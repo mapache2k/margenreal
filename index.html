@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>margenreal.io — Calculadora de Precio Real</title>
+  <meta name="description" content="Calcula tu margen real después de comisiones, envío y tiempo en stock. Gratis — hasta 5 productos." />
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:#f8fafc; color:#0f172a; }
+    .wrap { max-width:980px; margin:60px auto; padding:24px; }
+    .brand { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+    .logo { width:56px; height:56px; background:#4f46e5; color:white; display:flex; align-items:center; justify-content:center; border-radius:10px; font-weight:800; }
+    h1 { font-size:34px; margin:0 0 12px 0; }
+    p.lead { color:#475569; margin:0 0 20px 0; }
+    .cta { display:flex; gap:12px; margin-top:18px; }
+    .btn { background:#4f46e5; color:white; padding:12px 18px; border-radius:10px; text-decoration:none; font-weight:600; }
+    .btn-muted { background:transparent; border:1px solid #e6eefc; padding:10px 16px; color:#334155; border-radius:10px; text-decoration:none; }
+    .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:28px; }
+    .card { background:white; padding:16px; border-radius:12px; box-shadow:0 4px 12px rgba(15,23,42,0.04); }
+    footer { margin-top:42px; color:#64748b; font-size:13px; }
+    @media(max-width:640px){ h1{ font-size:26px } .wrap{ margin:24px 16px } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">MR</div>
+      <div>
+        <div style="font-weight:700">margenreal.io</div>
+        <div style="font-size:13px;color:#64748b">Protege tu margen real</div>
+      </div>
+    </div>
+
+    <h1>Calculadora de Precio Real</h1>
+    <p class="lead">Descubre cuánto ganas realmente por producto después de comisiones, envío y tiempo en stock. Simple, en español y lista para vendedores chilenos.</p>
+
+    <div class="cta">
+      <a class="btn" href="/app">Probar gratis — hasta 5 productos</a>
+      <a class="btn-muted" href="/pricing">Ver precios</a>
+    </div>
+
+    <div class="features">
+      <div class="card">
+        <strong>Margen real</strong>
+        <p style="margin:8px 0 0;color:#475569;font-size:14px">Incluye comisiones, envío y costo por tiempo en stock.</p>
+      </div>
+      <div class="card">
+        <strong>Riesgo de dead stock</strong>
+        <p style="margin:8px 0 0;color:#475569;font-size:14px">Detecta productos que te cuestan dinero y recibe recomendaciones sencillas.</p>
+      </div>
+      <div class="card">
+        <strong>Fácil y rápido</strong>
+        <p style="margin:8px 0 0;color:#475569;font-size:14px">La versión gratuita es práctica: 60 segundos por producto.</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Contacto: <a href="mailto:contact@margenreal.io">contact@margenreal.io</a> · Hecho para vendedores chilenos</p>
+      <p style="margin-top:6px">Privacidad · Términos</p>
+    </footer>
+  </div>
+</body>
+</html>
