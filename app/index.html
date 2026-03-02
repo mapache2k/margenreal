@@ -4,20 +4,392 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calculadora — margenreal.io</title>
+  <meta name="description" content="Calculadora de Precio Real — incluye comisiones, envío y tiempo en stock." />
   <style>
-    body{font-family:Inter,system-ui,Arial;margin:0;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;height:100vh}
-    .box{max-width:720px;padding:28px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.06);text-align:center}
-    h1{margin:0 0 8px 0;font-size:22px}
-    p{color:#475569;margin:0 0 16px 0}
-    .btn{background:#4f46e5;color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600}
+    :root{--bg:#f8fafc;--card:#fff;--muted:#64748b;--accent:#4f46e5;--danger:#dc2626}
+    body{font-family:Inter,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:#0f172a; -webkit-font-smoothing:antialiased}
+    .wrap{max-width:1100px;margin:28px auto;padding:20px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.04);border:1px solid rgba(2,6,23,0.04)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;background:var(--accent);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:14px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+    @media(min-width:980px){ .grid{grid-template-columns:420px 1fr} }
+    label{display:block;font-size:13px;color:#334155;margin-bottom:6px}
+    input[type=number], select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc;font-size:14px}
+    .small{font-size:12px;color:var(--muted)}
+    .row{display:flex;gap:8px}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;font-weight:700}
+    .btn-ghost{background:transparent;border:1px solid #e6eefc;padding:9px 12px;border-radius:10px;cursor:pointer}
+    .result{display:flex;flex-wrap:wrap;gap:12px}
+    .stat{flex:1;min-width:140px;background:#f8fafc;padding:12px;border-radius:10px;border:1px solid rgba(2,6,23,0.03)}
+    .muted{color:var(--muted);font-size:13px}
+    .danger{color:var(--danger);font-weight:700}
+    .suggest{background:#fef3f2;border:1px solid #fecaca;padding:10px;border-radius:8px;color:#7f1d1d}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .tiny{font-size:12px;color:var(--muted)}
+    .toggle{background:#f1f5f9;border-radius:8px;padding:8px;cursor:pointer;border:1px solid rgba(2,6,23,0.03)}
+    .platform-select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc;background:white}
+    .highlight{font-weight:700}
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Bienvenido — Calculadora de Precio Real</h1>
-    <p>This is a placeholder “app” page. Your calculator will be connected here soon.</p>
-    <p>If you already have the calculator code ready, paste it into this repository under <code>/app</code>.</p>
-    <a class="btn" href="/">← Volver al inicio</a>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">MR</div>
+        <div>
+          <h1>Calculadora de Precio Real</h1>
+          <p class="lead">Exacto: comisiones, envío y costo por tiempo en stock. Rápido y en español.</p>
+        </div>
+      </div>
+      <div>
+        <a class="btn" href="/">Volver al inicio</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Input card -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <strong>Detalles del producto</strong>
+          <button id="toggleAdvanced" class="toggle tiny">Opciones avanzadas ▾</button>
+        </div>
+
+        <div style="display:grid;gap:10px">
+          <div>
+            <label>Coste del producto (COGS)</label>
+            <input id="cogs" type="number" min="0" step="0.01" placeholder="Ej: 12000" />
+            <div class="tiny">Lo que pagas por unidad.</div>
+          </div>
+
+          <div>
+            <label>Precio de venta</label>
+            <input id="price" type="number" min="0" step="0.01" placeholder="Ej: 24990" />
+          </div>
+
+          <div>
+            <label>Plataforma</label>
+            <select id="platform" class="platform-select">
+              <option value="amazon">Amazon (~15%)</option>
+              <option value="etsy">Etsy (~6.5%)</option>
+              <option value="ebay">eBay (~13%)</option>
+              <option value="shopify">Shopify (~2%)</option>
+              <option value="custom">Personalizar...</option>
+            </select>
+          </div>
+
+          <div id="customFeeRow" style="display:none">
+            <label>Comisión personalizada (%)</label>
+            <input id="customFee" type="number" min="0" step="0.1" placeholder="Ej: 10" />
+          </div>
+
+          <div>
+            <label>Envío por unidad (CLP)</label>
+            <input id="shipping" type="number" min="0" step="0.01" placeholder="Ej: 3500" />
+            <div class="tiny">Costo promedio de envío por unidad.</div>
+          </div>
+
+          <!-- advanced -->
+          <div id="advanced" style="display:none;border-top:1px dashed #eef2ff;padding-top:10px;margin-top:6px">
+            <div>
+              <label>Costo de almacenamiento (CLP / mes)</label>
+              <input id="storage" type="number" min="0" step="0.01" placeholder="Ej: 2000" />
+            </div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1">
+                <label>Unidades vendidas / mes</label>
+                <input id="units" type="number" min="0" step="1" placeholder="Ej: 20" />
+              </div>
+              <div style="flex:1">
+                <label>Días promedio en stock</label>
+                <input id="days" type="number" min="0" step="1" placeholder="Ej: 30" />
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="calcBtn" class="btn">Calcular</button>
+            <button id="resetBtn" class="btn-ghost">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: results -->
+      <div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <strong>Resultados</strong>
+            <div class="tiny">Automático y exportable luego</div>
+          </div>
+
+          <div id="riskBox" style="display:none;margin-bottom:10px"></div>
+
+          <div class="result" id="stats">
+            <div class="stat">
+              <div class="small muted">Margen real</div>
+              <div id="trueMargin" style="font-weight:800;font-size:18px">—</div>
+              <div class="tiny" id="simpleMarginSub"></div>
+            </div>
+            <div class="stat">
+              <div class="small muted">Ganancia neta / unidad</div>
+              <div id="profitUnit" style="font-weight:800;font-size:18px">—</div>
+            </div>
+            <div class="stat">
+              <div class="small muted">Ganancia mensual (estimada)</div>
+              <div id="monthlyProfit" style="font-weight:800;font-size:18px">—</div>
+              <div class="tiny" id="unitsNote">—</div>
+            </div>
+            <div class="stat">
+              <div class="small muted">Gap (markup vs real)</div>
+              <div id="gap" style="font-weight:800;font-size:18px">—</div>
+            </div>
+          </div>
+
+          <div id="suggestions" style="margin-top:12px"></div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card tiny">
+          <strong>Cost Breakdown / unidad</strong>
+          <div id="breakdown" style="margin-top:8px;color:#334155">
+            — 
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="tiny card" style="display:flex;justify-content:space-between;align-items:center">
+          <div>Contacto: <a href="mailto:contacto@margenreal.io">contacto@margenreal.io</a></div>
+          <div class="tiny muted">Hecho en Chile</div>
+        </div>
+      </div>
+    </div>
   </div>
+
+<script>
+/* ---------- config ---------- */
+const PLATFORMS = {
+  amazon: { label: "Amazon (~15%)", fee: 15 },
+  etsy: { label: "Etsy (~6.5%)", fee: 6.5 },
+  ebay: { label: "eBay (~13%)", fee: 13 },
+  shopify: { label: "Shopify (~2%)", fee: 2 },
+  custom: { label: "Custom", fee: 0 }
+};
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const fmtCLP = n => isFinite(n) ? Math.round(n).toLocaleString('es-CL') : '-';
+const pct = n => isFinite(n) ? n.toFixed(1) + '%' : '-';
+function sanitizeNumber(v, fallback=0){
+  if(v === '' || v === null || v === undefined) return fallback;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+/* ---------- pure calculation ---------- */
+function calculatePricing(params={}){
+  const cogs = sanitizeNumber(params.cogs, 0);
+  const price = sanitizeNumber(params.price, 0);
+  const feePercent = sanitizeNumber(params.platformFeePercent, 0);
+  const shipping = sanitizeNumber(params.shipping, 0);
+  const storage = sanitizeNumber(params.storagePerMonth, 0);
+  const units = Math.max(0, Math.round(sanitizeNumber(params.unitsPerMonth, 0)));
+  const days = Math.max(0, sanitizeNumber(params.avgDaysInInventory, 30));
+
+  const feeAmt = (price * feePercent) / 100;
+  const carrying = (storage / 30) * days;
+  const totalCost = cogs + shipping + feeAmt + carrying;
+  const profit = price - totalCost;
+  const margin = price > 0 ? (profit / price) * 100 : 0;
+  const simpleMargin = price > 0 ? ((price - cogs) / price) * 100 : 0;
+  const monthly = profit * units;
+  const gap = simpleMargin - margin;
+  const carryRatio = profit > 0 ? carrying / profit : Infinity;
+
+  let risk = "LOW";
+  if (margin < 5 || carryRatio > 0.5) risk = "HIGH";
+  else if (margin < 15 || carryRatio > 0.25 || days > 60) risk = "MEDIUM";
+
+  const suggestions = [];
+  if (profit <= 0) {
+    const targetMarginPct = 10;
+    const baseCosts = cogs + shipping + carrying;
+    const suggestedPriceForTarget = baseCosts / (1 - targetMarginPct / 100);
+    suggestions.push({
+      type: "price_increase",
+      text: `Sube el precio a ${Math.round(suggestedPriceForTarget).toLocaleString('es-CL')} para alcanzar ~${targetMarginPct}% de margen.`,
+      suggestedPrice: Math.round(suggestedPriceForTarget)
+    });
+  }
+  if (carryRatio > 0.5) {
+    suggestions.push({ type: "promote", text: "Considera una promoción corta o bundle para acelerar la rotación."});
+  }
+  if (days > 60 && margin < 10) {
+    suggestions.push({ type: "liquidate", text: "Considera liquidar o combinar con best-sellers."});
+  }
+
+  return {
+    feeAmt, carrying, totalCost, profit, margin, simpleMargin, gap, monthly, carryRatio, risk, suggestions
+  };
+}
+
+/* ---------- UI binding ---------- */
+const elems = {
+  cogs: $('cogs'), price: $('price'), platform: $('platform'),
+  customFee: $('customFee'), customFeeRow: $('customFeeRow'),
+  shipping: $('shipping'), storage: $('storage'),
+  units: $('units'), days: $('days'),
+  advanced: $('advanced'), toggleAdvanced: $('toggleAdvanced'),
+  calcBtn: $('calcBtn'), resetBtn: $('resetBtn'),
+  trueMargin: $('trueMargin'), simpleMarginSub: $('simpleMarginSub'),
+  profitUnit: $('profitUnit'), monthlyProfit: $('monthlyProfit'),
+  unitsNote: $('unitsNote'), gap: $('gap'), breakdown: $('breakdown'),
+  suggestions: $('suggestions'), riskBox: $('riskBox')
+};
+
+function readForm(){
+  const platformKey = elems.platform.value;
+  const platformFee = platformKey === 'custom' ? sanitizeNumber(elems.customFee.value,0) : PLATFORMS[platformKey].fee;
+  return {
+    cogs: sanitizeNumber(elems.cogs.value,0),
+    price: sanitizeNumber(elems.price.value,0),
+    platformFeePercent: platformFee,
+    shipping: sanitizeNumber(elems.shipping.value,0),
+    storagePerMonth: sanitizeNumber(elems.storage.value,0),
+    unitsPerMonth: Math.max(0, Math.round(sanitizeNumber(elems.units.value,0))),
+    avgDaysInInventory: sanitizeNumber(elems.days.value,30)
+  };
+}
+
+function render(result, inputs){
+  elems.trueMargin.textContent = pct(result.margin);
+  elems.simpleMarginSub.textContent = `vs ${(result.simpleMargin).toFixed(1)}% markup-only`;
+  elems.profitUnit.textContent = (result.profit >= 0 ? fmtCLP(result.profit) : '-' + fmtCLP(Math.abs(result.profit)));
+  elems.monthlyProfit.textContent = (result.monthly >= 0 ? fmtCLP(result.monthly) : '-' + fmtCLP(Math.abs(result.monthly)));
+  elems.unitsNote.textContent = `a ${inputs.unitsPerMonth} unidades/mes`;
+  elems.gap.textContent = (result.gap).toFixed(1) + '%';
+  elems.breakdown.innerHTML = `
+    <div style="display:flex;justify-content:space-between"><div class="tiny">Costo del producto</div><div class="tiny">${fmtCLP(inputs.cogs)}</div></div>
+    <div style="display:flex;justify-content:space-between"><div class="tiny">Envío</div><div class="tiny">${fmtCLP(inputs.shipping)}</div></div>
+    <div style="display:flex;justify-content:space-between"><div class="tiny">Comisión (${inputs.platformFeePercent}%)</div><div class="tiny">${fmtCLP(result.feeAmt)}</div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;font-weight:700"><div>Total costos</div><div>${fmtCLP(result.totalCost)}</div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;font-weight:700"><div>Ganancia neta</div><div>${fmtCLP(result.profit)}</div></div>
+  `;
+
+  // risk box
+  elems.riskBox.style.display = 'block';
+  const riskColor = result.risk === 'LOW' ? '#ecfccb' : result.risk === 'MEDIUM' ? '#fffbeb' : '#ffeded';
+  const border = result.risk === 'LOW' ? '#84cc16' : result.risk === 'MEDIUM' ? '#f59e0b' : '#ef4444';
+  elems.riskBox.innerHTML = `<div style="background:${riskColor};border:1px solid ${border};padding:10px;border-radius:8px">
+    <div style="font-weight:700">Riesgo de dead stock: ${result.risk}</div>
+    <div class="tiny" style="margin-top:6px">${ result.risk==='LOW' ? 'Rotación y margen saludables.' : result.risk==='MEDIUM' ? 'Los costos de mantener stock están comiendo tu margen.' : 'Este producto podría estar perdiéndote dinero.' }</div>
+  </div>`;
+
+  // suggestions
+  elems.suggestions.innerHTML = '';
+  if(result.suggestions.length){
+    result.suggestions.forEach(s => {
+      const el = document.createElement('div');
+      el.className = 'suggest';
+      el.style.marginTop = '8px';
+      let inner = `<div style="font-weight:700;margin-bottom:6px">${s.text}</div>`;
+      if(s.suggestedPrice){
+        inner += `<button class="btn" style="margin-top:6px" data-price="${s.suggestedPrice}">Aplicar precio sugerido (${fmtCLP(s.suggestedPrice)})</button>`;
+      }
+      el.innerHTML = inner;
+      elems.suggestions.appendChild(el);
+    });
+    // wire apply price buttons
+    elems.suggestions.querySelectorAll('button[data-price]').forEach(b => {
+      b.addEventListener('click', (ev) => {
+        const p = Number(ev.currentTarget.getAttribute('data-price'));
+        elems.price.value = p;
+        saveDraft(); // save and re-run
+        runCalc();
+      });
+    });
+  }
+}
+
+/* ---------- actions ---------- */
+function runCalc(){
+  const inputs = readForm();
+  const r = calculatePricing(inputs);
+  render(r, inputs);
+  saveEvent('calculate', { inputs, result: r });
+}
+
+function resetForm(){
+  if(!confirm('Limpiar todos los campos?')) return;
+  elems.cogs.value=''; elems.price.value=''; elems.platform.value='amazon'; elems.customFee.value=''; elems.shipping.value=''; elems.storage.value=''; elems.units.value=''; elems.days.value='';
+  elems.customFeeRow.style.display='none';
+  elems.advanced.style.display='none';
+  elems.toggleAdvanced.textContent = 'Opciones avanzadas ▾';
+  saveDraft(true);
+  // clear results
+  elems.trueMargin.textContent='—'; elems.profitUnit.textContent='—'; elems.monthlyProfit.textContent='—'; elems.gap.textContent='—'; elems.breakdown.textContent='—'; elems.suggestions.innerHTML=''; elems.riskBox.style.display='none'; elems.unitsNote.textContent='—';
+}
+
+/* ---------- simple analytics / events (placeholder) ---------- */
+function saveEvent(type, metadata){
+  // placeholder: you can later send to Supabase or analytics
+  console.log('event', type, metadata);
+}
+
+/* ---------- localStorage draft ---------- */
+const DRAFT_KEY = 'margenreal:draft:v1';
+function saveDraft(forceClear=false){
+  if(forceClear){ localStorage.removeItem(DRAFT_KEY); return; }
+  const draft = {
+    cogs: elems.cogs.value, price: elems.price.value, platform: elems.platform.value, customFee: elems.customFee.value,
+    shipping: elems.shipping.value, storage: elems.storage.value, units: elems.units.value, days: elems.days.value
+  };
+  try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); }catch(e){}
+}
+function restoreDraft(){
+  try{
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    elems.cogs.value = d.cogs || '';
+    elems.price.value = d.price || '';
+    elems.platform.value = d.platform || 'amazon';
+    elems.customFee.value = d.customFee || '';
+    elems.shipping.value = d.shipping || '';
+    elems.storage.value = d.storage || '';
+    elems.units.value = d.units || '';
+    elems.days.value = d.days || '';
+    // show custom fee row if platform is custom
+    if(elems.platform.value === 'custom') elems.customFeeRow.style.display='block';
+  }catch(e){}
+}
+
+/* ---------- bind events ---------- */
+elems.platform.addEventListener('change', () => {
+  if(elems.platform.value === 'custom') elems.customFeeRow.style.display='block';
+  else elems.customFeeRow.style.display='none';
+  saveDraft();
+});
+elems.toggleAdvanced.addEventListener('click', () => {
+  elems.advanced.style.display = elems.advanced.style.display === 'none' ? 'block' : 'none';
+  elems.toggleAdvanced.textContent = elems.advanced.style.display === 'none' ? 'Opciones avanzadas ▾' : 'Opciones avanzadas ▴';
+});
+elems.calcBtn.addEventListener('click', () => { runCalc(); saveDraft(); });
+elems.resetBtn.addEventListener('click', () => { resetForm(); });
+window.addEventListener('beforeunload', saveDraft);
+['cogs','price','customFee','shipping','storage','units','days','platform'].forEach(id => {
+  const el = $(id);
+  if(!el) return;
+  el.addEventListener('input', () => saveDraft());
+});
+
+/* ---------- init ---------- */
+restoreDraft();
+// initial run if there are values
+if(elems.price.value || elems.cogs.value) runCalc();
+</script>
 </body>
 </html>
