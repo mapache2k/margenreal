@@ -12,8 +12,9 @@
 :root {
   /* Colors — backgrounds */
   --bg:          #464340;
-  --surface:     #323130;
-  --surface2:    #3a3937;
+  --surface:  #42403e;
+  --surface2: #4a4846;
+
 
   /* Colors — borders */
   --border:      #3f3e3b;
