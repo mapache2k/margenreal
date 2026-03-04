@@ -69,9 +69,9 @@ function renderScoreBadge(id, score) {
   const el = document.getElementById(id);
   if (!el) return;
   let cls, dot, label;
-  if      (score >= 70) { cls = 'healthy'; dot = '#34d399'; label = 'Negocio saludable';  }
-  else if (score >= 40) { cls = 'warning'; dot = '#fbbf24'; label = 'Señales de alerta'; }
-  else                  { cls = 'danger';  dot = '#f05252'; label = 'Zona de riesgo';     }
+  if      (score >= 70) { cls = 'healthy'; dot = 'var(--success)'; label = 'Negocio saludable';  }
+  else if (score >= 40) { cls = 'warning'; dot = 'var(--warning)'; label = 'Señales de alerta'; }
+  else                  { cls = 'danger';  dot = 'var(--danger)'; label = 'Zona de riesgo';     }
   el.innerHTML = `<div class="score-bar ${cls}"><span class="score-dot" style="background:${dot}"></span><span class="score-text">${label}</span><span class="score-num">Score ${score}/100</span></div>`;
 }
 
@@ -83,7 +83,7 @@ function renderMetrics(id, r) {
   const rwV = r.ebitda >= 0 ? '∞' : (r.runway < 0.5 ? '< 1' : r.runway.toFixed(1));
   const beC = r.revenue >= r.breakeven ? 'g' : 'y';
   const wcC = r.wcGap <= 0 ? 'g' : r.wcGap <= 15 ? '' : 'y';
-  const rbc = r.runway < 3 ? '#f05252' : r.runway < 6 ? '#fbbf24' : '#34d399';
+  const rbc = r.runway < 3 ? 'var(--danger)' : r.runway < 6 ? 'var(--warning)' : 'var(--success)';
   el.innerHTML = `
     <div class="m-card ${eC}">
       <div class="m-lbl">Resultado operacional</div>
@@ -119,7 +119,7 @@ function renderChart(id, projection) {
   const months = ['M1','M2','M3','M4','M5','M6'];
   el.innerHTML = projection.map((val, i) => {
     const h     = Math.max(6, (Math.abs(val) / maxVal) * 80);
-    const color = val >= 0 ? '#34d399' : '#f05252';
+    const color = val >= 0 ? 'var(--success)' : 'var(--danger)';
     return `<div class="bar-wrap"><div class="bar-v">${fmt(val)}</div><div class="bar" style="height:${h}px;background:${color};opacity:${0.55 + i * 0.09}"></div><div class="bar-l">${months[i]}</div></div>`;
   }).join('');
 }
@@ -130,17 +130,17 @@ function renderSensitivity(id, r) {
   el.innerHTML = `
     <div class="sens-card">
       <div class="sens-lbl">Ventas −10%</div>
-      <div class="sens-val" style="color:${r.ebitda10 >= 0 ? '#34d399' : '#f05252'}">${r.ebitda10 >= 0 ? '+' : ''}${fmt(r.ebitda10)}</div>
+      <div class="sens-val" style="color:${r.ebitda10 >= 0 ? 'var(--success)' : 'var(--danger)'}">${r.ebitda10 >= 0 ? '+' : ''}${fmt(r.ebitda10)}</div>
       <div class="sens-sub">${r.ebitda10 >= 0 ? 'Sigue rentable' : 'Entra en pérdida'}</div>
     </div>
     <div class="sens-card">
       <div class="sens-lbl">Ventas −20%</div>
-      <div class="sens-val" style="color:${r.ebitda20 >= 0 ? '#34d399' : '#f05252'}">${r.ebitda20 >= 0 ? '+' : ''}${fmt(r.ebitda20)}</div>
+      <div class="sens-val" style="color:${r.ebitda20 >= 0 ? 'var(--success)' : 'var(--danger)'}">${r.ebitda20 >= 0 ? '+' : ''}${fmt(r.ebitda20)}</div>
       <div class="sens-sub">${r.ebitda20 >= 0 ? 'Sigue rentable' : 'Entra en pérdida'}</div>
     </div>
     <div class="sens-card">
       <div class="sens-lbl">Margen bruto</div>
-      <div class="sens-val" style="color:${r.marginPct >= 30 ? '#34d399' : r.marginPct >= 15 ? '#fbbf24' : '#f05252'}">${r.marginPct.toFixed(1)}%</div>
+      <div class="sens-val" style="color:${r.marginPct >= 30 ? 'var(--success)' : r.marginPct >= 15 ? 'var(--warning)' : 'var(--danger)'}">${r.marginPct.toFixed(1)}%</div>
       <div class="sens-sub">${r.marginPct >= 30 ? 'Saludable' : r.marginPct >= 15 ? 'Moderado' : 'Muy ajustado'}</div>
     </div>`;
 }
