@@ -11,9 +11,9 @@
 /* ─── DESIGN TOKENS ─── */
 :root {
   /* Colors — backgrounds */
-  --bg:          #464340;
-  --surface:  #42403e;
-  --surface2: #4a4846;
+--bg:       #1e1e1e;
+--surface:  #262624;
+--surface2: #2f2f2d;
 
 
   /* Colors — borders */
