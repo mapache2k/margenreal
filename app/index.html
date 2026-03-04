@@ -1,395 +1,515 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Calculadora — margenreal.io</title>
-  <meta name="description" content="Calculadora de Precio Real — incluye comisiones, envío y tiempo en stock." />
-  <style>
-    :root{--bg:#f8fafc;--card:#fff;--muted:#64748b;--accent:#4f46e5;--danger:#dc2626}
-    body{font-family:Inter,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:#0f172a; -webkit-font-smoothing:antialiased}
-    .wrap{max-width:1100px;margin:28px auto;padding:20px}
-    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.04);border:1px solid rgba(2,6,23,0.04)}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:44px;height:44px;background:var(--accent);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800}
-    h1{margin:0;font-size:20px}
-    p.lead{margin:6px 0 0;color:var(--muted);font-size:14px}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
-    @media(min-width:980px){ .grid{grid-template-columns:420px 1fr} }
-    label{display:block;font-size:13px;color:#334155;margin-bottom:6px}
-    input[type=number], select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc;font-size:14px}
-    .small{font-size:12px;color:var(--muted)}
-    .row{display:flex;gap:8px}
-    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;font-weight:700}
-    .btn-ghost{background:transparent;border:1px solid #e6eefc;padding:9px 12px;border-radius:10px;cursor:pointer}
-    .result{display:flex;flex-wrap:wrap;gap:12px}
-    .stat{flex:1;min-width:140px;background:#f8fafc;padding:12px;border-radius:10px;border:1px solid rgba(2,6,23,0.03)}
-    .muted{color:var(--muted);font-size:13px}
-    .danger{color:var(--danger);font-weight:700}
-    .suggest{background:#fef3f2;border:1px solid #fecaca;padding:10px;border-radius:8px;color:#7f1d1d}
-    footer{margin-top:18px;color:var(--muted);font-size:13px}
-    .tiny{font-size:12px;color:var(--muted)}
-    .toggle{background:#f1f5f9;border-radius:8px;padding:8px;cursor:pointer;border:1px solid rgba(2,6,23,0.03)}
-    .platform-select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eefc;background:white}
-    .highlight{font-weight:700}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>¿Sobrevivirá tu negocio? — margenreal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#0a0a0f;
+    --surface:#13131a;
+    --border:#1e1e2e;
+    --accent:#e8ff47;
+    --accent2:#ff4f47;
+    --text:#f0f0f5;
+    --muted:#6b6b80;
+    --green:#47ffb2;
+    --yellow:#ffc147;
+    --red:#ff4f47;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* noise texture overlay */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;z-index:0;opacity:0.4;
+  }
+
+  .app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:32px 20px 80px}
+
+  /* header */
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:56px}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.5px}
+  .logo span{color:var(--accent)}
+  .badge{background:var(--surface);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:12px;color:var(--muted)}
+
+  /* progress */
+  .progress-track{display:flex;gap:8px;margin-bottom:48px;align-items:center}
+  .progress-step{height:3px;flex:1;background:var(--border);border-radius:99px;transition:background .4s}
+  .progress-step.done{background:var(--accent)}
+  .progress-step.active{background:var(--accent);opacity:0.5}
+  .progress-label{font-size:12px;color:var(--muted);white-space:nowrap;margin-left:4px}
+
+  /* step */
+  .step{display:none;animation:fadeUp .4s ease both}
+  .step.active{display:block}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  .step-eyebrow{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .step-title{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:800;line-height:1.1;margin-bottom:8px}
+  .step-sub{color:var(--muted);font-size:15px;margin-bottom:36px;max-width:520px;line-height:1.6}
+
+  /* inputs */
+  .field{margin-bottom:24px}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.5px;margin-bottom:8px;text-transform:uppercase}
+  .field input{
+    width:100%;background:var(--surface);border:1px solid var(--border);
+    color:var(--text);font-family:'DM Sans',sans-serif;font-size:24px;font-weight:600;
+    padding:16px 20px;border-radius:12px;outline:none;transition:border .2s;
+  }
+  .field input:focus{border-color:var(--accent)}
+  .field input::placeholder{color:var(--border)}
+  .field-hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+  /* buttons */
+  .btn-row{display:flex;gap:12px;margin-top:36px;align-items:center}
+  .btn-primary{
+    background:var(--accent);color:#0a0a0f;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px;
+    padding:16px 32px;border-radius:12px;border:none;cursor:pointer;
+    transition:transform .15s,box-shadow .15s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,255,71,.25)}
+  .btn-back{background:transparent;border:1px solid var(--border);color:var(--muted);
+    font-family:'DM Sans',sans-serif;font-size:14px;padding:15px 24px;border-radius:12px;
+    cursor:pointer;transition:border .2s,color .2s}
+  .btn-back:hover{border-color:var(--muted);color:var(--text)}
+
+  /* results */
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+  @media(max-width:540px){.results-grid{grid-template-columns:1fr}.field-row{grid-template-columns:1fr}}
+
+  .metric-card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:16px;padding:20px 24px;position:relative;overflow:hidden;
+  }
+  .metric-card.highlight{border-color:var(--accent);background:#1a1a0f}
+  .metric-card.danger{border-color:var(--red);background:#1a0f0f}
+  .metric-card.good{border-color:var(--green);background:#0f1a14}
+  .metric-card.warn{border-color:var(--yellow);background:#1a160f}
+
+  .metric-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .metric-value{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,38px);font-weight:800;line-height:1}
+  .metric-sub{font-size:12px;color:var(--muted);margin-top:8px}
+  .metric-card.highlight .metric-value{color:var(--accent)}
+  .metric-card.danger .metric-value{color:var(--red)}
+  .metric-card.good .metric-value{color:var(--green)}
+  .metric-card.warn .metric-value{color:var(--yellow)}
+
+  /* runway bar */
+  .runway-bar-wrap{margin-top:10px;height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+  .runway-bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+
+  /* sensitivity */
+  .sensitivity-row{display:flex;gap:12px;margin-bottom:24px}
+  .sens-card{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+  .sens-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .sens-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+
+  /* diagnosis */
+  .diagnosis{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+  .diagnosis-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .diag-item{display:flex;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .diag-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+  .diag-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+  .diag-text{font-size:14px;line-height:1.6;color:#c8c8d8}
+  .diag-text strong{color:var(--text)}
+
+  /* projection chart */
+  .chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+  .chart-title{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .chart-bars{display:flex;align-items:flex-end;gap:8px;height:100px}
+  .chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .chart-bar{width:100%;border-radius:6px 6px 0 0;transition:height 1s cubic-bezier(.16,1,.3,1)}
+  .chart-bar-label{font-size:10px;color:var(--muted)}
+  .chart-bar-val{font-size:10px;font-weight:600;color:var(--muted)}
+
+  /* restart */
+  .btn-restart{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:13px;padding:12px 20px;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:8px}
+  .btn-restart:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* step counter */
+  .step-counter{font-size:12px;color:var(--muted);margin-bottom:8px}
+
+  /* score badge */
+  .score-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;margin-bottom:24px}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo">MR</div>
-        <div>
-          <h1>Calculadora de Precio Real</h1>
-          <p class="lead">Exacto: comisiones, envío y costo por tiempo en stock. Rápido y en español.</p>
-        </div>
-      </div>
-      <div>
-        <a class="btn" href="/">Volver al inicio</a>
-      </div>
-    </header>
+<div class="app">
 
-    <div class="grid">
-      <!-- LEFT: Input card -->
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <strong>Detalles del producto</strong>
-          <button id="toggleAdvanced" class="toggle tiny">Opciones avanzadas ▾</button>
-        </div>
+  <div class="header">
+    <div class="logo">margen<span>real</span></div>
+    <div class="badge">Beta gratuita</div>
+  </div>
 
-        <div style="display:grid;gap:10px">
-          <div>
-            <label>Coste del producto (COGS)</label>
-            <input id="cogs" type="number" min="0" step="0.01" placeholder="Ej: 12000" />
-            <div class="tiny">Lo que pagas por unidad.</div>
-          </div>
+  <!-- Progress -->
+  <div class="progress-track" id="progressTrack">
+    <div class="progress-step" id="ps0"></div>
+    <div class="progress-step" id="ps1"></div>
+    <div class="progress-step" id="ps2"></div>
+    <div class="progress-step" id="ps3"></div>
+    <div class="progress-label" id="progressLabel">Paso 1 de 4</div>
+  </div>
 
-          <div>
-            <label>Precio de venta</label>
-            <input id="price" type="number" min="0" step="0.01" placeholder="Ej: 24990" />
-          </div>
-
-          <div>
-            <label>Plataforma</label>
-            <select id="platform" class="platform-select">
-              <option value="amazon">Amazon (~15%)</option>
-              <option value="etsy">Etsy (~6.5%)</option>
-              <option value="ebay">eBay (~13%)</option>
-              <option value="shopify">Shopify (~2%)</option>
-              <option value="custom">Personalizar...</option>
-            </select>
-          </div>
-
-          <div id="customFeeRow" style="display:none">
-            <label>Comisión personalizada (%)</label>
-            <input id="customFee" type="number" min="0" step="0.1" placeholder="Ej: 10" />
-          </div>
-
-          <div>
-            <label>Envío por unidad (CLP)</label>
-            <input id="shipping" type="number" min="0" step="0.01" placeholder="Ej: 3500" />
-            <div class="tiny">Costo promedio de envío por unidad.</div>
-          </div>
-
-          <!-- advanced -->
-          <div id="advanced" style="display:none;border-top:1px dashed #eef2ff;padding-top:10px;margin-top:6px">
-            <div>
-              <label>Costo de almacenamiento (CLP / mes)</label>
-              <input id="storage" type="number" min="0" step="0.01" placeholder="Ej: 2000" />
-            </div>
-            <div style="display:flex;gap:8px">
-              <div style="flex:1">
-                <label>Unidades vendidas / mes</label>
-                <input id="units" type="number" min="0" step="1" placeholder="Ej: 20" />
-              </div>
-              <div style="flex:1">
-                <label>Días promedio en stock</label>
-                <input id="days" type="number" min="0" step="1" placeholder="Ej: 30" />
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:8px;margin-top:8px">
-            <button id="calcBtn" class="btn">Calcular</button>
-            <button id="resetBtn" class="btn-ghost">Limpiar</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: results -->
-      <div>
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <strong>Resultados</strong>
-            <div class="tiny">Automático y exportable luego</div>
-          </div>
-
-          <div id="riskBox" style="display:none;margin-bottom:10px"></div>
-
-          <div class="result" id="stats">
-            <div class="stat">
-              <div class="small muted">Margen real</div>
-              <div id="trueMargin" style="font-weight:800;font-size:18px">—</div>
-              <div class="tiny" id="simpleMarginSub"></div>
-            </div>
-            <div class="stat">
-              <div class="small muted">Ganancia neta / unidad</div>
-              <div id="profitUnit" style="font-weight:800;font-size:18px">—</div>
-            </div>
-            <div class="stat">
-              <div class="small muted">Ganancia mensual (estimada)</div>
-              <div id="monthlyProfit" style="font-weight:800;font-size:18px">—</div>
-              <div class="tiny" id="unitsNote">—</div>
-            </div>
-            <div class="stat">
-              <div class="small muted">Gap (markup vs real)</div>
-              <div id="gap" style="font-weight:800;font-size:18px">—</div>
-            </div>
-          </div>
-
-          <div id="suggestions" style="margin-top:12px"></div>
-        </div>
-
-        <div style="height:12px"></div>
-
-        <div class="card tiny">
-          <strong>Cost Breakdown / unidad</strong>
-          <div id="breakdown" style="margin-top:8px;color:#334155">
-            — 
-          </div>
-        </div>
-
-        <div style="height:10px"></div>
-        <div class="tiny card" style="display:flex;justify-content:space-between;align-items:center">
-          <div>Contacto: <a href="mailto:contacto@margenreal.io">contacto@margenreal.io</a></div>
-          <div class="tiny muted">Hecho en Chile</div>
-        </div>
-      </div>
+  <!-- STEP 0: Revenue + Margin -->
+  <div class="step active" id="step0">
+    <div class="step-eyebrow">Ingresos</div>
+    <div class="step-title">¿Cuánto vende tu negocio?</div>
+    <div class="step-sub">Ingresa tus números del último mes. Sin contabilidad — solo lo que sabes de tu negocio.</div>
+    <div class="field">
+      <label>Ventas mensuales</label>
+      <input type="number" id="revenue" placeholder="0" min="0"/>
+      <div class="field-hint">Total cobrado en el último mes (sin IVA si aplica)</div>
+    </div>
+    <div class="field">
+      <label>Margen bruto (%)</label>
+      <input type="number" id="grossMargin" placeholder="0" min="0" max="100"/>
+      <div class="field-hint">Cuánto queda después de pagar los costos directos del producto o servicio. Ej: si vendes a 100 y el costo es 60, tu margen es 40%</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goStep(1)">Siguiente →</button>
     </div>
   </div>
 
+  <!-- STEP 1: Costs + Cash -->
+  <div class="step" id="step1">
+    <div class="step-eyebrow">Costos y Caja</div>
+    <div class="step-title">¿Cuánto gastas y cuánto tienes?</div>
+    <div class="step-sub">Tus costos fijos son los gastos que pagas sí o sí, vendes o no vendes.</div>
+    <div class="field">
+      <label>Costos fijos mensuales</label>
+      <input type="number" id="fixedCosts" placeholder="0" min="0"/>
+      <div class="field-hint">Arriendo, sueldos, servicios, suscripciones — todo lo que no varía con las ventas</div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Caja disponible</label>
+        <input type="number" id="cash" placeholder="0" min="0"/>
+        <div class="field-hint">Efectivo y cuenta corriente hoy</div>
+      </div>
+      <div class="field">
+        <label>Deuda mensual</label>
+        <input type="number" id="debtPayment" placeholder="0" min="0"/>
+        <div class="field-hint">Créditos, cuotas, leasing</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(0)">← Atrás</button>
+      <button class="btn-primary" onclick="goStep(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Working capital -->
+  <div class="step" id="step2">
+    <div class="step-eyebrow">Capital de Trabajo</div>
+    <div class="step-title">¿Cuándo cobras y cuándo pagas?</div>
+    <div class="step-sub">El timing del dinero importa tanto como el monto. Aquí se esconde una de las trampas más comunes.</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Días para cobrar</label>
+        <input type="number" id="arDays" placeholder="0" min="0"/>
+        <div class="field-hint">Promedio de días desde que vendes hasta que recibes el dinero</div>
+      </div>
+      <div class="field">
+        <label>Días para pagar</label>
+        <input type="number" id="apDays" placeholder="0" min="0"/>
+        <div class="field-hint">Promedio de días que tienes para pagar a tus proveedores</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(1)">← Atrás</button>
+      <button class="btn-primary" onclick="calculate()">Ver mi diagnóstico →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Results -->
+  <div class="step" id="step3">
+    <div class="step-eyebrow">Diagnóstico</div>
+    <div class="step-title" id="resultsTitle">Tu negocio al descubierto</div>
+    <div id="scoreBadge" style="margin-bottom:24px"></div>
+
+    <div class="results-grid" id="metricsGrid"></div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Proyección de caja — 6 meses</div>
+      <div class="chart-bars" id="projChart"></div>
+    </div>
+
+    <div class="sensitivity-row" id="sensitivityRow"></div>
+
+    <div class="diagnosis" id="diagnosisBox"></div>
+
+    <button class="btn-restart" onclick="restart()">↩ Recalcular con otros números</button>
+  </div>
+
+</div>
+
 <script>
-/* ---------- config ---------- */
-const PLATFORMS = {
-  amazon: { label: "Amazon (~15%)", fee: 15 },
-  etsy: { label: "Etsy (~6.5%)", fee: 6.5 },
-  ebay: { label: "eBay (~13%)", fee: 13 },
-  shopify: { label: "Shopify (~2%)", fee: 2 },
-  custom: { label: "Custom", fee: 0 }
-};
+const STEPS = 4;
+let currentStep = 0;
+let results = {};
 
-/* ---------- helpers ---------- */
-const $ = id => document.getElementById(id);
-const fmtCLP = n => isFinite(n) ? Math.round(n).toLocaleString('es-CL') : '-';
-const pct = n => isFinite(n) ? n.toFixed(1) + '%' : '-';
-function sanitizeNumber(v, fallback=0){
-  if(v === '' || v === null || v === undefined) return fallback;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : fallback;
+function goStep(n){
+  if(n > currentStep && !validateStep(currentStep)) return;
+  document.getElementById('step'+currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ---------- pure calculation ---------- */
-function calculatePricing(params={}){
-  const cogs = sanitizeNumber(params.cogs, 0);
-  const price = sanitizeNumber(params.price, 0);
-  const feePercent = sanitizeNumber(params.platformFeePercent, 0);
-  const shipping = sanitizeNumber(params.shipping, 0);
-  const storage = sanitizeNumber(params.storagePerMonth, 0);
-  const units = Math.max(0, Math.round(sanitizeNumber(params.unitsPerMonth, 0)));
-  const days = Math.max(0, sanitizeNumber(params.avgDaysInInventory, 30));
-
-  const feeAmt = (price * feePercent) / 100;
-  const carrying = (storage / 30) * days;
-  const totalCost = cogs + shipping + feeAmt + carrying;
-  const profit = price - totalCost;
-  const margin = price > 0 ? (profit / price) * 100 : 0;
-  const simpleMargin = price > 0 ? ((price - cogs) / price) * 100 : 0;
-  const monthly = profit * units;
-  const gap = simpleMargin - margin;
-  const carryRatio = profit > 0 ? carrying / profit : Infinity;
-
-  let risk = "LOW";
-  if (margin < 5 || carryRatio > 0.5) risk = "HIGH";
-  else if (margin < 15 || carryRatio > 0.25 || days > 60) risk = "MEDIUM";
-
-  const suggestions = [];
-  if (profit <= 0) {
-    const targetMarginPct = 10;
-    const baseCosts = cogs + shipping + carrying;
-    const suggestedPriceForTarget = baseCosts / (1 - targetMarginPct / 100);
-    suggestions.push({
-      type: "price_increase",
-      text: `Sube el precio a ${Math.round(suggestedPriceForTarget).toLocaleString('es-CL')} para alcanzar ~${targetMarginPct}% de margen.`,
-      suggestedPrice: Math.round(suggestedPriceForTarget)
-    });
+function validateStep(n){
+  const required = [
+    ['revenue','grossMargin'],
+    ['fixedCosts','cash'],
+    []
+  ];
+  for(const id of required[n]||[]){
+    const v = parseFloat(document.getElementById(id)?.value);
+    if(isNaN(v)||v<0){
+      document.getElementById(id)?.focus();
+      return false;
+    }
   }
-  if (carryRatio > 0.5) {
-    suggestions.push({ type: "promote", text: "Considera una promoción corta o bundle para acelerar la rotación."});
-  }
-  if (days > 60 && margin < 10) {
-    suggestions.push({ type: "liquidate", text: "Considera liquidar o combinar con best-sellers."});
-  }
-
-  return {
-    feeAmt, carrying, totalCost, profit, margin, simpleMargin, gap, monthly, carryRatio, risk, suggestions
-  };
+  return true;
 }
 
-/* ---------- UI binding ---------- */
-const elems = {
-  cogs: $('cogs'), price: $('price'), platform: $('platform'),
-  customFee: $('customFee'), customFeeRow: $('customFeeRow'),
-  shipping: $('shipping'), storage: $('storage'),
-  units: $('units'), days: $('days'),
-  advanced: $('advanced'), toggleAdvanced: $('toggleAdvanced'),
-  calcBtn: $('calcBtn'), resetBtn: $('resetBtn'),
-  trueMargin: $('trueMargin'), simpleMarginSub: $('simpleMarginSub'),
-  profitUnit: $('profitUnit'), monthlyProfit: $('monthlyProfit'),
-  unitsNote: $('unitsNote'), gap: $('gap'), breakdown: $('breakdown'),
-  suggestions: $('suggestions'), riskBox: $('riskBox')
-};
-
-function readForm(){
-  const platformKey = elems.platform.value;
-  const platformFee = platformKey === 'custom' ? sanitizeNumber(elems.customFee.value,0) : PLATFORMS[platformKey].fee;
-  return {
-    cogs: sanitizeNumber(elems.cogs.value,0),
-    price: sanitizeNumber(elems.price.value,0),
-    platformFeePercent: platformFee,
-    shipping: sanitizeNumber(elems.shipping.value,0),
-    storagePerMonth: sanitizeNumber(elems.storage.value,0),
-    unitsPerMonth: Math.max(0, Math.round(sanitizeNumber(elems.units.value,0))),
-    avgDaysInInventory: sanitizeNumber(elems.days.value,30)
-  };
+function updateProgress(){
+  for(let i=0;i<STEPS-1;i++){
+    const el = document.getElementById('ps'+i);
+    el.className = 'progress-step' + (i<currentStep?' done':i===currentStep?' active':'');
+  }
+  document.getElementById('progressLabel').textContent = `Paso ${Math.min(currentStep+1,STEPS)} de ${STEPS}`;
 }
 
-function render(result, inputs){
-  elems.trueMargin.textContent = pct(result.margin);
-  elems.simpleMarginSub.textContent = `vs ${(result.simpleMargin).toFixed(1)}% markup-only`;
-  elems.profitUnit.textContent = (result.profit >= 0 ? fmtCLP(result.profit) : '-' + fmtCLP(Math.abs(result.profit)));
-  elems.monthlyProfit.textContent = (result.monthly >= 0 ? fmtCLP(result.monthly) : '-' + fmtCLP(Math.abs(result.monthly)));
-  elems.unitsNote.textContent = `a ${inputs.unitsPerMonth} unidades/mes`;
-  elems.gap.textContent = (result.gap).toFixed(1) + '%';
-  elems.breakdown.innerHTML = `
-    <div style="display:flex;justify-content:space-between"><div class="tiny">Costo del producto</div><div class="tiny">${fmtCLP(inputs.cogs)}</div></div>
-    <div style="display:flex;justify-content:space-between"><div class="tiny">Envío</div><div class="tiny">${fmtCLP(inputs.shipping)}</div></div>
-    <div style="display:flex;justify-content:space-between"><div class="tiny">Comisión (${inputs.platformFeePercent}%)</div><div class="tiny">${fmtCLP(result.feeAmt)}</div></div>
-    <div style="display:flex;justify-content:space-between;margin-top:6px;font-weight:700"><div>Total costos</div><div>${fmtCLP(result.totalCost)}</div></div>
-    <div style="display:flex;justify-content:space-between;margin-top:4px;font-weight:700"><div>Ganancia neta</div><div>${fmtCLP(result.profit)}</div></div>
+function g(id){ return parseFloat(document.getElementById(id)?.value)||0; }
+
+function calculate(){
+  const revenue = g('revenue');
+  const grossMarginPct = g('grossMargin');
+  const fixedCosts = g('fixedCosts');
+  const cash = g('cash');
+  const debtPayment = g('debtPayment');
+  const arDays = g('arDays');
+  const apDays = g('apDays');
+
+  // Core calcs
+  const grossProfit = revenue * (grossMarginPct/100);
+  const ebitda = grossProfit - fixedCosts;
+  const freeCashFlow = ebitda - debtPayment;
+  const breakeven = grossMarginPct > 0 ? (fixedCosts + debtPayment) / (grossMarginPct/100) : Infinity;
+
+  // Runway
+  const monthlyBurn = freeCashFlow < 0 ? Math.abs(freeCashFlow) : 0;
+  const runway = monthlyBurn > 0 ? cash / monthlyBurn : Infinity;
+
+  // Working capital gap
+  const wcGap = arDays - apDays; // positive = you're financing your clients
+
+  // Sensitivity: -10% and -20% revenue
+  const ebitda10 = (revenue*0.9*(grossMarginPct/100)) - fixedCosts - debtPayment;
+  const ebitda20 = (revenue*0.8*(grossMarginPct/100)) - fixedCosts - debtPayment;
+
+  // 6-month projection
+  const projection = [];
+  let runningCash = cash;
+  for(let m=1;m<=6;m++){
+    runningCash += freeCashFlow;
+    projection.push(runningCash);
+  }
+
+  results = { revenue, grossMarginPct, grossProfit, fixedCosts, ebitda, freeCashFlow, breakeven, runway, cash, wcGap, arDays, apDays, debtPayment, ebitda10, ebitda20, projection };
+
+  renderResults();
+  goStep(3);
+}
+
+function healthScore(r){
+  let score = 0;
+  if(r.ebitda > 0) score += 30;
+  if(r.runway > 6 || r.ebitda > 0) score += 20;
+  if(r.grossMarginPct >= 30) score += 20;
+  if(r.ebitda10 > 0) score += 15;
+  if(r.wcGap <= 0) score += 15;
+  return score;
+}
+
+function fmt(n){
+  if(!isFinite(n)) return '∞';
+  const abs = Math.abs(n);
+  let s;
+  if(abs>=1000000) s=(n/1000000).toFixed(1)+'M';
+  else if(abs>=1000) s=(n/1000).toFixed(0)+'K';
+  else s=Math.round(n).toString();
+  return s;
+}
+
+function renderResults(){
+  const r = results;
+  const score = healthScore(r);
+
+  // Score badge
+  let badgeColor, badgeText, badgeBg;
+  if(score>=70){badgeColor='#47ffb2';badgeBg='rgba(71,255,178,0.1)';badgeText='Negocio saludable'}
+  else if(score>=40){badgeColor='#ffc147';badgeBg='rgba(255,193,71,0.1)';badgeText='Señales de alerta'}
+  else{badgeColor='#ff4f47';badgeBg='rgba(255,79,71,0.1)';badgeText='Zona de riesgo'}
+
+  document.getElementById('scoreBadge').innerHTML = `
+    <div class="score-badge" style="background:${badgeBg};border:1px solid ${badgeColor}20;color:${badgeColor}">
+      <span style="font-size:20px">${score>=70?'●':score>=40?'◑':'○'}</span>
+      ${badgeText} — Score ${score}/100
+    </div>`;
+
+  // Title
+  document.getElementById('resultsTitle').textContent = r.ebitda>=0 ? 'Tu negocio tiene base.' : 'Hay trabajo urgente por hacer.';
+
+  // Metrics grid
+  const runwayDisplay = r.ebitda >= 0 ? '∞' : (r.runway < 0.5 ? '< 1' : r.runway.toFixed(1));
+  const runwayCard = r.ebitda >= 0 ? 'good' : r.runway > 6 ? 'warn' : 'danger';
+  const ebitdaCard = r.ebitda >= 0 ? 'good' : 'danger';
+  const breakCard = r.revenue >= r.breakeven ? 'good' : 'warn';
+  const wc = r.wcGap;
+  const wcCard = wc <= 0 ? 'good' : wc <= 15 ? '' : 'warn';
+
+  document.getElementById('metricsGrid').innerHTML = `
+    <div class="metric-card ${ebitdaCard}">
+      <div class="metric-label">Resultado operacional</div>
+      <div class="metric-value">${r.ebitda>=0?'+':''}${fmt(r.ebitda)}</div>
+      <div class="metric-sub">${r.ebitda>=0?'Por encima del punto de equilibrio':'Estás perdiendo dinero cada mes'}</div>
+    </div>
+    <div class="metric-card highlight">
+      <div class="metric-label">Meses de runway</div>
+      <div class="metric-value">${runwayDisplay}</div>
+      <div class="metric-sub">${r.ebitda>=0?'Con este ritmo no quemas caja':'Tiempo antes de quedarte sin caja'}</div>
+      ${r.ebitda<0?`<div class="runway-bar-wrap"><div class="runway-bar-fill" id="runwayBar" style="width:0%;background:${r.runway<3?'var(--red)':r.runway<6?'var(--yellow)':'var(--green)'}"></div></div>`:''}
+    </div>
+    <div class="metric-card ${breakCard}">
+      <div class="metric-label">Venta mínima para sobrevivir</div>
+      <div class="metric-value">${isFinite(r.breakeven)?fmt(r.breakeven):'—'}</div>
+      <div class="metric-sub">${r.revenue>=r.breakeven?`Estás ${fmt(r.revenue-r.breakeven)} sobre el punto de quiebre`:`Te faltan ${fmt(r.breakeven-r.revenue)} para cubrir todo`}</div>
+    </div>
+    <div class="metric-card ${wcCard}">
+      <div class="metric-label">Brecha de capital de trabajo</div>
+      <div class="metric-value">${wc>0?'+':''}${wc} días</div>
+      <div class="metric-sub">${wc<=0?'Cobras antes de pagar — situación favorable':wc<=15?'Brecha moderada, manejable':wc<=30?'Estás financiando a tus clientes con tu caja':'Presión alta de capital de trabajo'}</div>
+    </div>
   `;
 
-  // risk box
-  elems.riskBox.style.display = 'block';
-  const riskColor = result.risk === 'LOW' ? '#ecfccb' : result.risk === 'MEDIUM' ? '#fffbeb' : '#ffeded';
-  const border = result.risk === 'LOW' ? '#84cc16' : result.risk === 'MEDIUM' ? '#f59e0b' : '#ef4444';
-  elems.riskBox.innerHTML = `<div style="background:${riskColor};border:1px solid ${border};padding:10px;border-radius:8px">
-    <div style="font-weight:700">Riesgo de dead stock: ${result.risk}</div>
-    <div class="tiny" style="margin-top:6px">${ result.risk==='LOW' ? 'Rotación y margen saludables.' : result.risk==='MEDIUM' ? 'Los costos de mantener stock están comiendo tu margen.' : 'Este producto podría estar perdiéndote dinero.' }</div>
-  </div>`;
+  // Animate runway bar
+  setTimeout(()=>{
+    const rb = document.getElementById('runwayBar');
+    if(rb && r.runway<Infinity) rb.style.width = Math.min(100,(r.runway/12)*100)+'%';
+  },300);
 
-  // suggestions
-  elems.suggestions.innerHTML = '';
-  if(result.suggestions.length){
-    result.suggestions.forEach(s => {
-      const el = document.createElement('div');
-      el.className = 'suggest';
-      el.style.marginTop = '8px';
-      let inner = `<div style="font-weight:700;margin-bottom:6px">${s.text}</div>`;
-      if(s.suggestedPrice){
-        inner += `<button class="btn" style="margin-top:6px" data-price="${s.suggestedPrice}">Aplicar precio sugerido (${fmtCLP(s.suggestedPrice)})</button>`;
-      }
-      el.innerHTML = inner;
-      elems.suggestions.appendChild(el);
-    });
-    // wire apply price buttons
-    elems.suggestions.querySelectorAll('button[data-price]').forEach(b => {
-      b.addEventListener('click', (ev) => {
-        const p = Number(ev.currentTarget.getAttribute('data-price'));
-        elems.price.value = p;
-        saveDraft(); // save and re-run
-        runCalc();
-      });
-    });
+  // Sensitivity
+  document.getElementById('sensitivityRow').innerHTML = `
+    <div class="sens-card">
+      <div class="sens-label">-10% ventas</div>
+      <div class="sens-val" style="color:${r.ebitda10>=0?'var(--green)':'var(--red)'}">${r.ebitda10>=0?'+':''}${fmt(r.ebitda10)}</div>
+    </div>
+    <div class="sens-card">
+      <div class="sens-label">-20% ventas</div>
+      <div class="sens-val" style="color:${r.ebitda20>=0?'var(--green)':'var(--red)'}">${r.ebitda20>=0?'+':''}${fmt(r.ebitda20)}</div>
+    </div>
+    <div class="sens-card">
+      <div class="sens-label">Margen bruto</div>
+      <div class="sens-val" style="color:${r.grossMarginPct>=30?'var(--green)':r.grossMarginPct>=15?'var(--yellow)':'var(--red)'}">${r.grossMarginPct.toFixed(1)}%</div>
+    </div>
+  `;
+
+  // Projection chart
+  const maxVal = Math.max(...r.projection.map(Math.abs), 1);
+  const chartHtml = r.projection.map((val,i)=>{
+    const barH = Math.max(4, Math.abs(val)/maxVal * 100);
+    const color = val>=0 ? 'var(--green)' : 'var(--red)';
+    const months = ['M1','M2','M3','M4','M5','M6'];
+    return `<div class="chart-bar-wrap">
+      <div class="chart-bar-val">${fmt(val)}</div>
+      <div class="chart-bar" style="height:${barH}px;background:${color};opacity:${0.5+i*0.1}"></div>
+      <div class="chart-bar-label">${months[i]}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('projChart').innerHTML = chartHtml;
+
+  // Diagnosis
+  const diags = buildDiagnosis(r);
+  document.getElementById('diagnosisBox').innerHTML = `
+    <div class="diagnosis-title">💡 Diagnóstico inteligente</div>
+    ${diags.map(d=>`<div class="diag-item"><div class="diag-icon">${d.icon}</div><div class="diag-text">${d.text}</div></div>`).join('')}
+  `;
+}
+
+function buildDiagnosis(r){
+  const items = [];
+
+  // Margin analysis
+  if(r.grossMarginPct < 20){
+    items.push({icon:'🔴',text:`<strong>Margen muy ajustado (${r.grossMarginPct.toFixed(0)}%).</strong> Con este nivel, incluso duplicar las ventas generará poco valor real. Es urgente revisar precios o reducir costos variables antes de crecer.`});
+  } else if(r.grossMarginPct < 35){
+    items.push({icon:'🟡',text:`<strong>Margen moderado (${r.grossMarginPct.toFixed(0)}%).</strong> El negocio puede funcionar, pero el crecimiento no compensa rápido. Un aumento del 5% en margen impacta el resultado más que aumentar ventas en 20%.`});
+  } else {
+    items.push({icon:'🟢',text:`<strong>Margen sólido (${r.grossMarginPct.toFixed(0)}%).</strong> Cada venta adicional tiene buen impacto. Aquí el foco debe estar en escalar volumen, no en optimizar costos.`});
   }
+
+  // Fixed cost leverage
+  const coverageRatio = r.grossMarginPct > 0 ? r.grossProfit / (r.fixedCosts||1) : 0;
+  if(coverageRatio < 1){
+    items.push({icon:'⚠️',text:`<strong>Tus costos fijos son demasiado altos para tu nivel de ventas.</strong> Necesitas ${fmt(r.breakeven)} en ventas solo para cubrirlos. Reducir los fijos en 10% mejoraría tu resultado en <strong>${fmt(r.fixedCosts*0.1)}</strong> al mes.`});
+  } else if(coverageRatio < 1.5){
+    items.push({icon:'🔶',text:`<strong>Estructura de costos fijos con poco margen de error.</strong> Una caída del 15% en ventas te llevaría a pérdida operacional. Considera si hay costos fijos prescindibles por ahora.`});
+  }
+
+  // Working capital
+  if(r.wcGap > 30){
+    items.push({icon:'⏳',text:`<strong>Estás financiando a tus clientes por ${r.wcGap} días.</strong> Cobras tarde, pagas rápido. Esto inmoviliza caja aunque seas rentable. Reducir los días de cobro en 15 días liberaría flujo equivalente a ~${fmt(r.revenue*0.5/30*15)} de caja.`});
+  } else if(r.wcGap <= 0){
+    items.push({icon:'✅',text:`<strong>Tu ciclo de caja es favorable.</strong> Pagas después de cobrar (${Math.abs(r.wcGap)} días a favor). Esto es una ventaja competitiva real — puedes crecer sin necesitar capital adicional.`});
+  }
+
+  // Survival check
+  if(r.ebitda < 0 && r.runway < 3){
+    items.push({icon:'🚨',text:`<strong>Tienes menos de 3 meses de caja disponible.</strong> Con el ritmo actual, la prioridad número uno es extender el runway: reducir costos fijos, acelerar cobros o conseguir liquidez inmediata.`});
+  } else if(r.ebitda > 0 && r.ebitda20 < 0){
+    items.push({icon:'🛡️',text:`<strong>Eres rentable hoy, pero frágil ante caídas.</strong> Una baja del 20% en ventas te pondría en pérdida. Vale la pena construir una reserva de caja equivalente a 2-3 meses de costos fijos.`});
+  } else if(r.ebitda > 0 && r.ebitda20 > 0){
+    items.push({icon:'💪',text:`<strong>Tu negocio resiste una caída del 20% en ventas y sigue siendo rentable.</strong> Tienes base para crecer. El siguiente paso es identificar qué palanca de crecimiento tiene mayor retorno: más volumen, mejor precio, o expansión de margen.`});
+  }
+
+  return items;
 }
 
-/* ---------- actions ---------- */
-function runCalc(){
-  const inputs = readForm();
-  const r = calculatePricing(inputs);
-  render(r, inputs);
-  saveEvent('calculate', { inputs, result: r });
+function restart(){
+  currentStep = 0;
+  ['revenue','grossMargin','fixedCosts','cash','debtPayment','arDays','apDays'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value='';
+  });
+  goStep(0);
 }
 
-function resetForm(){
-  if(!confirm('Limpiar todos los campos?')) return;
-  elems.cogs.value=''; elems.price.value=''; elems.platform.value='amazon'; elems.customFee.value=''; elems.shipping.value=''; elems.storage.value=''; elems.units.value=''; elems.days.value='';
-  elems.customFeeRow.style.display='none';
-  elems.advanced.style.display='none';
-  elems.toggleAdvanced.textContent = 'Opciones avanzadas ▾';
-  saveDraft(true);
-  // clear results
-  elems.trueMargin.textContent='—'; elems.profitUnit.textContent='—'; elems.monthlyProfit.textContent='—'; elems.gap.textContent='—'; elems.breakdown.textContent='—'; elems.suggestions.innerHTML=''; elems.riskBox.style.display='none'; elems.unitsNote.textContent='—';
-}
-
-/* ---------- simple analytics / events (placeholder) ---------- */
-function saveEvent(type, metadata){
-  // placeholder: you can later send to Supabase or analytics
-  console.log('event', type, metadata);
-}
-
-/* ---------- localStorage draft ---------- */
-const DRAFT_KEY = 'margenreal:draft:v1';
-function saveDraft(forceClear=false){
-  if(forceClear){ localStorage.removeItem(DRAFT_KEY); return; }
-  const draft = {
-    cogs: elems.cogs.value, price: elems.price.value, platform: elems.platform.value, customFee: elems.customFee.value,
-    shipping: elems.shipping.value, storage: elems.storage.value, units: elems.units.value, days: elems.days.value
-  };
-  try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); }catch(e){}
-}
-function restoreDraft(){
-  try{
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if(!raw) return;
-    const d = JSON.parse(raw);
-    elems.cogs.value = d.cogs || '';
-    elems.price.value = d.price || '';
-    elems.platform.value = d.platform || 'amazon';
-    elems.customFee.value = d.customFee || '';
-    elems.shipping.value = d.shipping || '';
-    elems.storage.value = d.storage || '';
-    elems.units.value = d.units || '';
-    elems.days.value = d.days || '';
-    // show custom fee row if platform is custom
-    if(elems.platform.value === 'custom') elems.customFeeRow.style.display='block';
-  }catch(e){}
-}
-
-/* ---------- bind events ---------- */
-elems.platform.addEventListener('change', () => {
-  if(elems.platform.value === 'custom') elems.customFeeRow.style.display='block';
-  else elems.customFeeRow.style.display='none';
-  saveDraft();
-});
-elems.toggleAdvanced.addEventListener('click', () => {
-  elems.advanced.style.display = elems.advanced.style.display === 'none' ? 'block' : 'none';
-  elems.toggleAdvanced.textContent = elems.advanced.style.display === 'none' ? 'Opciones avanzadas ▾' : 'Opciones avanzadas ▴';
-});
-elems.calcBtn.addEventListener('click', () => { runCalc(); saveDraft(); });
-elems.resetBtn.addEventListener('click', () => { resetForm(); });
-window.addEventListener('beforeunload', saveDraft);
-['cogs','price','customFee','shipping','storage','units','days','platform'].forEach(id => {
-  const el = $(id);
-  if(!el) return;
-  el.addEventListener('input', () => saveDraft());
+// Allow Enter key to advance
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&currentStep<3){
+    if(currentStep===2) calculate();
+    else goStep(currentStep+1);
+  }
 });
 
-/* ---------- init ---------- */
-restoreDraft();
-// initial run if there are values
-if(elems.price.value || elems.cogs.value) runCalc();
+updateProgress();
 </script>
 </body>
 </html>
