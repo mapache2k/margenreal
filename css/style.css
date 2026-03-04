@@ -63,6 +63,18 @@
   --sp-16: 64px;
   --sp-20: 80px;
 
+  /* ── Layout tokens — change these to reflow the whole site ── 
+     To make pages feel tighter: reduce --section-y and --hero-pt
+     To make pages feel more spacious: increase them
+     All sections, hero, and cards reference these — one change cascades everywhere. ── */
+  --section-y:   56px;   /* vertical padding for all sections (was 80px) */
+  --section-x:   40px;   /* horizontal padding */
+  --section-max:  1100px;
+  --hero-pt:     60px;   /* hero top — how high content sits */
+  --hero-pb:     56px;
+  --gap-cards:   1px;
+  --gap-grid:    16px;
+
   /* Border radii */
   --r-sm:  8px;
   --r-md:  12px;
@@ -234,8 +246,19 @@ nav {
 
 /* ─── PAGE LAYOUT ─── */
 .page-wrap { padding-top: 60px; min-height: 100vh; }
-.section   { padding: var(--sp-20) var(--sp-10); max-width: 1100px; margin: 0 auto; }
-@media (max-width: 640px) { .section { padding: var(--sp-12) var(--sp-5); } }
+.section   {
+  padding: var(--section-y) var(--section-x);
+  max-width: var(--section-max);
+  margin: 0 auto;
+}
+@media (max-width: 640px) {
+  :root {
+    --section-y: 44px;
+    --section-x: 20px;
+    --hero-pt:   48px;
+    --hero-pb:   44px;
+  }
+}
 .divider   { border: none; border-top: 1px solid var(--border); }
 
 /* ─── BUTTONS ─── */
