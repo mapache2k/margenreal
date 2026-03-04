@@ -11,9 +11,9 @@
 /* ─── DESIGN TOKENS ─── */
 :root {
   /* Colors — backgrounds */
-  --bg:          #0c0c0c;
-  --surface:     #141414;
-  --surface2:    #1c1c1c;
+  --bg:          #0e0e0d;   /* very subtle warm tint, not pure black */
+  --surface:     #161615;
+  --surface2:    #1e1e1c;
 
   /* Colors — borders */
   --border:      #272727;
@@ -169,7 +169,7 @@ nav {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 var(--sp-10);
   height: 60px;
-  background: rgba(12,12,12,.92);
+  background: rgba(14,14,13,.94);
   backdrop-filter: blur(12px);         /* reduced from 24px — better perf */
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
