@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Herramienta — margenreal</title>
+  <meta name="description" content="Diagnóstico financiero para tu PyME en 3 minutos. Runway, punto de equilibrio y diagnóstico gerencial."/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Epilogue:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    /* ── Page header ── */
+    .tool-header { padding: 52px 40px 28px; max-width: 1100px; margin: 0 auto; text-align: center; }
+    @media(max-width:640px){ .tool-header{ padding: 36px 20px 20px; } }
+    .tool-header h1 { font-family: var(--font-display); font-size: clamp(28px,5vw,48px); font-weight: 800; margin-bottom: 10px; }
+    .tool-header p  { color: var(--muted); font-size: 15px; }
+
+    /* ── Mode toggle ── */
+    .mode-toggle {
+      display: inline-flex; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 4px; gap: 4px; margin-top: 24px;
+    }
+    .mode-btn {
+      font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      padding: 9px 22px; border-radius: 9px; border: none; cursor: pointer;
+      transition: all .2s; background: transparent; color: var(--muted);
+    }
+    .mode-btn.active { background: var(--accent); color: #080810; }
+
+    /* ── Wizard ── */
+    .wizard-wrap { max-width: 600px; margin: 0 auto; padding: 32px 40px 80px; }
+    @media(max-width:640px){ .wizard-wrap{ padding: 24px 20px 60px; } }
+
+    .prog-track { display: flex; gap: 6px; margin-bottom: 48px; align-items: center; }
+    .prog-step  { height: 3px; flex: 1; background: var(--border); border-radius: 99px; transition: background .4s; }
+    .prog-step.done   { background: var(--accent); }
+    .prog-step.active { background: var(--accent); opacity: .5; }
+    .prog-label { font-size: 11px; color: var(--muted); white-space: nowrap; margin-left: 6px; }
+
+    .wz-step { display: none; animation: fadeUp .35s ease both; }
+    .wz-step.active { display: block; }
+    .wz-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .wz-title   { font-family: var(--font-display); font-size: clamp(24px,4vw,36px); font-weight: 800; line-height: 1.1; margin-bottom: 8px; }
+    .wz-sub     { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.65; }
+
+    .btn-next {
+      background: var(--accent); color: #080810;
+      font-family: var(--font-display); font-weight: 800; font-size: 14px;
+      padding: 15px 28px; border-radius: 11px; border: none; cursor: pointer;
+      transition: transform .15s, box-shadow .2s; letter-spacing: .3px;
+    }
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,255,71,.25); }
+    .btn-back-wz {
+      background: transparent; border: 1px solid var(--border2); color: var(--muted);
+      font-family: var(--font-body); font-size: 13px; padding: 14px 22px;
+      border-radius: 11px; cursor: pointer; transition: all .2s;
+    }
+    .btn-back-wz:hover { border-color: var(--muted); color: var(--text); }
+    .btn-row { display: flex; gap: 10px; margin-top: 28px; align-items: center; }
+    .btn-restart { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 12px; padding: 10px 18px; border-radius: 9px; cursor: pointer; transition: all .2s; font-family: var(--font-body); }
+    .btn-restart:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Single page tool ── */
+    .single-wrap { max-width: 1060px; margin: 0 auto; padding: 16px 40px 80px; display: none; }
+    @media(max-width:640px){ .single-wrap{ padding: 16px 20px 60px; } }
+    .single-wrap.active { display: block; }
+    .tool-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+    @media(max-width:900px){ .tool-grid{ grid-template-columns: 1fr; } }
+
+    .inputs-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; position: sticky; top: 80px; }
+    .inputs-card h3 { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 20px; }
+
+    .sf { margin-bottom: 14px; }
+    .sf label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .sf input  { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 16px; font-weight: 600; padding: 11px 13px; border-radius: 9px; outline: none; transition: border .2s; -moz-appearance: textfield; }
+    .sf input::-webkit-outer-spin-button, .sf input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .sf input:focus { border-color: var(--accent); }
+    .sf input::placeholder { color: var(--border2); }
+    .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn-calc  { width: 100%; margin-top: 18px; background: var(--accent); color: #080810; font-family: var(--font-display); font-weight: 800; font-size: 14px; padding: 14px; border-radius: 11px; border: none; cursor: pointer; transition: box-shadow .2s, transform .15s; letter-spacing: .3px; }
+    .btn-calc:hover { box-shadow: 0 6px 24px rgba(232,255,71,.25); transform: translateY(-1px); }
+    .btn-reset { width: 100%; margin-top: 8px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--font-body); font-size: 12px; padding: 10px; border-radius: 9px; cursor: pointer; transition: all .2s; }
+    .btn-reset:hover { border-color: var(--muted2); color: var(--text); }
+
+    .results-panel { display: none; }
+    .results-panel.show { display: block; animation: fadeUp .4s ease both; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-state .es-icon  { font-size: 48px; margin-bottom: 16px; }
+    .empty-state .es-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .empty-state .es-text  { font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/index.html">margen<span>real</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="/index.html">Inicio</a>
+    <a class="nav-link active" href="/tool.html">Herramienta</a>
+    <a class="nav-link" href="/pricing.html">Planes</a>
+    <a class="nav-link" href="/about.html">Nosotros</a>
+  </div>
+  <a class="btn nav-cta" href="/tool.html">Diagnosticar mi negocio →</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="tool-header">
+    <div class="label">Diagnóstico financiero</div>
+    <h1>Conoce si tu negocio<br>va a sobrevivir.</h1>
+    <p>7 variables · 3 minutos · Diagnóstico real</p>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="mbWizard" onclick="setMode('wizard')">Paso a paso</button>
+      <button class="mode-btn" id="mbSingle" onclick="setMode('single')">Todo en uno</button>
+    </div>
+  </div>
+
+  <!-- ══ WIZARD ══ -->
+  <div class="wizard-wrap" id="wizardWrap">
+    <div class="prog-track">
+      <div class="prog-step" id="ps0"></div>
+      <div class="prog-step" id="ps1"></div>
+      <div class="prog-step" id="ps2"></div>
+      <div class="prog-step" id="ps3"></div>
+      <span class="prog-label" id="psLabel">Paso 1 de 4</span>
+    </div>
+
+    <!-- Step 0 -->
+    <div class="wz-step active" id="wzS0">
+      <div class="wz-eyebrow">Ingresos y Margen</div>
+      <div class="wz-title">¿Cuánto vende y gana<br>tu negocio?</div>
+      <div class="wz-sub">Solo números del último mes. Sin contabilidad.</div>
+      <div class="field">
+        <label>Ventas mensuales</label>
+        <input type="number" id="w_rev" placeholder="0" min="0"/>
+        <div class="field-hint">Total cobrado el último mes</div>
+      </div>
+      <div class="field">
+        <label>Margen bruto (%)</label>
+        <input type="number" id="w_mg" placeholder="40" min="0" max="100"/>
+        <div class="field-hint">Si vendes 100 y el costo directo es 60, tu margen es 40%</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-next" onclick="wzGo(1)">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="wz-step" id="wzS1">
+      <div class="wz-eyebrow">Costos y Caja</div>
+      <div class="wz-title">¿Cuánto gastas y<br>cuánto tienes?</div>
+      <div class="wz-sub">Los costos fijos son los que pagas sí o sí, vendas o no vendas.</div>
+      <div class="field">
+        <label>Costos fijos mensuales</label>
+        <input type="number" id="w_fc" placeholder="0" min="0"/>
+        <div class="field-hint">Arriendo, sueldos, servicios, suscripciones</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Caja disponible</label>
+          <input type="number" id="w_cash" placeholder="0" min="0"/>
+          <div class="field-hint">Efectivo + cuenta corriente hoy</div>
+        </div>
+        <div class="field">
+          <label>Deuda mensual</label>
+          <input type="number" id="w_debt" placeholder="0" min="0"/>
+          <div class="field-hint">Cuotas de créditos o leasing</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-back-wz" onclick="wzGo(0)">← Atrás</button>
+        <button class="btn-next" onclick="wzGo(2)">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="wz-step" id="wzS2">
+      <div class="wz-eyebrow">Capital de Trabajo</div>
+      <div class="wz-title">¿Cuándo cobras y<br>cuándo pagas?</div>
+      <div class="wz-sub">El timing importa tanto como el monto. Aquí vive una de las trampas más silenciosas.</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Días para cobrar</label>
+          <input type="number" id="w_ar" placeholder="0" min="0"/>
+          <div class="field-hint">Desde que vendes hasta que recibes el pago</div>
+        </div>
+        <div class="field">
+          <label>Días para pagar</label>
+          <input type="number" id="w_ap" placeholder="0" min="0"/>
+          <div class="field-hint">Días para pagar a tus proveedores</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-back-wz" onclick="wzGo(1)">← Atrás</button>
+        <button class="btn-next" onclick="wzCalc()">Ver diagnóstico →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Results -->
+    <div class="wz-step" id="wzS3">
+      <div class="wz-eyebrow">Diagnóstico</div>
+      <div class="wz-title" id="wzTitle">Tu negocio al descubierto</div>
+      <div id="wzScore"  style="margin-bottom:16px"></div>
+      <div class="metrics-grid" id="wzMetrics"></div>
+      <div class="chart-card"><div class="chart-lbl">Proyección de caja — 6 meses</div><div class="bars" id="wzChart"></div></div>
+      <div class="sens-row" id="wzSens"></div>
+      <div class="diag-card" id="wzDiag"></div>
+      <button class="btn-restart" onclick="wzRestart()">↩ Recalcular con otros números</button>
+    </div>
+  </div>
+
+  <!-- ══ SINGLE PAGE ══ -->
+  <div class="single-wrap" id="singleWrap">
+    <div class="tool-grid">
+      <div class="inputs-card">
+        <h3>Datos de tu negocio</h3>
+        <div class="sf"><label>Ventas mensuales</label><input type="number" id="s_rev" placeholder="0"/></div>
+        <div class="sf"><label>Margen bruto (%)</label><input type="number" id="s_mg" placeholder="40"/></div>
+        <div class="sf"><label>Costos fijos mensuales</label><input type="number" id="s_fc" placeholder="0"/></div>
+        <div class="sf-row">
+          <div class="sf"><label>Caja disponible</label><input type="number" id="s_cash" placeholder="0"/></div>
+          <div class="sf"><label>Deuda mensual</label><input type="number" id="s_debt" placeholder="0"/></div>
+        </div>
+        <div class="sf-row">
+          <div class="sf"><label>Días para cobrar</label><input type="number" id="s_ar" placeholder="30"/></div>
+          <div class="sf"><label>Días para pagar</label><input type="number" id="s_ap" placeholder="30"/></div>
+        </div>
+        <button class="btn-calc" onclick="sCalc()">Calcular diagnóstico →</button>
+        <button class="btn-reset" onclick="sReset()">Limpiar campos</button>
+      </div>
+      <div>
+        <div class="results-panel" id="sResults">
+          <div id="sScore"   style="margin-bottom:14px"></div>
+          <div class="metrics-grid" id="sMetrics"></div>
+          <div class="chart-card"><div class="chart-lbl">Proyección de caja — 6 meses</div><div class="bars" id="sChart"></div></div>
+          <div class="sens-row" id="sSens"></div>
+          <div class="diag-card" id="sDiag"></div>
+        </div>
+        <div class="empty-state" id="sEmpty">
+          <div class="es-icon">📊</div>
+          <div class="es-title">Tu diagnóstico aparece aquí</div>
+          <div class="es-text">Completa los datos y presiona calcular</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="/js/calculator.js"></script>
+<script>
+  /* ── Mode toggle ── */
+  function setMode(m) {
+    document.getElementById('wizardWrap').style.display = m === 'wizard' ? 'block' : 'none';
+    document.getElementById('singleWrap').classList.toggle('active', m === 'single');
+    document.getElementById('mbWizard').classList.toggle('active', m === 'wizard');
+    document.getElementById('mbSingle').classList.toggle('active', m === 'single');
+  }
+
+  /* ── WIZARD ── */
+  let wzStep = 0;
+  function wzUpdateProgress() {
+    [0,1,2,3].forEach(i => {
+      const el = document.getElementById('ps'+i);
+      if (!el) return;
+      el.className = 'prog-step' + (i < wzStep ? ' done' : i === wzStep ? ' active' : '');
+    });
+    document.getElementById('psLabel').textContent = `Paso ${Math.min(wzStep+1,4)} de 4`;
+  }
+  function wzGo(n) {
+    document.getElementById('wzS'+wzStep).classList.remove('active');
+    wzStep = n;
+    document.getElementById('wzS'+wzStep).classList.add('active');
+    wzUpdateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function wzCalc() {
+    const inputs = {
+      revenue: parseFloat(document.getElementById('w_rev').value)  || 0,
+      marginPct: parseFloat(document.getElementById('w_mg').value) || 0,
+      fixedCosts: parseFloat(document.getElementById('w_fc').value)|| 0,
+      cash:  parseFloat(document.getElementById('w_cash').value)   || 0,
+      debt:  parseFloat(document.getElementById('w_debt').value)   || 0,
+      arDays: parseFloat(document.getElementById('w_ar').value)    || 0,
+      apDays: parseFloat(document.getElementById('w_ap').value)    || 0,
+    };
+    const r = calculate(inputs);
+    document.getElementById('wzTitle').textContent = r.ebitda >= 0 ? 'Tu negocio tiene base.' : 'Hay trabajo urgente por hacer.';
+    renderResults('wz', r);
+    wzGo(3);
+  }
+  function wzRestart() {
+    ['w_rev','w_mg','w_fc','w_cash','w_debt','w_ar','w_ap'].forEach(id => { document.getElementById(id).value = ''; });
+    wzGo(0);
+  }
+  wzUpdateProgress();
+
+  /* ── SINGLE PAGE ── */
+  function sCalc() {
+    const inputs = {
+      revenue:    parseFloat(document.getElementById('s_rev').value)  || 0,
+      marginPct:  parseFloat(document.getElementById('s_mg').value)   || 0,
+      fixedCosts: parseFloat(document.getElementById('s_fc').value)   || 0,
+      cash:       parseFloat(document.getElementById('s_cash').value) || 0,
+      debt:       parseFloat(document.getElementById('s_debt').value) || 0,
+      arDays:     parseFloat(document.getElementById('s_ar').value)   || 0,
+      apDays:     parseFloat(document.getElementById('s_ap').value)   || 0,
+    };
+    const r = calculate(inputs);
+    renderResults('s', r);
+    document.getElementById('sResults').classList.add('show');
+    document.getElementById('sEmpty').style.display = 'none';
+  }
+  function sReset() {
+    ['s_rev','s_mg','s_fc','s_cash','s_debt','s_ar','s_ap'].forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('sResults').classList.remove('show');
+    document.getElementById('sEmpty').style.display = 'block';
+  }
+
+  /* Enter key to advance wizard */
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (wzStep === 0) wzGo(1);
+    else if (wzStep === 1) wzGo(2);
+    else if (wzStep === 2) wzCalc();
+  });
+</script>
+</body>
+</html>
