@@ -99,38 +99,58 @@ function buildActions(r) {
 
   // ── MARGIN (biggest lever for most businesses) ──
   if (r.marginPct < 15) {
-    const impactOf5pct = r.revenue * 0.05;
+    const impact10pct = r.revenue * 0.1 * ((r.marginPct + 10) / 100) - r.revenue * 0.1 * (r.marginPct / 100);
+    // Actually: if price goes up 10%, revenue goes up 10%, margin gain = new_gross - old_gross
+    const newGross = (r.revenue * 1.1) * (r.marginPct / 100); // same margin %, more revenue
+    const gainFromPrice = newGross - r.grossProfit;
     actions.push({
       priority: 1,
       icon: '📈',
       label: 'MAYOR IMPACTO',
-      problem: `Tu margen bruto es ${r.marginPct.toFixed(0)}% — muy por debajo del mínimo viable.`,
-      action: 'Sube precios un 10% o elimina los productos/servicios con menor margen. Haz esto antes que cualquier otra cosa.',
-      impact: `+10% en precio = +${fmt(impactOf5pct * 2)} de resultado operacional mensual`,
+      problem: `Tu margen bruto es ${r.marginPct.toFixed(0)}% — por cada ${fmt(r.revenue)} que vendes, solo ${fmt(r.grossProfit)} quedan para cubrir costos.`,
+      action: `Sube precios un 10% antes de tocar cualquier otra variable. Si vendes lo mismo, pasarías de ${fmt(r.grossProfit)} a ${fmt(Math.round(newGross))} de margen bruto mensual.`,
+      impact: `+10% en precio = +${fmt(Math.round(gainFromPrice))} de margen bruto sin vender más`,
       color: 'var(--danger)'
     });
   } else if (r.marginPct < 30) {
-    const impactOf5pct = r.revenue * 0.05;
+    const targetGross = r.revenue * 0.35;
+    const gainToTarget = targetGross - r.grossProfit;
     actions.push({
       priority: 1,
       icon: '📈',
       label: 'ALTA PRIORIDAD',
-      problem: `Margen de ${r.marginPct.toFixed(0)}% — funciona, pero limita el crecimiento.`,
-      action: 'Identifica los 3 productos/clientes con mejor margen y enfoca el esfuerzo de ventas ahí. Evita descuentos.',
-      impact: `Subir margen a 35% generaría +${fmt(r.revenue * 0.05)} adicionales al mes`,
+      problem: `Margen de ${r.marginPct.toFixed(0)}% — de cada ${fmt(r.revenue)} vendidos, ${fmt(r.grossProfit)} van a cubrir costos. Funciona, pero el crecimiento no compensa rápido.`,
+      action: 'Identifica los 3 productos o clientes con mejor margen y enfoca el esfuerzo de ventas ahí. Evita descuentos — cada 5% de descuento reduce tu margen bruto proporcionalmente.',
+      impact: `Llegar al 35% de margen generaría +${fmt(Math.round(gainToTarget))} adicionales al mes sin vender más`,
       color: 'var(--warning)'
     });
   }
 
   // ── FIXED COSTS ──
   if (r.ebitda < 0) {
+    const costGapPct = r.fixedCosts > 0 ? (r.costGap / r.fixedCosts) * 100 : null;
+    const costCuttable = costGapPct !== null && costGapPct <= 100; // is it even possible to cut enough?
+
+    let action, impact;
+    if (!costCuttable || costGapPct > 60) {
+      // Cutting costs alone won't save this — need revenue too
+      const revenueNeeded = fmt(r.revenueGap || 0);
+      const costCut30     = fmt(r.fixedCosts * 0.3);
+      action = `Solo recortar costos no es suficiente — necesitas también ${revenueNeeded} más en ventas. Combina: recorta lo que puedas (apunta a un 20–30% de fijos) y activa ventas en paralelo.`;
+      impact = `Recortar 30% en fijos (−${costCut30}/mes) + ventas adicionales de ${revenueNeeded} = equilibrio`;
+    } else {
+      const cutPct = Math.ceil(costGapPct);
+      action = `Necesitas reducir tus costos fijos un ${cutPct}% (equivale a −${fmt(r.costGap)}/mes sobre tus ${fmt(r.fixedCosts)}/mes actuales). Revisa nómina, arriendo y suscripciones en ese orden.`;
+      impact = `−${cutPct}% en costos fijos = punto de equilibrio exacto`;
+    }
+
     actions.push({
       priority: r.marginPct < 15 ? 2 : 1,
       icon: '✂️',
       label: r.marginPct < 15 ? 'URGENTE' : 'MAYOR IMPACTO',
-      problem: `Costos fijos de ${fmt(r.fixedCosts)} consumen todo tu margen — operas en pérdida.`,
-      action: `Necesitas reducir costos fijos en ${fmt(r.costGap)} para llegar al equilibrio. Revisa nómina, arriendo y suscripciones.`,
-      impact: `Cortar ${fmt(r.costGap)} en fijos = punto de equilibrio exacto`,
+      problem: `Tus costos fijos (${fmt(r.fixedCosts)}/mes) superan lo que genera tu margen bruto (${fmt(r.grossProfit)}/mes) — operas en pérdida de ${fmt(Math.abs(r.ebitda))}/mes.`,
+      action,
+      impact,
       color: 'var(--danger)'
     });
   } else if (r.ebitda > 0 && r.ebitda < r.fixedCosts * 0.2) {
@@ -138,9 +158,9 @@ function buildActions(r) {
       priority: 2,
       icon: '✂️',
       label: 'MEDIA PRIORIDAD',
-      problem: 'Tu resultado operacional es positivo pero muy ajustado.',
-      action: 'Revisa si hay costos fijos que puedas volver variables — pagas aunque no vendas.',
-      impact: `Reducir fijos 10% = +${fmt(r.fixedCosts * 0.1)} de resultado mensual`,
+      problem: `Tu resultado es positivo (${fmt(r.ebitda)}/mes) pero solo representa el ${((r.ebitda / r.fixedCosts) * 100).toFixed(0)}% de tus costos fijos — poco margen de error.`,
+      action: 'Revisa si hay costos fijos que puedas convertir a variables (pagas solo cuando vendes). Eso reduce el riesgo sin afectar capacidad.',
+      impact: `Reducir fijos un 10% (−${fmt(r.fixedCosts * 0.1)}/mes) = +${fmt(r.fixedCosts * 0.1)} de resultado mensual`,
       color: 'var(--warning)'
     });
   }
