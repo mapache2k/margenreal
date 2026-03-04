@@ -11,13 +11,13 @@
 /* ─── DESIGN TOKENS ─── */
 :root {
   /* Colors — backgrounds */
-  --bg:          #0e0e0d;   /* very subtle warm tint, not pure black */
-  --surface:     #161615;
-  --surface2:    #1e1e1c;
+  --bg:          #2a2926;
+  --surface:     #323130;
+  --surface2:    #3a3937;
 
   /* Colors — borders */
-  --border:      #272727;
-  --border2:     #333333;
+  --border:      #3f3e3b;
+  --border2:     #4d4c49;
 
   /* Colors — accent (warm white) */
   --accent:      #f0ebe0;
@@ -169,7 +169,7 @@ nav {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 var(--sp-10);
   height: 60px;
-  background: rgba(14,14,13,.94);
+  background: rgba(42,41,38,.96);
   backdrop-filter: blur(12px);         /* reduced from 24px — better perf */
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
