@@ -1,7 +1,10 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import ProLayout from '../../lib/ProLayout';
 import { usePro, SnapshotInputs } from '../../lib/ProContext';
+
+// carga dinámica del layout que usa hooks/objetos del cliente
+const ProLayout = dynamic(() => import('../../lib/ProLayout'), { ssr: false });
 
 export default function ProHome() {
   const router = useRouter();
