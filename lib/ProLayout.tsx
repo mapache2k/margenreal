@@ -265,8 +265,8 @@ export default function ProLayout({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="sidebar-footer">
-            <a className="sidebar-footer-link" href="/tool.html">← Herramienta gratuita</a>
-            <a className="sidebar-footer-link" href="/pricing.html">Planes</a>
+            <a className="sidebar-footer-link" href="/tool">← Herramienta gratuita</a>
+            <a className="sidebar-footer-link" href="/pricing">Planes</a>
           </div>
         </aside>
 
