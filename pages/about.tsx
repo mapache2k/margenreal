@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 
 export default function AboutPage(): React.JSX.Element {
@@ -12,16 +13,16 @@ export default function AboutPage(): React.JSX.Element {
 
       <div className="page-wrap">
         <nav>
-          <a className="nav-logo" href="/">
+          <Link className="nav-logo" href="/">
             margen<span>real</span>
-          </a>
+          </Link>
           <div className="nav-links">
-            <a className="nav-link" href="/">Inicio</a>
-            <a className="nav-link" href="/tool">Herramienta</a>
-            <a className="nav-link" href="/pricing">Planes</a>
-            <a className="nav-link active" href="/about">Nosotros</a>
+            <Link className="nav-link" href="/">Inicio</Link>
+            <Link className="nav-link" href="/tool">Herramienta</Link>
+            <Link className="nav-link" href="/pricing">Planes</Link>
+            <Link className="nav-link active" href="/about">Nosotros</Link>
           </div>
-          <a className="btn nav-cta" href="/tool">Diagnosticar mi negocio →</a>
+          <Link className="btn nav-cta" href="/tool">Diagnosticar mi negocio →</Link>
         </nav>
 
         <section className="section">
@@ -162,18 +163,18 @@ export default function AboutPage(): React.JSX.Element {
             <p style={{ color: "var(--muted)", fontSize: 15, maxWidth: 440, margin: "0 auto 28px", lineHeight: 1.7 }}>
               Si eres dueño de una PyME en LatAm y quieres ser beta tester, o si tienes feedback, escríbenos.
             </p>
-            <a className="btn btn-primary" href="mailto:contacto@margenreal.io">contacto@margenreal.io</a>
+            <a className="btn btn-primary" href="mailto:contacto@margenreal.io">contacto@margenreal.io</Link>
           </div>
         </section>
 
         <footer>
-          <a className="footer-logo" href="/">margen<span>real</span></a>
+          <Link className="footer-logo" href="/">margen<span>real</span></Link>
           <div className="footer-links">
-            <a className="footer-link" href="/">Inicio</a>
-            <a className="footer-link" href="/tool">Herramienta</a>
-            <a className="footer-link" href="/pricing">Planes</a>
-            <a className="footer-link" href="/privacy">Privacidad</a>
-            <a className="footer-link" href="/terms">Términos</a>
+            <Link className="footer-link" href="/">Inicio</Link>
+            <Link className="footer-link" href="/tool">Herramienta</Link>
+            <Link className="footer-link" href="/pricing">Planes</Link>
+            <Link className="footer-link" href="/privacy">Privacidad</Link>
+            <Link className="footer-link" href="/terms">Términos</Link>
             <a className="footer-link" href="mailto:contacto@margenreal.io">Contacto</a>
           </div>
           <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
