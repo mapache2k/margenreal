@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 
 export default function PricingPage(): React.JSX.Element {
@@ -14,26 +15,26 @@ export default function PricingPage(): React.JSX.Element {
       </Head>
 
       <nav>
-        <a className="nav-logo" href="/">
+        <Link className="nav-logo" href="/">
           margen<span>real</span>
-        </a>
+        </Link>
         <div className="nav-links">
-          <a className="nav-link" href="/">
+          <Link className="nav-link" href="/">
             Inicio
-          </a>
-          <a className="nav-link" href="/tool">
+          </Link>
+          <Link className="nav-link" href="/tool">
             Herramienta
-          </a>
-          <a className="nav-link active" href="/pricing">
+          </Link>
+          <Link className="nav-link active" href="/pricing">
             Planes
-          </a>
-          <a className="nav-link" href="/about">
+          </Link>
+          <Link className="nav-link" href="/about">
             Nosotros
-          </a>
+          </Link>
         </div>
-        <a className="btn nav-cta" href="/tool">
+        <Link className="btn nav-cta" href="/tool">
           Diagnosticar mi negocio →
-        </a>
+        </Link>
       </nav>
 
       <div className="page-wrap">
@@ -69,9 +70,9 @@ export default function PricingPage(): React.JSX.Element {
                 <li className="off">Exportar PDF</li>
                 <li className="off">Benchmarks sectoriales</li>
               </ul>
-              <a className="btn-plan btn-plan-outline" href="/tool">
+              <Link className="btn-plan btn-plan-outline" href="/tool">
                 Empezar gratis
-              </a>
+              </Link>
             </div>
 
             <div className="plan featured">
@@ -120,7 +121,7 @@ export default function PricingPage(): React.JSX.Element {
               </ul>
               <a className="btn-plan btn-plan-outline" href="mailto:contacto@margenreal.io">
                 Contactar →
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -213,34 +214,34 @@ export default function PricingPage(): React.JSX.Element {
         </section>
 
         <footer>
-          <a className="footer-logo" href="/">
+          <Link className="footer-logo" href="/">
             margen<span>real</span>
-          </a>
+          </Link>
           <div className="footer-links">
-            <a className="footer-link" href="/">
+            <Link className="footer-link" href="/">
               Inicio
-            </a>
-            <a className="footer-link" href="/tool">
+            </Link>
+            <Link className="footer-link" href="/tool">
               Herramienta
-            </a>
-            <a className="footer-link" href="/about">
+            </Link>
+            <Link className="footer-link" href="/about">
               Nosotros
-            </a>
-            <a className="footer-link" href="/privacy">
+            </Link>
+            <Link className="footer-link" href="/privacy">
               Privacidad
-            </a>
-            <a className="footer-link" href="/terms">
+            </Link>
+            <Link className="footer-link" href="/terms">
               Términos
-            </a>
+            </Link>
             <a className="footer-link" href="mailto:contacto@margenreal.io">
               Contacto
-            </a>
+            </Link>
           </div>
           <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
         </footer>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .pricing-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
