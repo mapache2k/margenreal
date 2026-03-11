@@ -7,7 +7,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        {/* Load fonts once for the whole app */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Epilogue:wght@400;500;600&display=swap"
