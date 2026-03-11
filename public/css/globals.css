@@ -1,0 +1,210 @@
+/* styles/globals.css
+   Global variables & base styles for margenreal
+   Paste this file into /styles/globals.css and ensure pages/_app.tsx imports it.
+*/
+
+/* ===== Root variables (colors, spacing, fonts) ===== */
+:root{
+  --font-display: "Syne", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-body: "Epilogue", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+
+  --bg: #0a0a0e;           /* used as input background in some comps (dark theme) */
+  --surface: #0f1113;      /* cards */
+  --surface2: #121217;     /* hover */
+  --border: #1f2125;
+  --border2: #26272b;
+  --muted: #9aa0b2;
+  --muted2: #6f7480;
+  --text: #e8e8ea;
+  --text-2: #c8c9ce;
+  --accent: #f9d71b;       /* yellow-ish accent used in original */
+  --success: #78d89b;
+  --danger: #ff6b6b;
+  --warning: #f6d365;
+
+  --section-max: 1200px;
+  --section-x: 24px;
+  --sp-6: 12px;
+  --sp-10: 20px;
+  --sp-12: 32px;
+
+  --hero-pt: 56px;
+  --hero-pb: 72px;
+  --transition: 0.18s ease;
+}
+
+/* ===== Reset / base ===== */
+* { box-sizing: border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+html,body,#__next { height: 100%; }
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #060607 0%, #0b0b0d 100%);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Links */
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Headings */
+h1, h2, h3, h4 { margin: 0 0 12px 0; color: var(--text); font-family: var(--font-display); }
+p { margin: 0 0 14px 0; color: var(--text-2); }
+
+/* Page wrapper helpers */
+.page-wrap { max-width: var(--section-max); margin: 0 auto; padding: 0 24px; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Labels */
+.label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+/* ===== Navigation ===== */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 24px;
+  max-width: var(--section-max);
+  margin: 0 auto;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--text);
+  font-size: 18px;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 14px; align-items: center; }
+.nav-link {
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.nav-link.active, .nav-link:hover { color: var(--text); background: transparent; }
+
+/* CTA nav button */
+.btn.nav-cta {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #080810;
+  font-weight: 800;
+  font-family: var(--font-display);
+}
+
+/* ===== Generic buttons ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  text-decoration: none;
+}
+.btn-primary, .btn.btn-primary {
+  background: var(--accent);
+  color: #080810;
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text);
+}
+.btn-lg { padding: 14px 20px; font-size: 16px; border-radius: 12px; }
+
+/* ===== Cards / surfaces ===== */
+.surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.surface2 {
+  background: var(--surface2);
+}
+
+/* ===== Forms (inputs) ===== */
+input[type="number"], input[type="text"], textarea {
+  background: var(--bg);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+}
+input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(249,215,27,0.06); }
+
+/* ===== Utilities and small components used across pages ===== */
+.section { padding: 40px 0; max-width: var(--section-max); margin: 0 auto; }
+.heading { font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--text); margin-bottom: 8px; }
+.subtext { color: var(--muted); }
+
+.hi {
+  display: flex;
+  gap: 12px;
+}
+
+/* Results / empty state (tool page) */
+.empty-state {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-radius: 12px;
+  border: 1.5px dashed var(--border2);
+  padding: 48px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Hooks grid (homepage) */
+.hooks-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; }
+.hook-card { padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+
+/* FAQ */
+.faq-list { margin-top: 18px; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; }
+.faq-q { font-weight: 700; color: var(--text); display:flex; justify-content:space-between; align-items:center; }
+
+/* Testimonials */
+.testi { padding: 20px; border-radius:12px; background: var(--surface); border: 1px solid var(--border); }
+
+/* Pricing cards */
+.plan { padding: 20px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+
+/* Compare table defaults */
+table { width: 100%; border-collapse: collapse; color: var(--muted); }
+table th { text-align: left; padding: 12px; color: var(--text); font-weight: 700; border-bottom: 1px solid var(--border); }
+table td { padding: 12px; border-bottom: 1px solid var(--border); }
+
+/* Small responsive */
+@media (max-width: 900px) {
+  .hooks-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 620px) {
+  .hooks-grid { grid-template-columns: 1fr; }
+  nav { padding: 12px; }
+}
+
+/* Misc colors used in pages */
+.success { color: var(--success); }
+.danger { color: var(--danger); }
+.muted { color: var(--muted); }
