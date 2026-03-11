@@ -195,7 +195,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         {/* Sidebar */}
         <aside className="pro-sidebar">
           <div className="sidebar-logo">
-            <a className="sidebar-logo-text" href="/index.html">margen<span>real</span></a>
+            <a className="sidebar-logo-text" href="/index">margen<span>real</span></a>
             <span className="sidebar-pro-badge">PRO</span>
           </div>
 
