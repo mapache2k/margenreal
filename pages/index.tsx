@@ -1,4 +1,3 @@
-// pages/index.tsx
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -31,7 +30,7 @@ const faqItems = [
   }
 ];
 
-export default function Home() {
+export default function Home(): React.JSX.Element {
   const [openFaq, setOpenFaq] = useState<boolean[]>(faqItems.map(() => false));
 
   function toggleFaq(i: number) {
@@ -57,9 +56,113 @@ export default function Home() {
           rel="stylesheet"
         />
         <link rel="stylesheet" href="/css/style.css" />
+        {/* Inline page-specific CSS from your original file */}
         <style>{`
-/* (your inline page CSS unchanged) */
-... (omitted here for brevity in the snippet — keep the same styles you already had) ...
+/* ── Hero ── */
+.hero {
+  position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: var(--hero-pt) var(--section-x) var(--hero-pb);
+  max-width: var(--section-max); margin: 0 auto;
+  overflow: hidden;
+}
+@media(max-width:640px){ .hero{ padding: var(--hero-pt) var(--section-x) var(--hero-pb); } }
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,240,232,.05) 0%, transparent 65%);
+}
+.hero-grid { display: none; }
+.hero-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; width: 100%; }
+
+/* Eyebrow — simple text tag, no pill border */
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.8125rem; font-weight: 500;
+  color: var(--muted); margin-bottom: 24px;
+  letter-spacing: 0.01em;
+}
+.hero-eyebrow .dot {
+  width: 5px; height: 5px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2.5s infinite;
+  flex-shrink: 0;
+}
+.hero h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 4rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 20px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 480px; margin-bottom: 36px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-stats { display: flex; gap: 40px; margin-top: var(--sp-12); flex-wrap: wrap; padding-top: 32px; border-top: 1px solid var(--border); }
+.hs-val   { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.hs-label { font-size: 0.8125rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+/* ── Hooks grid — 3 cols, no orphan ── */
+.hooks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: var(--sp-12);
+}
+@media(max-width:700px){ .hooks-grid{ grid-template-columns: 1fr 1fr; } }
+@media(max-width:480px){ .hooks-grid{ grid-template-columns: 1fr; } }
+.hook-card { background: var(--surface); padding: 28px 24px; transition: background var(--transition); }
+.hook-card:hover { background: var(--surface2); }
+.hook-icon  { font-size: 22px; margin-bottom: 12px; line-height: 1; }
+.hook-title { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; margin-bottom: 8px; color: var(--text); line-height: 1.3; }
+.hook-text  { font-size: 0.8125rem; color: var(--muted); line-height: 1.65; }
+
+/* ── How it works — cleaner step numbers ── */
+.hiw-list { margin-top: var(--sp-12); display: grid; gap: 1px; }
+.hiw-step {
+  display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start;
+  background: var(--surface); padding: 24px 28px; transition: background var(--transition);
+}
+.hiw-step:first-child { border-radius: 16px 16px 0 0; }
+.hiw-step:last-child  { border-radius: 0 0 16px 16px; }
+.hiw-step:hover { background: var(--surface2); }
+.hiw-num {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  padding-top: 3px;
+}
+.hiw-title { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 700; margin-bottom: 6px; color: var(--text); line-height: 1.3; }
+.hiw-text  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+/* ── Testimonials ── */
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: var(--sp-12); }
+.testi { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.testi-stars  { color: var(--warning); font-size: 11px; margin-bottom: 14px; letter-spacing: 3px; }
+.testi-text   { font-size: 0.9375rem; line-height: 1.75; color: var(--text-2); margin-bottom: 20px; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.testi-name   { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+.testi-role   { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+/* ── FAQ ── */
+.faq-list { margin-top: var(--sp-12); display: grid; gap: 1px; }
+.faq-item { background: var(--surface); padding: 20px 24px; cursor: pointer; transition: background var(--transition); }
+.faq-item:first-child { border-radius: 16px 16px 0 0; }
+.faq-item:last-child  { border-radius: 0 0 16px 16px; }
+.faq-item:hover { background: var(--surface2); }
+.faq-q { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--text); }
+.faq-toggle { color: var(--muted); font-size: 18px; flex-shrink: 0; transition: transform .3s; line-height: 1; }
+.faq-a { font-size: 0.875rem; color: var(--muted); line-height: 1.75; max-height: 0; overflow: hidden; transition: max-height .4s ease, margin .3s; }
+.faq-item.open .faq-a      { max-height: 200px; margin-top: 12px; }
+.faq-item.open .faq-toggle { transform: rotate(45deg); color: var(--text); }
+
+/* ── CTA Banner ── */
+.cta-banner {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: var(--section-y) var(--section-x); text-align: center;
+}
+@media(max-width:640px){ .cta-banner{ padding: var(--sp-10) var(--sp-6); } }
         `}</style>
       </Head>
 
@@ -67,12 +170,12 @@ export default function Home() {
         <nav>
           <Link href="/" className="nav-logo">margen<span>real</span></Link>
           <div className="nav-links">
-            <Link href="/" className="nav-link active">Inicio</Link>
-            <Link href="/tool" className="nav-link">Herramienta</Link>
-            <Link href="/pricing" className="nav-link">Planes</Link>
-            <Link href="/about" className="nav-link">Nosotros</Link>
+            <a className="nav-link active" href="/">Inicio</a>
+            <a className="nav-link" href="/tool">Herramienta</a>
+            <a className="nav-link" href="/pricing">Planes</a>
+            <a className="nav-link" href="/about">Nosotros</a>
           </div>
-          <Link href="/tool" className="btn nav-cta">Diagnosticar mi negocio →</Link>
+          <a className="btn nav-cta" href="/tool">Diagnosticar mi negocio →</a>
         </nav>
       </header>
 
@@ -91,7 +194,7 @@ export default function Home() {
             </p>
 
             <div className="hero-actions anim-4">
-              <Link href="/tool" className="btn btn-primary btn-lg">Diagnosticar mi negocio →</Link>
+              <a className="btn btn-primary btn-lg" href="/tool">Diagnosticar mi negocio →</a>
               <a className="btn btn-outline" href="#como-funciona">¿Cómo funciona?</a>
             </div>
 
@@ -184,19 +287,19 @@ export default function Home() {
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7 }}>
               Descúbrelo en 3 minutos. Gratis. Sin registro.
             </p>
-            <Link href="/tool" className="btn btn-primary btn-lg">Hacer mi diagnóstico →</Link>
+            <a className="btn btn-primary btn-lg" href="/tool">Hacer mi diagnóstico →</a>
           </div>
         </section>
 
         <footer>
-          <Link href="/" className="footer-logo">margen<span>real</span></Link>
+          <a className="footer-logo" href="/index.html">margen<span>real</span></a>
           <div className="footer-links">
-            <Link href="/tool" className="footer-link">Herramienta</Link>
-            <Link href="/pricing" className="footer-link">Planes</Link>
-            <Link href="/about" className="footer-link">Nosotros</Link>
-            <Link href="/privacy" className="footer-link">Privacidad</Link>
-            <Link href="/terms" className="footer-link">Términos</Link>
-            <a className="footer-link" href="mailto:contacto@margenreal.io">Contacto</a>
+            <a className="footer-link" href="/tool">Herramienta</a>
+            <a className="footer-link" href="/pricing">Planes</a>
+            <a className="footer-link" href="/about">Nosotros</a>
+            <a className="footer-link" href="/privacy">Privacidad</a>
+            <a className="footer-link" href="/terms">Términos</a>
+            <a className="footer-link" href="/cdn-cgi/l/email-protection#34575b5a405557405b7459554653515a465155581a5d5b">Contacto</a>
           </div>
           <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
         </footer>
