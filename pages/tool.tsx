@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import Script from "next/script";
 import React, { useEffect } from "react";
 
@@ -70,29 +71,29 @@ export default function ToolPage(): React.JSX.Element {
       <Script src="/js/calculator.js" strategy="lazyOnload" />
 
       <nav>
-        <a className="nav-logo" href="/">
+        <Link className="nav-logo" href="/">
           margen<span>real</span>
-        </a>
+        </Link>
         <div className="nav-links">
-          <a className="nav-link" href="/">
+          <Link className="nav-link" href="/">
             Inicio
-          </a>
-          <a className="nav-link" href="/tool">
+          </Link>
+          <Link className="nav-link" href="/tool">
             Herramienta Gratis
-          </a>
-          <a className="nav-link" href="/pro">
+          </Link>
+          <Link className="nav-link" href="/pro">
             Herramienta Pro
-          </a>
-          <a className="nav-link" href="/pricing">
+          </Link>
+          <Link className="nav-link" href="/pricing">
             Planes
-          </a>
-          <a className="nav-link" href="/about">
+          </Link>
+          <Link className="nav-link" href="/about">
             Nosotros
-          </a>
+          </Link>
         </div>
-        <a className="btn nav-cta" href="/tool">
+        <Link className="btn nav-cta" href="/tool">
           Diagnosticar mi negocio →
-        </a>
+        </Link>
       </nav>
 
       <div className="page-wrap">
@@ -183,7 +184,7 @@ export default function ToolPage(): React.JSX.Element {
       </div>
 
       {/* Page-specific styles (keeps most layout identical to your original) */}
-      <style jsx>{`
+      <style>{`
         /* ── Page header ── */
         .tool-header {
           padding: 56px 40px 32px;
