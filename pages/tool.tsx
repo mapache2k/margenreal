@@ -1,6 +1,7 @@
 // pages/tool.tsx
 import Head from "next/head";
 import Script from "next/script";
+import Link from "next/link";
 import React, { useEffect } from "react";
 
 export default function ToolPage(): JSX.Element {
@@ -15,13 +16,20 @@ export default function ToolPage(): JSX.Element {
   // Read inputs (keeps same IDs as original so existing calculator.js can read/write)
   function sInputs() {
     return {
-      revenue: parseFloat((document.getElementById("s_rev") as HTMLInputElement)?.value || "0") || 0,
-      marginPct: parseFloat((document.getElementById("s_mg") as HTMLInputElement)?.value || "0") || 0,
-      fixedCosts: parseFloat((document.getElementById("s_fc") as HTMLInputElement)?.value || "0") || 0,
-      cash: parseFloat((document.getElementById("s_cash") as HTMLInputElement)?.value || "0") || 0,
-      debt: parseFloat((document.getElementById("s_debt") as HTMLInputElement)?.value || "0") || 0,
-      arDays: parseFloat((document.getElementById("s_ar") as HTMLInputElement)?.value || "0") || 0,
-      apDays: parseFloat((document.getElementById("s_ap") as HTMLInputElement)?.value || "0") || 0,
+      revenue:
+        parseFloat((document.getElementById("s_rev") as HTMLInputElement)?.value || "0") || 0,
+      marginPct:
+        parseFloat((document.getElementById("s_mg") as HTMLInputElement)?.value || "0") || 0,
+      fixedCosts:
+        parseFloat((document.getElementById("s_fc") as HTMLInputElement)?.value || "0") || 0,
+      cash:
+        parseFloat((document.getElementById("s_cash") as HTMLInputElement)?.value || "0") || 0,
+      debt:
+        parseFloat((document.getElementById("s_debt") as HTMLInputElement)?.value || "0") || 0,
+      arDays:
+        parseFloat((document.getElementById("s_ar") as HTMLInputElement)?.value || "0") || 0,
+      apDays:
+        parseFloat((document.getElementById("s_ap") as HTMLInputElement)?.value || "0") || 0,
     };
   }
 
@@ -71,37 +79,41 @@ export default function ToolPage(): JSX.Element {
       <Script src="/js/calculator.js" strategy="lazyOnload" />
 
       <nav>
-        <a className="nav-logo" href="/">
+        <Link href="/" className="nav-logo">
           margen<span>real</span>
-        </a>
+        </Link>
+
         <div className="nav-links">
-          <a className="nav-link" href="/">
+          <Link href="/" className="nav-link">
             Inicio
-          </a>
-          <a className="nav-link" href="/tool">
+          </Link>
+          <Link href="/tool" className="nav-link">
             Herramienta Gratis
-          </a>
-          <a className="nav-link" href="/pro">
+          </Link>
+          <Link href="/pro" className="nav-link">
             Herramienta Pro
-          </a>
-          <a className="nav-link" href="/pricing">
+          </Link>
+          <Link href="/pricing" className="nav-link">
             Planes
-          </a>
-          <a className="nav-link" href="/about">
+          </Link>
+          <Link href="/about" className="nav-link">
             Nosotros
-          </a>
+          </Link>
         </div>
-        <a className="btn nav-cta" href="/tool">
+
+        <Link href="/tool" className="btn nav-cta">
           Diagnosticar mi negocio →
-        </a>
+        </Link>
       </nav>
 
       <div className="page-wrap">
         <div className="tool-header">
           <div className="label">Diagnóstico financiero</div>
-          <h1>Conoce si tu negocio
+          <h1>
+            Conoce si tu negocio
             <br />
-            va a sobrevivir.</h1>
+            va a sobrevivir.
+          </h1>
           <p className="sub">7 variables · 3 minutos · Diagnóstico real</p>
         </div>
 
