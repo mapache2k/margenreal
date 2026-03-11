@@ -34,9 +34,88 @@ export default function ProLayout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <style>{/* tu CSS inline — lo mantuve igual */`
+      <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Epilogue:wght@400;500;600&display=swap');
-        /* ...resto del CSS... */
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Epilogue', sans-serif; background: #0a0a0e; color: #e8e8ea; }
+
+        .pro-shell { display: flex; min-height: 100vh; }
+
+        /* ── Sidebar ── */
+        .pro-sidebar {
+          width: 220px; flex-shrink: 0;
+          background: #0d0d10; border-right: 1px solid #1f2125;
+          display: flex; flex-direction: column;
+          position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .sidebar-logo {
+          display: flex; align-items: center; gap: 8px;
+          padding: 24px 20px 20px;
+          border-bottom: 1px solid #1f2125;
+        }
+        .sidebar-logo-text {
+          font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+          color: #e8e8ea; text-decoration: none; letter-spacing: -0.02em;
+        }
+        .sidebar-logo-text span { color: #f9d71b; }
+        .sidebar-pro-badge {
+          font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 800;
+          background: #f9d71b; color: #0a0a0e;
+          padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em;
+        }
+        .sidebar-snapshot {
+          padding: 16px 20px;
+          border-bottom: 1px solid #1f2125;
+        }
+        .sidebar-business-name {
+          font-family: 'Syne', sans-serif; font-size: 0.875rem; font-weight: 700;
+          color: #e8e8ea; margin-bottom: 10px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sidebar-score { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; }
+        .sidebar-score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .sidebar-score-text { font-size: 0.75rem; font-weight: 600; flex: 1; }
+        .sidebar-score-num { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 800; color: #9aa0b2; }
+        .sidebar-metrics { display: grid; gap: 8px; }
+        .sidebar-metric { display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-metric-lbl { font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6f7480; }
+        .sidebar-metric-val { font-family: 'Syne', sans-serif; font-size: 0.8125rem; font-weight: 800; color: #e8e8ea; }
+        .sidebar-empty { font-size: 0.75rem; color: #6f7480; line-height: 1.6; }
+        .sidebar-nav { flex: 1; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; }
+        .sidebar-nav-item {
+          display: flex; align-items: center; gap: 10px;
+          padding: 9px 12px; border-radius: 9px;
+          font-size: 0.875rem; font-weight: 500; color: #9aa0b2;
+          text-decoration: none; transition: background 0.15s, color 0.15s;
+        }
+        .sidebar-nav-item:hover { background: #1a1a1f; color: #e8e8ea; }
+        .sidebar-nav-item.active { background: #1f2125; color: #f9d71b; font-weight: 700; }
+        .sidebar-nav-locked {
+          display: flex; align-items: center; gap: 10px;
+          padding: 9px 12px; border-radius: 9px;
+          font-size: 0.875rem; color: #3a3a45; cursor: not-allowed;
+        }
+        .sidebar-nav-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+        .sidebar-lock { margin-left: auto; font-size: 0.75rem; }
+        .sidebar-footer {
+          padding: 16px 10px;
+          border-top: 1px solid #1f2125;
+          display: flex; flex-direction: column; gap: 2px;
+        }
+        .sidebar-footer-link {
+          font-size: 0.8125rem; color: #6f7480;
+          text-decoration: none; padding: 7px 12px; border-radius: 8px;
+          transition: color 0.15s, background 0.15s;
+        }
+        .sidebar-footer-link:hover { color: #e8e8ea; background: #1a1a1f; }
+
+        /* ── Main content area ── */
+        .pro-main { flex: 1; min-width: 0; overflow-x: hidden; }
+
+        @media (max-width: 768px) {
+          .pro-sidebar { display: none; }
+        }
       `}</style>
 
       <div className="pro-shell">
