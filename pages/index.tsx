@@ -4,7 +4,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { usePro, SnapshotInputs } from '../../lib/ProContext';
+import { usePro, SnapshotInputs } from '../lib/ProContext';
 
 // load ProLayout client-side only (keeps server from importing client-only code)
 const ProLayout = dynamic(() => import('../../lib/ProLayout'), { ssr: false });
