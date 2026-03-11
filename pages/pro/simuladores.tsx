@@ -1,9 +1,12 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ProLayout from '../../lib/ProLayout';
 import { usePro } from '../../lib/ProContext';
 import { CalcResult } from '../../lib/ProContext';
+
+// carga dinámica del layout que usa hooks/objetos del cliente
+const ProLayout = dynamic(() => import('../../lib/ProLayout'), { ssr: false });
 
 const fmtCLP = (n: number) => {
   if (Math.abs(n) >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
