@@ -169,14 +169,12 @@ export default function Diagnostico() {
       </div>
 
       <div className="page-content">
-        {/* Score */}
         <div className="score-bar" style={{ background: `${color}10`, borderColor: `${color}25` }}>
           <div className="score-dot" style={{ background: color }} />
           <div className="score-text" style={{ color }}>{scoreLabel(s)}</div>
           <div className="score-num">Score {s}/100</div>
         </div>
 
-        {/* AI Diagnosis */}
         <div className="ai-card">
           <div className="ai-header">
             <div className="ai-icon">✦</div>
@@ -195,7 +193,6 @@ export default function Diagnostico() {
           )}
         </div>
 
-        {/* Key metrics */}
         <div className="metrics-grid">
           <div className={`m-card ${calc.ebitda >= 0 ? 'g' : 'r'}`}>
             <div className="m-lbl">EBITDA mensual</div>
@@ -235,7 +232,6 @@ export default function Diagnostico() {
           </div>
         </div>
 
-        {/* WC detail */}
         <div className="wc-card">
           <div className="section-lbl">Capital de trabajo</div>
           <div className="wc-row">
@@ -262,7 +258,6 @@ export default function Diagnostico() {
           )}
         </div>
 
-        {/* Cash projection */}
         <div className="chart-card">
           <div className="section-lbl">Proyección de caja — 12 meses</div>
           <div className="proj-chart">
@@ -283,7 +278,6 @@ export default function Diagnostico() {
           </div>
         </div>
 
-        {/* Scenarios */}
         <div className="chart-card">
           <div className="section-lbl">Escenarios — caja al mes 12</div>
           <div className="scenario-grid">
@@ -305,7 +299,6 @@ export default function Diagnostico() {
           </div>
         </div>
 
-        {/* Sensitivity */}
         <div className="section-lbl">Sensibilidad del EBITDA</div>
         <div className="sens-grid">
           {[
@@ -321,7 +314,6 @@ export default function Diagnostico() {
           ))}
         </div>
 
-        {/* Actions */}
         <div className="actions-card">
           <div className="actions-title">Plan de acción</div>
           {actions.length === 0 ? (
