@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { usePro, SnapshotInputs } from '../lib/ProContext';
 
 // load ProLayout client-side only (keeps server from importing client-only code)
-const ProLayout = dynamic(() => import('../../lib/ProLayout'), { ssr: false });
+const ProLayout = dynamic(() => import('../lib/ProLayout'), { ssr: false });
 
 export default function ProHome(): JSX.Element | null {
   const router = useRouter();
