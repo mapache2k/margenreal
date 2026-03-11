@@ -163,7 +163,7 @@ export default function AboutPage(): React.JSX.Element {
             <p style={{ color: "var(--muted)", fontSize: 15, maxWidth: 440, margin: "0 auto 28px", lineHeight: 1.7 }}>
               Si eres dueño de una PyME en LatAm y quieres ser beta tester, o si tienes feedback, escríbenos.
             </p>
-            <a className="btn btn-primary" href="mailto:contacto@margenreal.io">contacto@margenreal.io</Link>
+            <a className="btn btn-primary" href="mailto:contacto@margenreal.io">contacto@margenreal.io</a>
           </div>
         </section>
 
