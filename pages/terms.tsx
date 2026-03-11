@@ -178,7 +178,7 @@ export default function TermsPage(): React.JSX.Element {
             </Link>
             <a className="footer-link" href="mailto:contacto@margenreal.io">
               Contacto
-            </Link>
+            </a>
           </div>
           <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
         </footer>
