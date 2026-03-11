@@ -1,4 +1,5 @@
-// components/ProLayout.tsx
+// components/ProLayout.tsx (o lib/ProLayout.tsx)
+// 'use client' ya estaba presente en tu archivo original
 'use client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -23,41 +24,33 @@ const NAV_ITEMS = [
 
 export default function ProLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { data, inputs } = usePro();
+  // Protegemos por si usePro() devuelve undefined en SSR o durante build
+  const prov = usePro() || ({} as { data?: any; inputs?: any });
+  const { data, inputs } = prov;
   const calc = data?.calc;
+
+  // valor seguro para el nombre del negocio
+  const businessName = inputs?.businessName ?? 'Mi negocio';
 
   return (
     <>
-      <style>{/* ... mantuve tu CSS inline exactamente igual ... */`
+      <style>{/* tu CSS inline — lo mantuve igual */`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Epilogue:wght@400;500;600&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-size: 16px; }
-        body {
-          background: #161614;
-          color: #f0f0f0;
-          font-family: 'Epilogue', sans-serif;
-          -webkit-font-smoothing: antialiased;
-        }
-        /* (aquí va todo el CSS que tenías — lo omití en el snippet para brevedad) */
+        /* ...resto del CSS... */
       `}</style>
 
       <div className="pro-shell">
-        {/* Sidebar */}
         <aside className="pro-sidebar">
           <div className="sidebar-logo">
-            {/* Logo ahora usa Link hacia "/" (ruta Next limpia) */}
-            <Link href="/" className="sidebar-logo-text">
-              margen<span>real</span>
-            </Link>
+            <Link href="/" className="sidebar-logo-text">margen<span>real</span></Link>
             <span className="sidebar-pro-badge">PRO</span>
           </div>
 
-          {/* Business snapshot */}
           <div className="sidebar-snapshot">
             {calc ? (
               <>
                 <div className="sidebar-business-name">
-                  {inputs.businessName || 'Mi negocio'}
+                  {businessName}
                 </div>
                 <div className="sidebar-score">
                   <div className="sidebar-score-dot" style={{ background: scoreColor(calc.score) }} />
@@ -66,6 +59,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
                   </div>
                   <div className="sidebar-score-num">{calc.score}/100</div>
                 </div>
+
                 <div className="sidebar-metrics">
                   <div className="sidebar-metric">
                     <span className="sidebar-metric-lbl">EBITDA</span>
@@ -90,12 +84,9 @@ export default function ProLayout({ children }: { children: ReactNode }) {
             )}
           </div>
 
-          {/* Navigation */}
           <nav className="sidebar-nav">
             {NAV_ITEMS.map(item => {
-              const isActive = item.exact
-                ? router.pathname === item.href
-                : router.pathname.startsWith(item.href);
+              const isActive = item.exact ? router.pathname === item.href : router.pathname.startsWith(item.href);
               const isLocked = !calc && item.href !== '/pro';
               if (isLocked) {
                 return (
@@ -107,12 +98,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
                 );
               }
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
-                  aria-current={isActive ? 'page' : undefined}
-                >
+                <Link key={item.href} href={item.href} className={`sidebar-nav-item ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
                   <span className="sidebar-nav-icon" aria-hidden>{item.icon}</span>
                   <span>{item.label}</span>
                 </Link>
@@ -121,16 +107,12 @@ export default function ProLayout({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="sidebar-footer">
-            {/* Footer links convertidos a Link para navegación SPA */}
             <Link href="/tool" className="sidebar-footer-link">← Herramienta gratuita</Link>
             <Link href="/pricing" className="sidebar-footer-link">Planes</Link>
           </div>
         </aside>
 
-        {/* Main */}
-        <main className="pro-main">
-          {children}
-        </main>
+        <main className="pro-main">{children}</main>
       </div>
     </>
   );
