@@ -1,10 +1,8 @@
-// pages/tool.tsx
 import Head from "next/head";
 import Script from "next/script";
-import Link from "next/link";
 import React, { useEffect } from "react";
 
-export default function ToolPage(): JSX.Element {
+export default function ToolPage(): React.JSX.Element {
   useEffect(() => {
     // Ensure empty-state is visible on mount
     const empty = document.getElementById("sEmpty");
@@ -16,20 +14,13 @@ export default function ToolPage(): JSX.Element {
   // Read inputs (keeps same IDs as original so existing calculator.js can read/write)
   function sInputs() {
     return {
-      revenue:
-        parseFloat((document.getElementById("s_rev") as HTMLInputElement)?.value || "0") || 0,
-      marginPct:
-        parseFloat((document.getElementById("s_mg") as HTMLInputElement)?.value || "0") || 0,
-      fixedCosts:
-        parseFloat((document.getElementById("s_fc") as HTMLInputElement)?.value || "0") || 0,
-      cash:
-        parseFloat((document.getElementById("s_cash") as HTMLInputElement)?.value || "0") || 0,
-      debt:
-        parseFloat((document.getElementById("s_debt") as HTMLInputElement)?.value || "0") || 0,
-      arDays:
-        parseFloat((document.getElementById("s_ar") as HTMLInputElement)?.value || "0") || 0,
-      apDays:
-        parseFloat((document.getElementById("s_ap") as HTMLInputElement)?.value || "0") || 0,
+      revenue: parseFloat((document.getElementById("s_rev") as HTMLInputElement)?.value || "0") || 0,
+      marginPct: parseFloat((document.getElementById("s_mg") as HTMLInputElement)?.value || "0") || 0,
+      fixedCosts: parseFloat((document.getElementById("s_fc") as HTMLInputElement)?.value || "0") || 0,
+      cash: parseFloat((document.getElementById("s_cash") as HTMLInputElement)?.value || "0") || 0,
+      debt: parseFloat((document.getElementById("s_debt") as HTMLInputElement)?.value || "0") || 0,
+      arDays: parseFloat((document.getElementById("s_ar") as HTMLInputElement)?.value || "0") || 0,
+      apDays: parseFloat((document.getElementById("s_ap") as HTMLInputElement)?.value || "0") || 0,
     };
   }
 
@@ -79,41 +70,37 @@ export default function ToolPage(): JSX.Element {
       <Script src="/js/calculator.js" strategy="lazyOnload" />
 
       <nav>
-        <Link href="/" className="nav-logo">
+        <a className="nav-logo" href="/">
           margen<span>real</span>
-        </Link>
-
+        </a>
         <div className="nav-links">
-          <Link href="/" className="nav-link">
+          <a className="nav-link" href="/">
             Inicio
-          </Link>
-          <Link href="/tool" className="nav-link">
+          </a>
+          <a className="nav-link" href="/tool">
             Herramienta Gratis
-          </Link>
-          <Link href="/pro" className="nav-link">
+          </a>
+          <a className="nav-link" href="/pro">
             Herramienta Pro
-          </Link>
-          <Link href="/pricing" className="nav-link">
+          </a>
+          <a className="nav-link" href="/pricing">
             Planes
-          </Link>
-          <Link href="/about" className="nav-link">
+          </a>
+          <a className="nav-link" href="/about">
             Nosotros
-          </Link>
+          </a>
         </div>
-
-        <Link href="/tool" className="btn nav-cta">
+        <a className="btn nav-cta" href="/tool">
           Diagnosticar mi negocio →
-        </Link>
+        </a>
       </nav>
 
       <div className="page-wrap">
         <div className="tool-header">
           <div className="label">Diagnóstico financiero</div>
-          <h1>
-            Conoce si tu negocio
+          <h1>Conoce si tu negocio
             <br />
-            va a sobrevivir.
-          </h1>
+            va a sobrevivir.</h1>
           <p className="sub">7 variables · 3 minutos · Diagnóstico real</p>
         </div>
 
