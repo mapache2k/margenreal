@@ -1,9 +1,7 @@
-// pages/privacy.tsx
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 
-export default function PrivacyPage(): JSX.Element {
+export default function PrivacyPage(): React.JSX.Element {
   return (
     <>
       <Head>
@@ -16,26 +14,26 @@ export default function PrivacyPage(): JSX.Element {
       </Head>
 
       <nav>
-        <Link href="/" className="nav-logo">
+        <a className="nav-logo" href="/">
           margen<span>real</span>
-        </Link>
+        </a>
         <div className="nav-links">
-          <Link href="/" className="nav-link">
+          <a className="nav-link" href="/">
             Inicio
-          </Link>
-          <Link href="/tool" className="nav-link">
+          </a>
+          <a className="nav-link" href="/tool">
             Herramienta
-          </Link>
-          <Link href="/pricing" className="nav-link">
+          </a>
+          <a className="nav-link" href="/pricing">
             Planes
-          </Link>
-          <Link href="/about" className="nav-link">
+          </a>
+          <a className="nav-link" href="/about">
             Nosotros
-          </Link>
+          </a>
         </div>
-        <Link href="/tool" className="btn nav-cta">
+        <a className="btn nav-cta" href="/tool">
           Diagnosticar mi negocio →
-        </Link>
+        </a>
       </nav>
 
       <div className="page-wrap">
@@ -163,19 +161,19 @@ export default function PrivacyPage(): JSX.Element {
         </div>
 
         <footer>
-          <Link href="/" className="footer-logo">
+          <a className="footer-logo" href="/">
             margen<span>real</span>
-          </Link>
+          </a>
           <div className="footer-links">
-            <Link href="/" className="footer-link">
+            <a className="footer-link" href="/">
               Inicio
-            </Link>
-            <Link href="/tool" className="footer-link">
+            </a>
+            <a className="footer-link" href="/tool">
               Herramienta
-            </Link>
-            <Link href="/terms" className="footer-link">
+            </a>
+            <a className="footer-link" href="/terms">
               Términos
-            </Link>
+            </a>
             <a className="footer-link" href="mailto:contacto@margenreal.io">
               Contacto
             </a>
