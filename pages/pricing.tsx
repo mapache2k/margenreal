@@ -1,9 +1,7 @@
-// pages/pricing.tsx
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 
-export default function PricingPage(): JSX.Element {
+export default function PricingPage(): React.JSX.Element {
   return (
     <>
       <Head>
@@ -16,26 +14,26 @@ export default function PricingPage(): JSX.Element {
       </Head>
 
       <nav>
-        <Link href="/" className="nav-logo">
+        <a className="nav-logo" href="/">
           margen<span>real</span>
-        </Link>
+        </a>
         <div className="nav-links">
-          <Link href="/" className="nav-link">
+          <a className="nav-link" href="/">
             Inicio
-          </Link>
-          <Link href="/tool" className="nav-link">
+          </a>
+          <a className="nav-link" href="/tool">
             Herramienta
-          </Link>
-          <Link href="/pricing" className="nav-link active">
+          </a>
+          <a className="nav-link active" href="/pricing">
             Planes
-          </Link>
-          <Link href="/about" className="nav-link">
+          </a>
+          <a className="nav-link" href="/about">
             Nosotros
-          </Link>
+          </a>
         </div>
-        <Link href="/tool" className="btn nav-cta">
+        <a className="btn nav-cta" href="/tool">
           Diagnosticar mi negocio →
-        </Link>
+        </a>
       </nav>
 
       <div className="page-wrap">
@@ -71,9 +69,9 @@ export default function PricingPage(): JSX.Element {
                 <li className="off">Exportar PDF</li>
                 <li className="off">Benchmarks sectoriales</li>
               </ul>
-              <Link href="/tool" className="btn-plan btn-plan-outline">
+              <a className="btn-plan btn-plan-outline" href="/tool">
                 Empezar gratis
-              </Link>
+              </a>
             </div>
 
             <div className="plan featured">
@@ -215,25 +213,25 @@ export default function PricingPage(): JSX.Element {
         </section>
 
         <footer>
-          <Link href="/" className="footer-logo">
+          <a className="footer-logo" href="/">
             margen<span>real</span>
-          </Link>
+          </a>
           <div className="footer-links">
-            <Link href="/" className="footer-link">
+            <a className="footer-link" href="/">
               Inicio
-            </Link>
-            <Link href="/tool" className="footer-link">
+            </a>
+            <a className="footer-link" href="/tool">
               Herramienta
-            </Link>
-            <Link href="/about" className="footer-link">
+            </a>
+            <a className="footer-link" href="/about">
               Nosotros
-            </Link>
-            <Link href="/privacy" className="footer-link">
+            </a>
+            <a className="footer-link" href="/privacy">
               Privacidad
-            </Link>
-            <Link href="/terms" className="footer-link">
+            </a>
+            <a className="footer-link" href="/terms">
               Términos
-            </Link>
+            </a>
             <a className="footer-link" href="mailto:contacto@margenreal.io">
               Contacto
             </a>
@@ -243,7 +241,6 @@ export default function PricingPage(): JSX.Element {
       </div>
 
       <style jsx>{`
-        /* (styles unchanged — same as your original) */
         .pricing-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -410,6 +407,7 @@ export default function PricingPage(): JSX.Element {
           font-size: 12px;
         }
 
+        /* small responsive tweak */
         @media (max-width: 640px) {
           .pricing-grid {
             gap: 12px;
