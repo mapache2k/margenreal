@@ -207,10 +207,10 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
 
         .chart-card { background: #1e1e1c; border: 1px solid #2a2a28; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
 
-        .forecast-chart { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 12px; }
-        .fc-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-        .fc-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 3px; }
-        .fc-lbl { font-size: 0.5rem; color: #444; line-height: 1; }
+        .forecast-chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; margin-top: 12px; overflow: hidden; }
+        .fc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; }
+        .fc-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 3px; flex-shrink: 0; }
+        .fc-lbl { font-size: 0.5rem; color: #444; line-height: 1; flex-shrink: 0; }
 
         .warning-card {
           background: rgba(232,85,85,.07); border: 1px solid rgba(232,85,85,.2);
@@ -352,12 +352,12 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
               <div className="section-lbl">Evolución de caja</div>
               <div className="forecast-chart">
                 {forecast.map((p, i) => {
-                  const norm = ((p.cash - minCash) / range) * 100;
-                  const h = Math.max(4, norm * 0.85);
+                  const norm = ((p.cash - minCash) / range);
+                  const h = Math.max(3, Math.round(norm * 90));
                   const showLabel = forecast.length <= 12 || i === 0 || (i + 1) % Math.ceil(forecast.length / 6) === 0;
                   return (
                     <div key={i} className="fc-col" title={`${p.label} M${p.month}: ${fmtCLP(p.cash)}`}>
-                      <div className="fc-bar" style={{ height: `${h}%`, background: p.cash >= 0 ? '#2dd4a0' : '#e85555', opacity: 0.8 }} />
+                      <div className="fc-bar" style={{ height: `${h}px`, background: p.cash >= 0 ? '#2dd4a0' : '#e85555', opacity: 0.85 }} />
                       {showLabel && <div className="fc-lbl">{p.label}</div>}
                     </div>
                   );
@@ -374,12 +374,12 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
                   const minE = Math.min(...forecast.map(p => p.ebitda), 0);
                   const rangeE = maxE - minE || 1;
                   return forecast.map((p, i) => {
-                    const norm = ((p.ebitda - minE) / rangeE) * 100;
-                    const h = Math.max(4, norm * 0.85);
+                    const norm = ((p.ebitda - minE) / rangeE);
+                    const h = Math.max(3, Math.round(norm * 90));
                     const showLabel = forecast.length <= 12 || i === 0 || (i + 1) % Math.ceil(forecast.length / 6) === 0;
                     return (
                       <div key={i} className="fc-col" title={`${p.label} M${p.month}: ${fmtCLP(p.ebitda)}`}>
-                        <div className="fc-bar" style={{ height: `${h}%`, background: p.ebitda >= 0 ? '#7c6fff' : '#e85555', opacity: 0.8 }} />
+                        <div className="fc-bar" style={{ height: `${h}px`, background: p.ebitda >= 0 ? '#7c6fff' : '#e85555', opacity: 0.85 }} />
                         {showLabel && <div className="fc-lbl">{p.label}</div>}
                       </div>
                     );
