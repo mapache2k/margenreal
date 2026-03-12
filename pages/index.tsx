@@ -94,11 +94,12 @@ export default function Home() {
         </Link>
         <div className="nav-links">
           <Link href="/" className="nav-link active" style={{ textDecoration: 'none' }}>Inicio</Link>
-          <Link href="/tool" className="nav-link" style={{ textDecoration: 'none' }}>Herramienta</Link>
+          <Link href="/tool" className="nav-link" style={{ textDecoration: 'none' }}>Herramienta Gratis</Link>
+          <Link href="/pro" className="nav-link" style={{ textDecoration: 'none' }}>Herramienta Pro</Link>
           <Link href="/pricing" className="nav-link" style={{ textDecoration: 'none' }}>Planes</Link>
           <Link href="/about" className="nav-link" style={{ textDecoration: 'none' }}>Nosotros</Link>
         </div>
-        <Link href="/pro" className="btn nav-cta" style={{ textDecoration: 'none' }}>
+        <Link href="/tool" className="btn nav-cta" style={{ textDecoration: 'none' }}>
           Diagnosticar mi negocio →
         </Link>
       </nav>
@@ -121,7 +122,7 @@ export default function Home() {
               En 3 minutos sabes si tu negocio va a sobrevivir, cuánto dinero tienes realmente, y exactamente qué debes cambiar.
             </p>
             <div className="hero-actions">
-              <Link href="/pro" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
+              <Link href="/tool" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
                 Diagnosticar mi negocio →
               </Link>
               <a href="#como-funciona" className="btn btn-outline" style={{ textDecoration: 'none' }}>
@@ -235,7 +236,7 @@ export default function Home() {
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7, textAlign: 'center' }}>
               Descúbrelo en 3 minutos. Gratis. Sin registro.
             </p>
-            <Link href="/pro" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
+            <Link href="/tool" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
               Hacer mi diagnóstico →
             </Link>
           </div>
