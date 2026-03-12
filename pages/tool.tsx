@@ -167,6 +167,16 @@ export default function ToolPage(): React.JSX.Element {
                 </div>
                 <div className="sens-row" id="sSens" />
                 <div className="diag-card" id="sDiag" />
+                <div className="pro-upsell">
+                  <div className="pro-upsell-left">
+                    <div className="pro-upsell-label">✦ Herramienta Pro</div>
+                    <div className="pro-upsell-title">¿Quieres ir más profundo?</div>
+                    <div className="pro-upsell-text">Simuladores de escenarios, forecast a 24 meses, análisis de palancas con IA y más.</div>
+                  </div>
+                  <Link href="/pro" className="btn pro-upsell-btn">
+                    Probar Pro gratis →
+                  </Link>
+                </div>
               </div>
 
               <div className="empty-state" id="sEmpty">
@@ -374,6 +384,32 @@ export default function ToolPage(): React.JSX.Element {
           color: var(--muted);
           line-height: 1.6;
         }
+        .pro-upsell {
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 20px; flex-wrap: wrap;
+          margin-top: 16px; padding: 24px 28px;
+          background: rgba(249,215,27,.04);
+          border: 1px solid rgba(249,215,27,.15);
+          border-radius: 14px;
+        }
+        .pro-upsell-left { flex: 1; min-width: 200px; }
+        .pro-upsell-label {
+          font-size: 0.625rem; font-weight: 700; letter-spacing: 0.18em;
+          text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+        }
+        .pro-upsell-title {
+          font-family: var(--font-display); font-size: 1rem; font-weight: 800;
+          color: var(--text); margin-bottom: 6px; letter-spacing: -0.02em;
+        }
+        .pro-upsell-text { font-size: 0.8125rem; color: var(--muted); line-height: 1.6; }
+        .pro-upsell-btn {
+          background: var(--accent); color: #080810;
+          font-family: var(--font-display); font-weight: 800;
+          font-size: 0.875rem; padding: 12px 20px;
+          border-radius: 10px; white-space: nowrap;
+          text-decoration: none; flex-shrink: 0;
+        }
+        .pro-upsell-btn:hover { background: #fff; text-decoration: none; }
       `}</style>
     </>
   );
