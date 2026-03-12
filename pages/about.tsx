@@ -18,7 +18,8 @@ export default function AboutPage(): React.JSX.Element {
           </Link>
           <div className="nav-links">
             <Link className="nav-link" href="/">Inicio</Link>
-            <Link className="nav-link" href="/tool">Herramienta</Link>
+            <Link className="nav-link" href="/tool">Herramienta Gratis</Link>
+          <Link className="nav-link" href="/pro">Herramienta Pro</Link>
             <Link className="nav-link" href="/pricing">Planes</Link>
             <Link className="nav-link active" href="/about">Nosotros</Link>
           </div>
