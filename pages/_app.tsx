@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+    posthog.init("phc_zKFtMZZ5kPqpT2RRFSCWL3ao3dfWiREGdDFrqe2vD8GM", {
+      api_host: "https://us.i.posthog.com",
       capture_pageview: false,
     });
 
