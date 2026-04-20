@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import posthog from 'posthog-js';
 
 interface Inputs {
   costoUSD: string;
@@ -50,18 +51,26 @@ export default function Calculadora() {
   });
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
+  const calculatedOnce = useRef(false);
 
   const set = (k: keyof Inputs) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setInputs(prev => ({ ...prev, [k]: e.target.value }));
 
   const resultado = calcular(inputs);
 
+  useEffect(() => {
+    if (resultado && !calculatedOnce.current) {
+      calculatedOnce.current = true;
+      posthog.capture('calculator_completed');
+    }
+  }, [resultado]);
+
   const fmt = (n: number) =>
     n.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
   const handleEmail = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: conectar a lista de emails
+    posthog.capture('free_signup', { source: 'calculadora' });
     setEmailSent(true);
   };
 

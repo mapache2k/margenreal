@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import posthog from 'posthog-js';
 
 const ERRORES = [
   {
@@ -41,7 +42,7 @@ export default function Gratis() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: conectar a lista de emails / envío del PDF
+    posthog.capture('free_signup', { source: 'gratis' });
     setSent(true);
   };
 
