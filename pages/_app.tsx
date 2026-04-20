@@ -7,15 +7,17 @@ import posthog from "posthog-js";
 import "../styles/globals.css";
 import { ProProvider } from "../lib/ProContext";
 
+if (typeof window !== "undefined") {
+  posthog.init("phc_zKFtMZZ5kPqpT2RRFSCWL3ao3dfWiREGdDFrqe2vD8GM", {
+    api_host: "https://us.i.posthog.com",
+    capture_pageview: false,
+  });
+}
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    posthog.init("phc_zKFtMZZ5kPqpT2RRFSCWL3ao3dfWiREGdDFrqe2vD8GM", {
-      api_host: "https://us.i.posthog.com",
-      capture_pageview: false,
-    });
-
     const handleRouteChange = () => posthog.capture("$pageview");
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => router.events.off("routeChangeComplete", handleRouteChange);
