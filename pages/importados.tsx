@@ -192,7 +192,7 @@ export default function Importados() {
                 <li>Ejemplos reales: ropa, cosméticos, accesorios</li>
                 <li className="off">Modelos de escenarios</li>
               </ul>
-              <a href="https://margenreal.lemonsqueezy.com/buy/1553460" target="_blank" rel="noopener noreferrer" className="btn btn-plan btn-plan-accent">
+              <a href="https://margenreal.lemonsqueezy.com/checkout/buy/be78bcd3-c734-4b95-b164-d4996478b598" target="_blank" rel="noopener noreferrer" className="btn btn-plan btn-plan-accent">
                 Comprar Starter →
               </a>
               <div className="pricing-note" style={{ marginTop: 12 }}>Pago único · Sin suscripción</div>
@@ -211,7 +211,7 @@ export default function Importados() {
                 <li>Ejemplos con márgenes reales por categoría</li>
                 <li>Cálculo de precio por volumen de compra</li>
               </ul>
-              <a href="https://margenreal.lemonsqueezy.com/buy/1553463" target="_blank" rel="noopener noreferrer" className="btn btn-plan btn-plan-outline">
+              <a href="https://margenreal.lemonsqueezy.com/checkout/buy/535e6adb-a287-4c6c-9f58-d72457f17044" target="_blank" rel="noopener noreferrer" className="btn btn-plan btn-plan-outline">
                 Comprar Pro →
               </a>
               <div className="pricing-note" style={{ marginTop: 12 }}>Pago único · Sin suscripción</div>
