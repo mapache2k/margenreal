@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string, subject: string, html: string, text: string) {
   const res = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
     headers: {
@@ -12,6 +12,7 @@ async function sendEmail(to: string, subject: string, html: string) {
       to: [{ email: to }],
       subject,
       htmlContent: html,
+      textContent: text,
     }),
   });
   if (!res.ok) throw new Error(`Brevo error: ${res.status}`);
@@ -29,14 +30,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await sendEmail(
       email,
-      '5 errores de pricing que te hacen vender sin margen',
-      buildEmail()
+      'Tu checklist de pricing',
+      buildEmail(),
+      buildEmailText()
     );
 
     await sendEmail(
       'contacto@margenreal.io',
       `[lead] ${email}`,
-      `<p>Nuevo lead: <strong>${email}</strong><br>${new Date().toISOString()}</p>`
+      `<p>Nuevo lead: <strong>${email}</strong><br>${new Date().toISOString()}</p>`,
+      `Nuevo lead: ${email}\n${new Date().toISOString()}`
     );
 
     return res.status(200).json({ ok: true });
@@ -44,6 +47,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('[subscribe]', err);
     return res.status(500).json({ error: 'Error al enviar. Intentá de nuevo.' });
   }
+}
+
+function buildEmailText() {
+  return `Hola,
+
+Acá están los 5 errores de pricing que hacen que muchos negocios vendan bien pero ganen poco:
+
+1. Calcular el margen sobre el precio de venta, no sobre el costo.
+El margen real se calcula sobre el costo. Si comprás a $100 y vendés a $150, tu margen es 33%, no 50%.
+
+2. No incluir los costos de importación en el costo del producto.
+Flete, arancel, bodegaje, seguro, tipo de cambio. Si no están en el costo unitario, tu margen es una ilusión.
+
+3. Fijar precio mirando a la competencia sin saber tu estructura de costos.
+Podés vender más barato que todos y perder en cada venta. El precio de la competencia no es tu piso — tu costo sí.
+
+4. Ignorar el costo del capital atado en inventario.
+Cada unidad en bodega tiene un costo financiero. Si tardás 60 días en vender, ese dinero no está trabajando.
+
+5. No tener un margen mínimo definido antes de negociar.
+Sin un piso claro, cualquier descuento parece razonable.
+
+Calculá tu margen real acá: https://margenreal.io/calculadora
+
+Saludos,
+Margen Real
+
+---
+Si no pediste este checklist, ignorá este mensaje.`;
 }
 
 function buildEmail() {
