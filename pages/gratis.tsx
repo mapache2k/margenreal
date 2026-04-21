@@ -38,12 +38,26 @@ const ERRORES = [
 
 export default function Gratis() {
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    posthog.capture('free_signup', { source: 'gratis' });
-    setSent(true);
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        posthog.capture('free_signup', { source: 'gratis' });
+        setStatus('ok');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
@@ -135,7 +149,7 @@ export default function Gratis() {
           <div className="capture-sub">
             Incluyendo la hoja de cálculo base y la fórmula de precio mínimo. Gratis, sin trampa.
           </div>
-          {!sent ? (
+          {status !== 'ok' ? (
             <form className="capture-form" onSubmit={handleSubmit}>
               <input
                 type="email"
@@ -143,8 +157,14 @@ export default function Gratis() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
+                disabled={status === 'loading'}
               />
-              <button type="submit">Quiero el checklist gratis →</button>
+              <button type="submit" disabled={status === 'loading'}>
+                {status === 'loading' ? 'Enviando...' : 'Quiero el checklist gratis →'}
+              </button>
+              {status === 'error' && (
+                <div style={{ color: '#f87171', fontSize: '0.875rem' }}>Error al enviar. Intentá de nuevo.</div>
+              )}
               <div className="capture-hint">Sin spam. Podés darte de baja cuando quieras.</div>
             </form>
           ) : (

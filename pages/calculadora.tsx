@@ -68,10 +68,21 @@ export default function Calculadora() {
   const fmt = (n: number) =>
     n.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
-  const handleEmail = (e: React.FormEvent) => {
+  const handleEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-    posthog.capture('free_signup', { source: 'calculadora' });
     setEmailSent(true);
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        posthog.capture('free_signup', { source: 'calculadora' });
+      }
+    } catch {
+      // optimistic — already shown success
+    }
   };
 
   return (

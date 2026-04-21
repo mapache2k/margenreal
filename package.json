@@ -16,12 +16,14 @@
   "description": "",
   "dependencies": {
     "next": "^16.1.6",
+    "nodemailer": "^6.10.1",
     "posthog-js": "^1.369.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@types/node": "^25.4.0",
+    "@types/nodemailer": "^6.4.23",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.0.0",
     "typescript": "^5.9.3"
