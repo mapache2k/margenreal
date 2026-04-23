@@ -1,21 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 async function sendEmail(to: string, subject: string, html: string, text: string) {
-  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+  const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      'api-key': process.env.BREVO_API_KEY!,
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      sender: { name: 'Margen Real', email: 'contacto@margenreal.io' },
-      to: [{ email: to }],
+      from: 'Margen Real <contacto@margenreal.io>',
+      to: [to],
       subject,
-      htmlContent: html,
-      textContent: text,
+      html,
+      text,
     }),
   });
-  if (!res.ok) throw new Error(`Brevo error: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Resend error: ${res.status} ${body}`);
+  }
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
