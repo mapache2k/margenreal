@@ -35,25 +35,25 @@
 <h2>Páginas del sitio</h2>
 <table>
 <tr><th>Ruta</th><th>Descripción</th></tr>
-<tr><td>/</td><td>Landing principal con CTA a calculadora y suscripción</td></tr>
-<tr><td>/calculadora-ml</td><td>Calculadora de margen para MercadoLibre Chile</td></tr>
-<tr><td>/gratis</td><td>Formulario de suscripción — entrega checklist por email</td></tr>
-<tr><td>/guias</td><td>Index de guías educativas</td></tr>
-<tr><td>/guias/[slug]</td><td>Página de guía individual (MDX)</td></tr>
-<tr><td>/shop</td><td>Tienda para vendedores de importados</td></tr>
-<tr><td>/gracias</td><td>Página post-compra — dispara evento purchase_complete en PostHog</td></tr>
-<tr><td>/terms</td><td>Términos de Uso</td></tr>
-<tr><td>/privacy</td><td>Política de Privacidad</td></tr>
-<tr><td>/admin/pipeline</td><td>Generador de borradores con Claude API (uso interno)</td></tr>
-<tr><td>/admin/emails</td><td>Templates de emails nurture para copiar en Resend (uso interno)</td></tr>
+<tr><td><a href="https://margenreal.io/" target="_blank">margenreal.io/</a></td><td>Landing principal con CTA a calculadora y suscripción</td></tr>
+<tr><td><a href="https://margenreal.io/calculadora-ml" target="_blank">/calculadora-ml</a></td><td>Calculadora de margen para MercadoLibre Chile</td></tr>
+<tr><td><a href="https://margenreal.io/gratis" target="_blank">/gratis</a></td><td>Formulario de suscripción — entrega checklist por email</td></tr>
+<tr><td><a href="https://margenreal.io/guias" target="_blank">/guias</a></td><td>Index de guías educativas</td></tr>
+<tr><td><a href="https://margenreal.io/guias/comisiones-ml-chile" target="_blank">/guias/comisiones-ml-chile</a> · <a href="https://margenreal.io/guias/precio-minimo-ml" target="_blank">/guias/precio-minimo-ml</a></td><td>Guías individuales (MDX)</td></tr>
+<tr><td><a href="https://margenreal.io/importados" target="_blank">/importados</a></td><td>Tienda para vendedores de importados</td></tr>
+<tr><td><a href="https://margenreal.io/gracias" target="_blank">/gracias</a></td><td>Página post-compra — dispara evento purchase_complete en PostHog</td></tr>
+<tr><td><a href="https://margenreal.io/terms" target="_blank">/terms</a></td><td>Términos de Uso</td></tr>
+<tr><td><a href="https://margenreal.io/privacy" target="_blank">/privacy</a></td><td>Política de Privacidad</td></tr>
+<tr><td><a href="https://margenreal.io/admin/pipeline" target="_blank">/admin/pipeline</a></td><td>Generador de borradores con Claude API (uso interno)</td></tr>
+<tr><td><a href="https://margenreal.io/admin/emails" target="_blank">/admin/emails</a></td><td>Templates de emails nurture para copiar en Resend (uso interno)</td></tr>
 </table>
 
 <h2>Secuencia de Email (Nurture)</h2>
 <table>
 <tr><th>Email</th><th>Timing</th><th>Tema</th><th>CTA</th></tr>
-<tr><td>Email 1</td><td>Inmediato</td><td>Los 5 errores de pricing (checklist)</td><td>/calculadora-ml</td></tr>
-<tr><td>Email 2</td><td>Día 3-5</td><td>El error que destruye tu margen en MercadoLibre</td><td>/calculadora-ml</td></tr>
-<tr><td>Email 3</td><td>Día 7-10</td><td>Tu precio mínimo: el número que te protege de vender a pérdida</td><td>/shop</td></tr>
+<tr><td>Email 1</td><td>Inmediato</td><td>Los 5 errores de pricing (checklist)</td><td><a href="https://margenreal.io/calculadora-ml" target="_blank">/calculadora-ml</a></td></tr>
+<tr><td>Email 2</td><td>Día 3-5</td><td>El error que destruye tu margen en MercadoLibre</td><td><a href="https://margenreal.io/calculadora-ml" target="_blank">/calculadora-ml</a></td></tr>
+<tr><td>Email 3</td><td>Día 7-10</td><td>Tu precio mínimo: el número que te protege de vender a pérdida</td><td><a href="https://margenreal.io/importados" target="_blank">/importados</a></td></tr>
 </table>
 <p><em>Email 1 se envía automático. Emails 2 y 3 se envían manualmente desde Resend Broadcasts. Templates en /admin/emails.</em></p>
 
@@ -62,7 +62,7 @@
 <tr><th>Evento</th><th>Dónde se dispara</th></tr>
 <tr><td>calculator_started</td><td>Primera interacción con la calculadora</td></tr>
 <tr><td>calculator_completed</td><td>Cálculo realizado (botón calcular)</td></tr>
-<tr><td>shop_page_view</td><td>Visita a /shop (importados)</td></tr>
+<tr><td>shop_page_view</td><td>Visita a /importados</td></tr>
 <tr><td>guide_view</td><td>Apertura de cualquier guía (con slug y tags)</td></tr>
 <tr><td>purchase_complete</td><td>Página /gracias después de compra Lemon Squeezy</td></tr>
 <tr><td>free_signup</td><td>Suscripción exitosa en /gratis</td></tr>
