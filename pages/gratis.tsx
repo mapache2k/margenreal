@@ -79,8 +79,8 @@ export default function Gratis() {
         .capture-success { font-size: 0.9375rem; color: var(--success); font-weight: 600; text-align: center; padding: 16px 0; }
         .capture-hint { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 8px; }
 
-        .errores-list { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--section-x) 80px; }
-        @media(max-width:640px){ .errores-list { padding: 0 20px 60px; } }
+        .errores-list { max-width: var(--content-max); padding: 0 0 80px; }
+        @media(max-width:640px){ .errores-list { padding: 0 0 60px; } }
         .error-item { border-bottom: 1px solid var(--border); padding: 40px 0; }
         .error-item:last-child { border-bottom: none; }
         .error-num { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
@@ -92,74 +92,78 @@ export default function Gratis() {
         .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
       `}</style>
 
-      <div className="page-hero narrow">
-        <div className="page-eyebrow">
-          <span className="dot" />
-          Guía gratuita · ML Chile
-        </div>
-        <h1 className="page-h1">Los <em>5 errores</em> que te<br />hacen vender sin margen</h1>
-        <p className="page-lead">
-          Si vendés en MercadoLibre Chile y cometés aunque sea uno de estos errores, estás dejando plata en la mesa — o peor, perdiendo sin saberlo.
-        </p>
-
-        <div className="capture-card">
-          <div className="capture-title">Recibí el checklist completo</div>
-          <div className="capture-sub">
-            Incluyendo la fórmula de precio mínimo para ML Chile. Gratis, sin trampa.
+      <div className="page-wrap">
+        <div className="page-hero">
+          <div className="page-eyebrow">
+            <span className="dot" />
+            Guía gratuita · ML Chile
           </div>
-          {status !== 'ok' ? (
-            <form className="capture-form" onSubmit={handleSubmit}>
-              <input
-                type="email"
-                placeholder="tu@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                disabled={status === 'loading'}
-              />
-              <button type="submit" disabled={status === 'loading'}>
-                {status === 'loading' ? 'Enviando...' : 'Quiero el checklist gratis →'}
-              </button>
-              {status === 'error' && (
-                <div style={{ color: '#f87171', fontSize: '0.875rem' }}>Error al enviar. Intentá de nuevo.</div>
-              )}
-              <div className="capture-hint">Sin spam. Podés darte de baja cuando quieras.</div>
-            </form>
-          ) : (
-            <div className="capture-success">
-              ¡Perfecto! Revisá tu email — el checklist ya está en camino.
-            </div>
-          )}
-        </div>
-      </div>
+          <h1 className="page-h1">Los <em>5 errores</em> que te<br />hacen vender sin margen</h1>
+          <p className="page-lead">
+            Si vendés en MercadoLibre Chile y cometés aunque sea uno de estos errores, estás dejando plata en la mesa — o peor, perdiendo sin saberlo.
+          </p>
 
-      <div className="errores-list">
-        <div className="label">Los 5 errores</div>
-        <h2 className="heading" style={{ marginBottom: 32 }}>Leelos todos. Seguro<br />te identificás con alguno.</h2>
-
-        {ERRORES.map((e) => (
-          <div className="error-item" key={e.n}>
-            <div className="error-num">Error {e.n}</div>
-            <div className="error-titulo">{e.titulo}</div>
-            <div className="error-desc">{e.desc}</div>
-            <div className="error-ejemplo">
-              <strong>Ejemplo real</strong>
-              {e.ejemplo}
+          <div className="capture-card">
+            <div className="capture-title">Recibí el checklist completo</div>
+            <div className="capture-sub">
+              Incluyendo la fórmula de precio mínimo para ML Chile. Gratis, sin trampa.
             </div>
+            {status !== 'ok' ? (
+              <form className="capture-form" onSubmit={handleSubmit}>
+                <input
+                  type="email"
+                  placeholder="tu@email.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  disabled={status === 'loading'}
+                />
+                <button type="submit" disabled={status === 'loading'}>
+                  {status === 'loading' ? 'Enviando...' : 'Quiero el checklist gratis →'}
+                </button>
+                {status === 'error' && (
+                  <div style={{ color: '#f87171', fontSize: '0.875rem' }}>Error al enviar. Intentá de nuevo.</div>
+                )}
+                <div className="capture-hint">Sin spam. Podés darte de baja cuando quieras.</div>
+              </form>
+            ) : (
+              <div className="capture-success">
+                ¡Perfecto! Revisá tu email — el checklist ya está en camino.
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className="cta-banner">
-        <h2>¿Sabés cuál es tu precio mínimo?</h2>
-        <p>Calculá exactamente cuánto necesitás cobrar para no perder plata en cada venta de MercadoLibre Chile.</p>
-        <div className="cta-btns">
-          <a href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
-            Calcular mi margen gratis →
-          </a>
-          <a href="/guias" className="btn btn-outline btn-lg" style={{ textDecoration: 'none' }}>
-            Ver guías
-          </a>
+        <div className="errores-list">
+          <div className="label">Los 5 errores</div>
+          <h2 className="heading" style={{ marginBottom: 32 }}>Leelos todos. Seguro<br />te identificás con alguno.</h2>
+
+          {ERRORES.map((e) => (
+            <div className="error-item" key={e.n}>
+              <div className="error-num">Error {e.n}</div>
+              <div className="error-titulo">{e.titulo}</div>
+              <div className="error-desc">{e.desc}</div>
+              <div className="error-ejemplo">
+                <strong>Ejemplo real</strong>
+                {e.ejemplo}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="cta-banner" style={{ marginBottom: 80 }}>
+          <h2 className="heading">¿Sabés cuál es tu precio mínimo?</h2>
+          <p style={{ color: 'var(--muted)', fontSize: '0.9375rem', lineHeight: 1.7, marginBottom: 28, maxWidth: 440, marginLeft: 'auto', marginRight: 'auto' }}>
+            Calculá exactamente cuánto necesitás cobrar para no perder plata en cada venta de MercadoLibre Chile.
+          </p>
+          <div className="cta-btns">
+            <a href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
+              Calcular mi margen gratis →
+            </a>
+            <a href="/guias" className="btn btn-outline btn-lg" style={{ textDecoration: 'none' }}>
+              Ver guías
+            </a>
+          </div>
         </div>
       </div>
 

@@ -346,15 +346,17 @@ table td { padding:12px; border-bottom:1px solid var(--border); }
    Layout utilities (use these in every page)
    ========================= */
 .page-hero {
-  padding: var(--hero-pt) var(--section-x) var(--hero-pb);
+  padding: var(--hero-pt) 0 var(--hero-pb);
   max-width: var(--section-max);
   margin: 0 auto;
 }
-.page-hero.narrow { max-width: var(--content-max); }
 .page-hero.centered { text-align: center; }
 @media (max-width: 640px) {
-  .page-hero { padding: 40px 20px 48px; }
+  .page-hero { padding: 40px 0 48px; }
 }
+
+/* page-wrap responsive padding */
+@media (max-width: 640px) { .page-wrap { padding: 0 20px; } }
 
 .page-section {
   max-width: var(--section-max);

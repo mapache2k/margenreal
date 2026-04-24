@@ -81,7 +81,7 @@ export default function CalculadoraML() {
       </Head>
 
       <style>{`
-
+        .results-panel { display: block; }
 
         .calc-wrap { max-width: 1060px; margin: 0 auto; padding: 16px 40px 80px; }
         @media(max-width:640px){ .calc-wrap { padding: 16px 20px 60px; } }
@@ -168,16 +168,18 @@ export default function CalculadoraML() {
         .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }      `}</style>
 
 
-      <div className="page-hero">
-        <div className="page-eyebrow">
-          <span className="dot" />
-          Para vendedores de MercadoLibre Chile
+      <div className="page-wrap">
+        <div className="page-hero">
+          <div className="page-eyebrow">
+            <span className="dot" />
+            Para vendedores de MercadoLibre Chile
+          </div>
+          <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
+          <p className="page-lead">
+            Calculá tu margen real como vendedor. Incluye comisión por categoría,
+            IVA 19% y costo de envío. Sin sorpresas.
+          </p>
         </div>
-        <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
-        <p className="page-lead">
-          Calculá tu margen real como vendedor. Incluye comisión por categoría,
-          IVA 19% y costo de envío. Sin sorpresas.
-        </p>
       </div>
 
       <div className="calc-wrap">
