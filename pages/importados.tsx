@@ -13,7 +13,7 @@ export default function Importados() {
 
   const faqs = [
     { q: '¿Las comisiones son exactas?', a: 'Sí. Usamos las tarifas vigentes de MercadoLibre Chile por categoría, incluyendo el IVA 19% que ML cobra sobre su comisión. Te recomendamos verificar siempre en el portal oficial de ML ante cambios de tarifas.' },
-    { q: '¿Para qué sirve la diferencia entre Clásica y Premium?', a: 'Clásica tiene menor comisión pero el comprador paga el envío. Premium tiene mayor comisión pero el envío es gratis para el comprador — ese costo lo absorbés vos. La calculadora muestra cuál te conviene más según tu margen.' },
+    { q: '¿Para qué sirve la diferencia entre Clásica y Premium?', a: 'Clásica tiene menor comisión pero el comprador paga el envío. Premium tiene mayor comisión pero el envío es gratis para el comprador — ese costo lo absorbes tú. La calculadora muestra cuál te conviene más según tu margen.' },
     { q: '¿Mis datos son privados?', a: 'Todo se calcula en tu navegador. No guardamos ningún número tuyo en ningún servidor.' },
     { q: '¿Puedo probar antes de pagar?', a: 'Sí. La calculadora de margen ML es completamente gratis. Pagás solo si querés los frameworks y spreadsheets completos.' },
     { q: '¿Se puede comprar una sola vez?', a: 'Exacto. Es un pago único — no hay suscripción. Comprás una vez y el material es tuyo para siempre.' },
@@ -84,8 +84,8 @@ export default function Importados() {
             {[
               { icon: '📊', title: 'Comisión por categoría', text: 'No es lo mismo vender ropa (17%) que electrónica (13%). La categoría define cuánto te descuenta ML antes de pagarte.' },
               { icon: '🧾', title: 'IVA 19% sobre la comisión', text: 'ML cobra IVA sobre su propia comisión. Si vendés a $20.000 con 15% de comisión, el descuento real es 17,85% — no 15%.' },
-              { icon: '📦', title: 'Costo de envío que absorbés', text: 'En publicaciones Premium el envío gratis lo pagás vos. $3.990 a $8.990 por paquete que sale directo de tu margen.' },
-              { icon: '🏷️', title: 'Precio copiado de la competencia', text: 'Si el competidor calculó mal, vos también quedás mal. El único precio que importa es el que cubre tus costos reales.' },
+              { icon: '📦', title: 'Costo de envío que absorbes', text: 'En publicaciones Premium el envío gratis lo pagas tú. $3.990 a $8.990 por paquete que sale directo de tu margen.' },
+              { icon: '🏷️', title: 'Precio copiado de la competencia', text: 'Si el competidor calculó mal, tú también quedas mal. El único precio que importa es el que cubre tus costos reales.' },
               { icon: '📉', title: 'Margen calculado sobre el precio de venta', text: 'El error clásico. El margen real se calcula sobre el costo, no sobre lo que publicás. La diferencia puede ser brutal.' },
               { icon: '🔢', title: 'Precio de lista vs. precio neto', text: 'Lo que ves en tu dashboard de ML no es lo que entra a tu bolsillo. El neto es lo que importa para decidir.' },
             ].map((p) => (
@@ -169,10 +169,10 @@ export default function Importados() {
           <h2 className="heading">Del caos al número<br />en cuatro pasos.</h2>
           <div className="steps-list">
             {[
-              { n: '01', title: 'Ingresás tu producto y categoría ML', text: 'Costo del producto, precio de publicación, categoría de MercadoLibre y tipo de publicación (Clásica o Premium).' },
+              { n: '01', title: 'Ingresas tu producto y categoría ML', text: 'Costo del producto, precio de publicación, categoría de MercadoLibre y tipo de publicación (Clásica o Premium).' },
               { n: '02', title: 'Ves tu margen real al instante', text: 'Comisión ML, IVA 19% sobre esa comisión, costo de envío — todo desglosado. Lo que realmente entra a tu bolsillo.' },
-              { n: '03', title: 'Calculás el precio para tu margen objetivo', text: '¿Querés 30% de margen? La calculadora te dice exactamente a qué precio publicar para lograrlo después de todos los descuentos ML.' },
-              { n: '04', title: 'Publicás con números, no de ojo', text: 'Sabés exactamente cuánto ganás en cada venta. Podés ajustar precio o cambiar de Clásica a Premium con datos reales.' },
+              { n: '03', title: 'Calculas el precio para tu margen objetivo', text: '¿Quieres 30% de margen? La calculadora te dice exactamente a qué precio publicar para lograrlo después de todos los descuentos ML.' },
+              { n: '04', title: 'Publicas con números, no de ojo', text: 'Sabes exactamente cuánto ganas en cada venta. Puedes ajustar el precio o cambiar de Clásica a Premium con datos reales.' },
             ].map((s) => (
               <div className="step" key={s.n}>
                 <div className="step-num">{s.n}</div>
@@ -205,12 +205,12 @@ export default function Importados() {
 
         <section className="section">
           <div className="cta-banner">
-            <div className="label" style={{ textAlign: 'center' }}>Empezá ahora</div>
+            <div className="label" style={{ textAlign: 'center' }}>Empieza ahora</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 600, textAlign: 'center' }}>
               ¿Cuánto te queda realmente<br />después de ML?
             </h2>
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7, textAlign: 'center' }}>
-              Calculalo en 30 segundos. Gratis. Sin registro.
+              Calcúlalo en 30 segundos. Gratis. Sin registro.
             </p>
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
               Calcular mi margen →

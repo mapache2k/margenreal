@@ -9,9 +9,9 @@ export default function Home() {
 
   const faqs = [
     { q: '¿Las comisiones ML son exactas?', a: 'Sí. Usamos las tarifas vigentes de MercadoLibre Chile por categoría, incluyendo el IVA 19% que ML cobra sobre su comisión. Te recomendamos verificar siempre ante actualizaciones en el portal oficial de ML.' },
-    { q: '¿Cuál es la diferencia entre Clásica y Premium?', a: 'Clásica tiene menor comisión pero el comprador paga el envío. Premium tiene mayor comisión pero el envío es gratis para el comprador — ese costo lo absorbés vos. La calculadora muestra cuál te conviene más.' },
+    { q: '¿Cuál es la diferencia entre Clásica y Premium?', a: 'Clásica tiene menor comisión pero el comprador paga el envío. Premium tiene mayor comisión pero el envío es gratis para el comprador — ese costo lo absorbes tú. La calculadora muestra cuál te conviene más.' },
     { q: '¿Mis datos son privados?', a: 'Todo se calcula en tu navegador. No guardamos ningún número tuyo en ningún servidor.' },
-    { q: '¿Puedo usar esto sin registrarme?', a: 'Sí. La calculadora de margen ML es completamente gratis y sin registro. Solo abrís y calculás.' },
+    { q: '¿Puedo usar esto sin registrarme?', a: 'Sí. La calculadora de margen ML es completamente gratis y sin registro. Solo abres y calculas.' },
     { q: '¿Funciona para otras categorías además de ropa?', a: 'Sí. Tenemos 12 categorías de MercadoLibre Chile con sus comisiones exactas: electrónica, celulares, herramientas, hogar, bebés, deportes y más.' },
   ];
 
@@ -57,12 +57,12 @@ export default function Home() {
             Para vendedores de MercadoLibre Chile
           </div>
           <h1 className="page-h1">
-            Sabé exactamente<br />
+            Conoce exactamente<br />
             <em>cuánto te queda</em><br />
             después de ML.
           </h1>
           <p className="page-lead">
-            Comisión por categoría + IVA 19% + costo de envío = tu margen real. Calculalo en 30 segundos, sin sorpresas al cobrar.
+            Comisión por categoría + IVA 19% + costo de envío = tu margen real. Calcúlalo en 30 segundos, sin sorpresas al cobrar.
           </p>
           <div className="page-actions">
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }} onClick={() => posthog.capture('cta_click', { location: 'hero' })}>
@@ -88,9 +88,9 @@ export default function Home() {
             {[
               { icon: '📊', title: 'Comisión por categoría', text: 'De 3% (automotor) a 20% (ropa Premium). Cada categoría tiene su tarifa — la calculamos automáticamente.' },
               { icon: '🧾', title: 'IVA 19% sobre la comisión', text: 'ML cobra IVA sobre su comisión. Un 15% de comisión se convierte en 17,85% de descuento real sobre tu venta.' },
-              { icon: '📦', title: 'Costo de envío real', text: 'En Premium el envío "gratis" lo pagás vos. Desde $2.990 (paquete chico) hasta $8.990 (más de 10 kg).' },
-              { icon: '🎯', title: 'Precio mínimo rentable', text: 'El número por debajo del cual perdés plata en cada venta. Lo calculamos con todos los costos incluidos.' },
-              { icon: '📈', title: 'Precio para margen objetivo', text: '¿Querés 30% de margen? Te decimos exactamente a qué precio publicar para lograrlo después de ML.' },
+              { icon: '📦', title: 'Costo de envío real', text: 'En Premium el envío "gratis" lo pagas tú. Desde $2.990 (paquete chico) hasta $8.990 (más de 10 kg).' },
+              { icon: '🎯', title: 'Precio mínimo rentable', text: 'El número por debajo del cual pierdes dinero en cada venta. Lo calculamos con todos los costos incluidos.' },
+              { icon: '📈', title: 'Precio para margen objetivo', text: '¿Quieres 30% de margen? Te decimos exactamente a qué precio publicar para lograrlo después de ML.' },
               { icon: '⚖️', title: 'Clásica vs. Premium', text: 'Comparás el impacto de cada tipo de publicación en tu margen real. No siempre Premium sale más caro.' },
             ].map((h) => (
               <div className="feat-card" key={h.title}>
@@ -109,10 +109,10 @@ export default function Home() {
           <h2 className="heading">Del precio de publicación<br />al margen real en 4 pasos.</h2>
           <div className="hiw-list">
             {[
-              { n: '01', title: 'Ingresás tu producto', text: 'Costo del producto, precio de publicación en ML, categoría y tipo de publicación (Clásica o Premium).' },
-              { n: '02', title: 'Elegís el costo de envío', text: 'Seleccionás el tamaño del paquete y la calculadora usa el estimado real de ML Chile.' },
+              { n: '01', title: 'Ingresas tu producto', text: 'Costo del producto, precio de publicación en ML, categoría y tipo de publicación (Clásica o Premium).' },
+              { n: '02', title: 'Eliges el costo de envío', text: 'Seleccionas el tamaño del paquete y la calculadora usa el estimado real de ML Chile.' },
               { n: '03', title: 'Ves el desglose completo', text: 'Comisión ML, IVA sobre comisión, envío, costo del producto — todo desglosado. Lo que realmente entra a tu bolsillo.' },
-              { n: '04', title: 'Ajustás precio con datos', text: 'Sabés el precio mínimo para no perder y el precio ideal para tu margen objetivo. Publicás con lógica, no de ojo.' },
+              { n: '04', title: 'Ajustas el precio con datos', text: 'Sabes el precio mínimo para no perder y el precio ideal para tu margen objetivo. Publicas con lógica, no de ojo.' },
             ].map((s) => (
               <div className="hiw-step" key={s.n}>
                 <div className="hiw-num">{s.n}</div>
@@ -145,12 +145,12 @@ export default function Home() {
 
         <section className="section">
           <div className="cta-banner">
-            <div className="label" style={{ textAlign: 'center' }}>Empezá ahora</div>
+            <div className="label" style={{ textAlign: 'center' }}>Empieza ahora</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 600, textAlign: 'center' }}>
               ¿Cuánto te queda realmente<br />en tu próxima venta en ML?
             </h2>
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7, textAlign: 'center' }}>
-              Calculalo en 30 segundos. Gratis. Sin registro.
+              Calcúlalo en 30 segundos. Gratis. Sin registro.
             </p>
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }} onClick={() => posthog.capture('cta_click', { location: 'bottom' })}>
               Calcular mi margen →

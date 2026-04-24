@@ -55,30 +55,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 function buildEmailText() {
   return `Hola,
 
-Acá están los 5 errores de pricing que hacen que muchos negocios vendan bien pero ganen poco:
+Aquí están los 5 errores de pricing que hacen que muchos negocios vendan bien pero ganen poco:
 
 1. Calcular el margen sobre el precio de venta, no sobre el costo.
-El margen real se calcula sobre el costo. Si comprás a $100 y vendés a $150, tu margen es 33%, no 50%.
+El margen real se calcula sobre el costo. Si compras a $100 y vendes a $150, tu margen es 33%, no 50%.
 
 2. No incluir los costos de importación en el costo del producto.
 Flete, arancel, bodegaje, seguro, tipo de cambio. Si no están en el costo unitario, tu margen es una ilusión.
 
 3. Fijar precio mirando a la competencia sin saber tu estructura de costos.
-Podés vender más barato que todos y perder en cada venta. El precio de la competencia no es tu piso — tu costo sí.
+Puedes vender más barato que todos y perder en cada venta. El precio de la competencia no es tu piso — tu costo sí.
 
 4. Ignorar el costo del capital atado en inventario.
-Cada unidad en bodega tiene un costo financiero. Si tardás 60 días en vender, ese dinero no está trabajando.
+Cada unidad en bodega tiene un costo financiero. Si tardas 60 días en vender, ese dinero no está trabajando.
 
 5. No tener un margen mínimo definido antes de negociar.
 Sin un piso claro, cualquier descuento parece razonable.
 
-Calculá tu margen real acá: https://margenreal.io/calculadora
+Calcula tu margen real aquí: https://margenreal.io/calculadora-ml
 
 Saludos,
 Margen Real
 
 ---
-Si no pediste este checklist, ignorá este mensaje.`;
+Si no pediste este checklist, ignora este mensaje.`;
 }
 
 function buildEmail() {
@@ -90,28 +90,28 @@ function buildEmail() {
 
 <p>Hola,</p>
 
-<p>Acá están los 5 errores de pricing que hacen que muchos negocios vendan bien pero ganen poco:</p>
+<p>Aquí están los 5 errores de pricing que hacen que muchos negocios vendan bien pero ganen poco:</p>
 
 <p><strong>1. Calcular el margen sobre el precio de venta, no sobre el costo.</strong><br>
-El margen real se calcula sobre el costo. Si comprás a $100 y vendés a $150, tu margen es 33%, no 50%.</p>
+El margen real se calcula sobre el costo. Si compras a $100 y vendes a $150, tu margen es 33%, no 50%.</p>
 
 <p><strong>2. No incluir los costos de importación en el costo del producto.</strong><br>
 Flete, arancel, bodegaje, seguro, tipo de cambio. Si no están en el costo unitario, tu margen es una ilusión.</p>
 
 <p><strong>3. Fijar precio mirando a la competencia sin saber tu estructura de costos.</strong><br>
-Podés vender más barato que todos y perder en cada venta. El precio de la competencia no es tu piso — tu costo sí.</p>
+Puedes vender más barato que todos y perder en cada venta. El precio de la competencia no es tu piso — tu costo sí.</p>
 
 <p><strong>4. Ignorar el costo del capital atado en inventario.</strong><br>
-Cada unidad en bodega tiene un costo financiero. Si tardás 60 días en vender, ese dinero no está trabajando.</p>
+Cada unidad en bodega tiene un costo financiero. Si tardas 60 días en vender, ese dinero no está trabajando.</p>
 
 <p><strong>5. No tener un margen mínimo definido antes de negociar.</strong><br>
-Sin un piso claro, cualquier descuento parece razonable. Definí tu margen mínimo antes de cada negociación.</p>
+Sin un piso claro, cualquier descuento parece razonable. Define tu margen mínimo antes de cada negociación.</p>
 
-<p>Si querés calcular tu margen real en cada producto: https://margenreal.io/calculadora-ml</p>
+<p>Si quieres calcular tu margen real en cada producto: https://margenreal.io/calculadora-ml</p>
 
 <p>Saludos,<br>Margen Real</p>
 
-<p style="font-size:13px;color:#888888;margin-top:40px;">Si no pediste este checklist, ignorá este mensaje.</p>
+<p style="font-size:13px;color:#888888;margin-top:40px;">Si no pediste este checklist, ignora este mensaje.</p>
 
 </body>
 </html>

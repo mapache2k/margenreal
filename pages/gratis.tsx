@@ -6,33 +6,33 @@ import posthog from 'posthog-js';
 const ERRORES = [
   {
     n: '01',
-    titulo: 'No separás la comisión real del precio de venta',
-    desc: 'La comisión de ML no es solo el porcentaje que ves en la categoría. Es ese porcentaje MÁS el IVA del 19% sobre esa comisión. Si vendés en Electrónica Clásica, la comisión aparece como 8% — pero la comisión efectiva que ML te descuenta es 9.5%. Esa diferencia destruye tu margen.',
-    ejemplo: 'Vendés un producto a $50.000. Creés que ML se lleva $4.000 (8%). En realidad te descuenta $4.760 (9.52% efectivo con IVA). En 100 ventas al mes eso son $76.000 que no calculaste.',
+    titulo: 'No separas la comisión real del precio de venta',
+    desc: 'La comisión de ML no es solo el porcentaje que ves en la categoría. Es ese porcentaje MÁS el IVA del 19% sobre esa comisión. Si vendes en Electrónica Clásica, la comisión aparece como 8% — pero la comisión efectiva que ML te descuenta es 9.5%. Esa diferencia destruye tu margen.',
+    ejemplo: 'Vendes un producto a $50.000. Crees que ML se lleva $4.000 (8%). En realidad te descuenta $4.760 (9.52% efectivo con IVA). En 100 ventas al mes eso son $76.000 que no calculaste.',
   },
   {
     n: '02',
-    titulo: 'Ignorás el costo de envío en tu estructura de precios',
-    desc: 'Con publicación Premium, el envío gratis lo pagás vos. ML estima el costo según el tamaño y destino del producto. Si no lo sumás al costo antes de fijar precio, estás subsidiando los envíos de tus compradores sin saberlo.',
-    ejemplo: 'Tu producto pesa 2kg y cuesta $8.000 enviarlo en promedio. Si lo ignorás, en 50 envíos al mes perdés $400.000 que nunca contabilizaste como costo.',
+    titulo: 'Ignoras el costo de envío en tu estructura de precios',
+    desc: 'Con publicación Premium, el envío gratis lo pagas tú. ML estima el costo según el tamaño y destino del producto. Si no lo sumas al costo antes de fijar precio, estás subsidiando los envíos de tus compradores sin saberlo.',
+    ejemplo: 'Tu producto pesa 2kg y cuesta $8.000 enviarlo en promedio. Si lo ignoras, en 50 envíos al mes pierdes $400.000 que nunca contabilizaste como costo.',
   },
   {
     n: '03',
-    titulo: 'Calculás el margen sobre el precio de venta, no sobre el costo',
-    desc: 'Si vendés a $20.000 y tu costo total es $14.000, no tenés 30% de margen. Tenés 30% de margen sobre ventas, pero 42.8% de markup sobre costo. Son cosas distintas. Confundirlos te hace creer que ganás más de lo que ganás — y fijar precios que parecen rentables pero no lo son.',
-    ejemplo: 'Precio venta: $20.000. Costo total: $14.000. Margen sobre venta: 30%. Markup sobre costo: 42.8%. Si querés 30% de margen real sobre costo, tu precio mínimo es $18.200, no $20.000.',
+    titulo: 'Calculas el margen sobre el precio de venta, no sobre el costo',
+    desc: 'Si vendes a $20.000 y tu costo total es $14.000, no tienes 30% de margen. Tienes 30% de margen sobre ventas, pero 42.8% de markup sobre costo. Son cosas distintas. Confundirlos te hace creer que ganas más de lo que ganas — y fijar precios que parecen rentables pero no lo son.',
+    ejemplo: 'Precio venta: $20.000. Costo total: $14.000. Margen sobre venta: 30%. Markup sobre costo: 42.8%. Si quieres 30% de margen real sobre costo, tu precio mínimo es $18.200, no $20.000.',
   },
   {
     n: '04',
-    titulo: 'Copiás el precio de la competencia sin conocer sus costos',
-    desc: 'Si un competidor vende más barato, puede ser porque compra mayor volumen, tiene mejor proveedor, o simplemente está perdiendo plata y no lo sabe. Su precio no es referencia válida para tu negocio. Cada estructura de costos es diferente.',
-    ejemplo: 'Tu competidor vende a $15.000. Vos copiás el precio. Pero él compra 200 unidades con descuento del 20% y vos comprás 20. Su costo real es $8.000, el tuyo es $11.000. Al precio de $15.000, él gana $7.000 y vos perdés plata.',
+    titulo: 'Copias el precio de la competencia sin conocer sus costos',
+    desc: 'Si un competidor vende más barato, puede ser porque compra mayor volumen, tiene mejor proveedor, o simplemente está perdiendo dinero y no lo sabe. Su precio no es referencia válida para tu negocio. Cada estructura de costos es diferente.',
+    ejemplo: 'Tu competidor vende a $15.000. Copias el precio. Pero él compra 200 unidades con descuento del 20% y tú compras 20. Su costo real es $8.000, el tuyo es $11.000. Al precio de $15.000, él gana $7.000 y tú pierdes dinero.',
   },
   {
     n: '05',
-    titulo: 'No calculás el precio mínimo antes de publicar',
-    desc: 'El precio mínimo es el precio por debajo del cual cada venta te genera una pérdida. Incluye tu costo del producto, la comisión ML con IVA, el envío estimado y el margen mínimo que necesitás. Sin calcularlo antes, publicás a ciegas y descubrís el problema cuando ya es tarde.',
-    ejemplo: 'Costo producto: $8.000. Comisión ML efectiva (15%+IVA): $1.785. Envío estimado: $2.500. Solo para no perder plata necesitás vender a $12.285. Si querés 20% de margen, tu precio mínimo es $15.356. ¿Sabés cuál es el tuyo?',
+    titulo: 'No calculas el precio mínimo antes de publicar',
+    desc: 'El precio mínimo es el precio por debajo del cual cada venta te genera una pérdida. Incluye tu costo del producto, la comisión ML con IVA, el envío estimado y el margen mínimo que necesitas. Sin calcularlo antes, publicas a ciegas y descubres el problema cuando ya es tarde.',
+    ejemplo: 'Costo producto: $8.000. Comisión ML efectiva (15%+IVA): $1.785. Envío estimado: $2.500. Solo para no perder dinero necesitas vender a $12.285. Si quieres 20% de margen, tu precio mínimo es $15.356. ¿Sabes cuál es el tuyo?',
   },
 ];
 
@@ -100,11 +100,11 @@ export default function Gratis() {
           </div>
           <h1 className="page-h1">Los <em>5 errores</em> que te<br />hacen vender sin margen</h1>
           <p className="page-lead">
-            Si vendés en MercadoLibre Chile y cometés aunque sea uno de estos errores, estás dejando plata en la mesa — o peor, perdiendo sin saberlo.
+            Si vendes en MercadoLibre Chile y cometes aunque sea uno de estos errores, estás dejando dinero en la mesa — o peor, perdiendo sin saberlo.
           </p>
 
           <div className="capture-card">
-            <div className="capture-title">Recibí el checklist completo</div>
+            <div className="capture-title">Recibe el checklist completo</div>
             <div className="capture-sub">
               Incluyendo la fórmula de precio mínimo para ML Chile. Gratis, sin trampa.
             </div>
@@ -122,9 +122,9 @@ export default function Gratis() {
                   {status === 'loading' ? 'Enviando...' : 'Quiero el checklist gratis →'}
                 </button>
                 {status === 'error' && (
-                  <div style={{ color: '#f87171', fontSize: '0.875rem' }}>Error al enviar. Intentá de nuevo.</div>
+                  <div style={{ color: '#f87171', fontSize: '0.875rem' }}>Error al enviar. Intenta de nuevo.</div>
                 )}
-                <div className="capture-hint">Sin spam. Podés darte de baja cuando quieras.</div>
+                <div className="capture-hint">Sin spam. Puedes darte de baja cuando quieras.</div>
               </form>
             ) : (
               <div className="capture-success">
@@ -136,7 +136,7 @@ export default function Gratis() {
 
         <div className="errores-list">
           <div className="label">Los 5 errores</div>
-          <h2 className="heading" style={{ marginBottom: 32 }}>Leelos todos. Seguro<br />te identificás con alguno.</h2>
+          <h2 className="heading" style={{ marginBottom: 32 }}>Léelos todos. Seguro<br />te identificas con alguno.</h2>
 
           {ERRORES.map((e) => (
             <div className="error-item" key={e.n}>
@@ -152,9 +152,9 @@ export default function Gratis() {
         </div>
 
         <div className="cta-banner" style={{ marginBottom: 80 }}>
-          <h2 className="heading">¿Sabés cuál es tu precio mínimo?</h2>
+          <h2 className="heading">¿Sabes cuál es tu precio mínimo?</h2>
           <p style={{ color: 'var(--muted)', fontSize: '0.9375rem', lineHeight: 1.7, marginBottom: 28, maxWidth: 440, marginLeft: 'auto', marginRight: 'auto' }}>
-            Calculá exactamente cuánto necesitás cobrar para no perder plata en cada venta de MercadoLibre Chile.
+            Calcula exactamente cuánto necesitas cobrar para no perder dinero en cada venta de MercadoLibre Chile.
           </p>
           <div className="cta-btns">
             <a href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>

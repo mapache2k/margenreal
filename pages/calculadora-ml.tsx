@@ -250,7 +250,7 @@ export default function CalculadoraML() {
 
             {/* Costo de envío */}
             <div className="sf">
-              <label>Costo de envío que asumís</label>
+              <label>Costo de envío que asumes</label>
               <select value={envioKey} onChange={e => setEnvioKey(e.target.value as EstimadoEnvioKey)}>
                 {Object.entries(ESTIMADOS_ENVIO_CLP).map(([k, v]) => (
                   <option key={k} value={k}>
@@ -274,21 +274,21 @@ export default function CalculadoraML() {
                   <div className="alert-card red">
                     <span className="alert-icon">⚠️</span>
                     <div>
-                      <strong>Este precio no es rentable.</strong> Después de comisión ML, IVA y envío, perdés {fmt(Math.abs(resultado.gananciaAbsoluta))} por unidad. El precio mínimo para no perder es <strong>${fmt(resultado.precioMinimoRentable)}</strong>.
+                      <strong>Este precio no es rentable.</strong> Después de comisión ML, IVA y envío, pierdes {fmt(Math.abs(resultado.gananciaAbsoluta))} por unidad. El precio mínimo para no perder es <strong>${fmt(resultado.precioMinimoRentable)}</strong>.
                     </div>
                   </div>
                 ) : resultado.margenPct < 15 ? (
                   <div className="alert-card red">
                     <span className="alert-icon">⚠️</span>
                     <div>
-                      <strong>Margen muy bajo ({fmtPct(resultado.margenPct)}).</strong> Cualquier devolución, descuento o variación de costo te pone en rojo. Considerá subir el precio o reducir costos.
+                      <strong>Margen muy bajo ({fmtPct(resultado.margenPct)}).</strong> Cualquier devolución, descuento o variación de costo te pone en rojo. Considera subir el precio o reducir costos.
                     </div>
                   </div>
                 ) : (
                   <div className="alert-card green">
                     <span className="alert-icon">✓</span>
                     <div>
-                      <strong>Publicación rentable.</strong> Tenés {fmtPct(resultado.margenPct)} de margen sobre venta y ganás ${fmt(resultado.gananciaAbsoluta)} por unidad después de todos los costos ML.
+                      <strong>Publicación rentable.</strong> Tienes {fmtPct(resultado.margenPct)} de margen sobre venta y ganas ${fmt(resultado.gananciaAbsoluta)} por unidad después de todos los costos ML.
                     </div>
                   </div>
                 )}
@@ -392,9 +392,9 @@ export default function CalculadoraML() {
 
                 {/* Lead magnet */}
                 <div className="lead-card">
-                  <div className="lead-title">¿Querés dominar los números de tu tienda ML?</div>
+                  <div className="lead-title">¿Quieres dominar los números de tu tienda ML?</div>
                   <div className="lead-text">
-                    Recibí gratis el checklist de los 5 errores de pricing que más plata les cuestan a los vendedores de MercadoLibre Chile.
+                    Recibe gratis el checklist de los 5 errores de pricing que más dinero les cuestan a los vendedores de MercadoLibre Chile.
                   </div>
                   {!emailSent ? (
                     <form className="lead-form" onSubmit={handleEmail}>
@@ -415,9 +415,9 @@ export default function CalculadoraML() {
             ) : (
               <div className="es">
                 <div className="es-icon">🛒</div>
-                <div className="es-title">Ingresá tus números para calcular</div>
+                <div className="es-title">Ingresa tus números para calcular</div>
                 <div className="es-text">
-                  Completá el costo del producto y el precio de venta.<br />
+                  Completa el costo del producto y el precio de venta.<br />
                   Los resultados aparecen al instante, incluyendo comisión ML, IVA y envío.
                 </div>
               </div>
