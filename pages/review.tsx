@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import NavBar from '../components/NavBar';
+import Layout from '../components/Layout';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
 import { getAllGuias, getGuia, type GuiaItem } from '../lib/guias';
@@ -17,16 +17,14 @@ export default function Review({ guias }: Props) {
   const published = guias.filter(g => !g.draft);
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Review interno — Margen Real</title>
         <meta name="robots" content="noindex,nofollow" />
       </Head>
 
       <style>{`
-        .review-wrap { max-width: 900px; margin: 0 auto; padding: 40px; }
-        @media(max-width:640px){ .review-wrap { padding: 24px 20px; } }
-        .review-header { margin-bottom: 40px; }
+        .review-wrap { max-width: 900px; margin: 0 auto; padding: 40px; }        .review-header { margin-bottom: 40px; }
         .review-header h1 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
         .review-header p { color: var(--muted); font-size: 0.875rem; }
 
@@ -62,15 +60,8 @@ export default function Review({ guias }: Props) {
         .md-preview ul, .md-preview ol { padding-left: 18px; margin-bottom: 12px; }
         .md-preview li { margin-bottom: 4px; }
 
-        .empty { color: var(--muted); font-size: 0.875rem; padding: 16px 0; }
+        .empty { color: var(--muted); font-size: 0.875rem; padding: 16px 0; }      `}</style>
 
-        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
-        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
-        .footer-logo span { color: var(--accent); }
-        .footer-copy { font-size: 0.75rem; color: var(--muted); }
-      `}</style>
-
-      <NavBar />
 
       <div className="review-wrap">
         <div className="review-header">
@@ -93,13 +84,7 @@ export default function Review({ guias }: Props) {
         ))}
       </div>
 
-      <footer>
-        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
-          margen<span>real</span>
-        </Link>
-        <div className="footer-copy">Review interno — no indexado</div>
-      </footer>
-    </>
+    </Layout>
   );
 }
 

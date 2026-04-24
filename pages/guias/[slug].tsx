@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import NavBar from '../../components/NavBar';
+import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { getAllGuias, getGuia, type GuiaItem } from '../../lib/guias';
@@ -22,7 +22,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 
 export default function GuiaPage({ guia }: Props) {
   return (
-    <>
+    <Layout>
       <Head>
         <title>{guia.title} — Margen Real</title>
         <meta name="description" content={guia.description} />
@@ -62,18 +62,8 @@ export default function GuiaPage({ guia }: Props) {
         .guia-cta { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.2); border-radius: 16px; padding: 28px; margin-top: 48px; text-align: center; }
         .guia-cta p { color: var(--muted); font-size: 0.9375rem; margin-bottom: 16px; }
 
-        ${guia.draft ? `.draft-banner { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px 20px; font-size: 0.875rem; color: #ef4444; font-weight: 600; margin-bottom: 24px; }` : ''}
+        ${guia.draft ? `.draft-banner { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px 20px; font-size: 0.875rem; color: #ef4444; font-weight: 600; margin-bottom: 24px; }` : ''}      `}</style>
 
-        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
-        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
-        .footer-logo span { color: var(--accent); }
-        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .footer-link { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
-        .footer-link:hover { color: var(--text); }
-        .footer-copy { font-size: 0.75rem; color: var(--muted); }
-      `}</style>
-
-      <NavBar />
 
       <div className="guia-wrap">
         <Link href="/guias" className="guia-back">← Volver a guías</Link>
@@ -99,18 +89,6 @@ export default function GuiaPage({ guia }: Props) {
         </div>
       </div>
 
-      <footer>
-        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
-          margen<span>real</span>
-        </Link>
-        <div className="footer-links">
-          <Link href="/calculadora-ml" className="footer-link">Calculadora ML</Link>
-          <Link href="/guias" className="footer-link">Guías</Link>
-          <Link href="/importados" className="footer-link">Para vendedores ML</Link>
-          <Link href="/privacy" className="footer-link">Privacidad</Link>
-        </div>
-        <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
-      </footer>
-    </>
+    </Layout>
   );
 }

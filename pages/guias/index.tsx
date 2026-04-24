@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import NavBar from '../../components/NavBar';
+import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
 import { getAllGuias, type GuiaFrontmatter } from '../../lib/guias';
@@ -13,7 +13,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 export default function GuiasIndex({ guias }: Props) {
   return (
-    <>
+    <Layout>
       <Head>
         <title>Guías para vendedores de MercadoLibre Chile — Margen Real</title>
         <meta name="description" content="Guías prácticas sobre comisiones ML, precios, márgenes y estrategias para vendedores de MercadoLibre Chile." />
@@ -39,18 +39,8 @@ export default function GuiasIndex({ guias }: Props) {
         .guia-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
         .guia-arrow { font-size: 0.875rem; color: var(--accent); margin-top: 12px; font-weight: 600; }
 
-        .empty { max-width: 760px; margin: 0 auto; padding: 0 40px 80px; text-align: center; color: var(--muted); }
+        .empty { max-width: 760px; margin: 0 auto; padding: 0 40px 80px; text-align: center; color: var(--muted); }      `}</style>
 
-        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
-        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
-        .footer-logo span { color: var(--accent); }
-        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .footer-link { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
-        .footer-link:hover { color: var(--text); }
-        .footer-copy { font-size: 0.75rem; color: var(--muted); }
-      `}</style>
-
-      <NavBar />
 
       <div className="guias-hero">
         <div className="badge">Guías ML Chile</div>
@@ -75,18 +65,6 @@ export default function GuiasIndex({ guias }: Props) {
         </div>
       )}
 
-      <footer>
-        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
-          margen<span>real</span>
-        </Link>
-        <div className="footer-links">
-          <Link href="/calculadora-ml" className="footer-link">Calculadora ML</Link>
-          <Link href="/importados" className="footer-link">Para vendedores ML</Link>
-          <Link href="/gratis" className="footer-link">Guía gratuita</Link>
-          <Link href="/privacy" className="footer-link">Privacidad</Link>
-        </div>
-        <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
-      </footer>
-    </>
+    </Layout>
   );
 }

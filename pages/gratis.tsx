@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import NavBar from '../components/NavBar';
+import Layout from '../components/Layout';
 import Link from 'next/link';
 import { useState } from 'react';
 import posthog from 'posthog-js';
@@ -62,7 +62,7 @@ export default function Gratis() {
   };
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>5 errores de pricing que te hacen vender sin margen — Margen Real</title>
         <meta name="description" content="El checklist gratuito para vendedores de importados en Instagram. Los 5 errores más comunes que hacen que vendas bien pero ganes poco." />
@@ -107,19 +107,9 @@ export default function Gratis() {
         @media(max-width:640px){ .cta-card { padding: 36px 24px; } }
         .cta-card h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
         .cta-card p { font-size: 0.9375rem; color: var(--muted); line-height: 1.7; margin-bottom: 28px; max-width: 440px; margin-left: auto; margin-right: auto; }
-        .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
-        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
-        .footer-logo span { color: var(--accent); }
-        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .footer-link { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
-        .footer-link:hover { color: var(--text); }
-        .footer-copy { font-size: 0.75rem; color: var(--muted); }
-      `}</style>
+        .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }      `}</style>
 
       {/* Nav */}
-      <NavBar />
 
       {/* Hero */}
       <div className="gratis-hero">
@@ -201,19 +191,6 @@ export default function Gratis() {
         </div>
       </div>
 
-      <footer>
-        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
-          margen<span>real</span>
-        </Link>
-        <div className="footer-links">
-          <Link href="/importados" className="footer-link">Para Importadores</Link>
-          <Link href="/calculadora" className="footer-link">Calculadora</Link>
-          <Link href="/tool" className="footer-link">Herramienta</Link>
-          <Link href="/privacy" className="footer-link">Privacidad</Link>
-          <Link href="/terms" className="footer-link">Términos</Link>
-        </div>
-        <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
-      </footer>
-    </>
+    </Layout>
   );
 }

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import NavBar from '../components/NavBar';
+import Layout from '../components/Layout';
 import Link from 'next/link';
 import { useState } from 'react';
 import posthog from 'posthog-js';
@@ -16,7 +16,7 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Margen Real — Calculadora de margen para MercadoLibre Chile</title>
         <meta name="description" content="Calculá exactamente cuánto te queda después de comisiones ML, IVA 19% y envío. La herramienta gratuita para vendedores de MercadoLibre Chile." />
@@ -71,18 +71,8 @@ export default function Home() {
         .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 64px 40px; text-align: center; }
         @media(max-width:640px){ .cta-banner{ padding: 40px 24px; } }
 
-        .heading { font-family: var(--font-display); font-size: clamp(1.5rem,3vw,2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); margin-bottom: 0; }
+        .heading { font-family: var(--font-display); font-size: clamp(1.5rem,3vw,2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); margin-bottom: 0; }      `}</style>
 
-        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
-        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
-        .footer-logo span { color: var(--accent); }
-        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .footer-link { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
-        .footer-link:hover { color: var(--text); }
-        .footer-copy { font-size: 0.75rem; color: var(--muted); }
-      `}</style>
-
-      <NavBar />
 
       <div className="page-wrap">
 
@@ -198,19 +188,6 @@ export default function Home() {
 
       </div>
 
-      <footer>
-        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
-          margen<span>real</span>
-        </Link>
-        <div className="footer-links">
-          <Link href="/calculadora-ml" className="footer-link">Calculadora ML</Link>
-          <Link href="/importados" className="footer-link">Para vendedores ML</Link>
-          <Link href="/gratis" className="footer-link">Guía gratuita</Link>
-          <Link href="/privacy" className="footer-link">Privacidad</Link>
-          <Link href="/terms" className="footer-link">Términos</Link>
-        </div>
-        <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
-      </footer>
-    </>
+    </Layout>
   );
 }

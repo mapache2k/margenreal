@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import NavBar from '../components/NavBar';
+import Layout from '../components/Layout';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import posthog from 'posthog-js';
@@ -87,7 +87,7 @@ export default function Calculadora() {
   };
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Calculadora de Precio para Importados — Margen Real</title>
         <meta name="description" content="Calculá el precio mínimo de venta para tus productos importados. Incluye flete, aduana, comisión de plataforma y margen objetivo." />
@@ -153,19 +153,9 @@ export default function Calculadora() {
         .lead-form input:focus { border-color: var(--accent); }
         .lead-form button { background: var(--accent); color: #0a0a0e; font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; padding: 11px 20px; border-radius: 9px; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
         .lead-form button:hover { opacity: 0.9; }
-        .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }
-
-        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
-        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
-        .footer-logo span { color: var(--accent); }
-        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .footer-link { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
-        .footer-link:hover { color: var(--text); }
-        .footer-copy { font-size: 0.75rem; color: var(--muted); }
-      `}</style>
+        .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }      `}</style>
 
       {/* Nav */}
-      <NavBar />
 
       {/* Header */}
       <div className="tool-header">
@@ -336,19 +326,6 @@ export default function Calculadora() {
         </div>
       </div>
 
-      <footer>
-        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
-          margen<span>real</span>
-        </Link>
-        <div className="footer-links">
-          <Link href="/importados" className="footer-link">Para Importadores</Link>
-          <Link href="/tool" className="footer-link">Herramienta</Link>
-          <Link href="/about" className="footer-link">Nosotros</Link>
-          <Link href="/privacy" className="footer-link">Privacidad</Link>
-          <Link href="/terms" className="footer-link">Términos</Link>
-        </div>
-        <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
-      </footer>
-    </>
+    </Layout>
   );
 }
