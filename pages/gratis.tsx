@@ -68,7 +68,7 @@ export default function Gratis() {
       </Head>
 
       <style>{`
-        .capture-card { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.25); border-radius: var(--radius-lg); padding: 32px; max-width: 480px; margin: 32px auto 0; }
+        .capture-card { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.25); border-radius: var(--radius-lg); padding: 32px; max-width: 480px; margin: 32px 0 0; }
         .capture-title { font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; margin-bottom: 8px; }
         .capture-sub { font-size: 0.875rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
         .capture-form { display: flex; flex-direction: column; gap: 10px; }
@@ -89,16 +89,15 @@ export default function Gratis() {
         .error-ejemplo { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-md); padding: 16px 20px; font-size: 0.875rem; color: var(--text-2); line-height: 1.7; }
         .error-ejemplo strong { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 
-        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 48px 40px; text-align: center; max-width: var(--content-max); margin: 0 auto 80px; }
-        @media(max-width:640px){ .cta-banner { padding: 36px 24px; margin: 0 20px 60px; } }
-        .cta-banner h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
-        .cta-banner p { font-size: 0.9375rem; color: var(--muted); line-height: 1.7; margin-bottom: 28px; max-width: 440px; margin-left: auto; margin-right: auto; }
         .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
       `}</style>
 
-      <div className="page-hero narrow centered">
-        <div className="section-label">Guía gratuita · ML Chile</div>
-        <h1 className="page-h1">Los <span style={{ color: 'var(--accent)' }}>5 errores</span> que te<br />hacen vender sin margen</h1>
+      <div className="page-hero narrow">
+        <div className="page-eyebrow">
+          <span className="dot" />
+          Guía gratuita · ML Chile
+        </div>
+        <h1 className="page-h1">Los <em>5 errores</em> que te<br />hacen vender sin margen</h1>
         <p className="page-lead">
           Si vendés en MercadoLibre Chile y cometés aunque sea uno de estos errores, estás dejando plata en la mesa — o peor, perdiendo sin saberlo.
         </p>
@@ -135,8 +134,8 @@ export default function Gratis() {
       </div>
 
       <div className="errores-list">
-        <div className="section-label">Los 5 errores</div>
-        <h2 className="page-h2" style={{ marginBottom: 32 }}>Leelos todos. Seguro<br />te identificás con alguno.</h2>
+        <div className="label">Los 5 errores</div>
+        <h2 className="heading" style={{ marginBottom: 32 }}>Leelos todos. Seguro<br />te identificás con alguno.</h2>
 
         {ERRORES.map((e) => (
           <div className="error-item" key={e.n}>

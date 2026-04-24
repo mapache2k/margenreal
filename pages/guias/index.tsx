@@ -36,7 +36,10 @@ export default function GuiasIndex({ guias }: Props) {
       `}</style>
 
       <div className="page-hero narrow">
-        <div className="section-label">Guías ML Chile</div>
+        <div className="page-eyebrow">
+          <span className="dot" />
+          Guías ML Chile
+        </div>
         <h1 className="page-h1">Guías para vender mejor<br />en MercadoLibre Chile</h1>
         <p className="page-lead">Comisiones, precios, márgenes y estrategias. Todo en español, con ejemplos reales.</p>
       </div>

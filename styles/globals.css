@@ -199,8 +199,15 @@ input:focus, textarea:focus, select:focus {
    Reusable small components & utilities
    ========================= */
 .section { padding: 40px 0; max-width: var(--section-max); margin: 0 auto; }
-.heading { font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--text); margin-bottom: 8px; }
+.heading { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); margin-bottom: 12px; }
 .subtext { color: var(--muted); }
+
+/* Page actions (row of CTA buttons below hero text) */
+.page-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+
+/* CTA banner */
+.cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; }
+@media(max-width:640px){ .cta-banner { padding: 40px 24px; } }
 
 .hi { display:flex; gap:12px; align-items:center; }
 
@@ -222,16 +229,17 @@ input:focus, textarea:focus, select:focus {
 .hook-card { padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
 
 /* FAQ */
-.faq-list { margin-top: 18px; }
-.faq-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 16px;
-  border-radius: var(--radius-lg);
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-.faq-q { font-weight: 700; color: var(--text); display:flex; justify-content:space-between; align-items:center; }
+.faq-list { margin-top: 32px; display: grid; gap: 1px; }
+.faq-item { background: var(--surface); padding: 20px 24px; cursor: pointer; transition: background var(--transition); }
+.faq-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.faq-item:last-child  { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.faq-item:only-child  { border-radius: var(--radius-lg); }
+.faq-item:hover { background: var(--surface-2); }
+.faq-q { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--text); }
+.faq-toggle { color: var(--muted); font-size: 20px; flex-shrink: 0; transition: transform 0.3s, color 0.2s; line-height: 1; user-select: none; }
+.faq-toggle.open { transform: rotate(45deg); color: var(--text); }
+.faq-a { font-size: 0.875rem; color: var(--muted); line-height: 1.75; overflow: hidden; transition: max-height 0.4s ease, margin 0.3s; max-height: 0; }
+.faq-a.open { max-height: 200px; margin-top: 12px; }
 
 /* Testimonials, pricing, plan */
 .testi, .plan { padding: 20px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); }
@@ -366,6 +374,7 @@ table td { padding:12px; border-bottom:1px solid var(--border); }
   line-height: 1.1;
   margin-bottom: 16px;
 }
+.page-h1 em { font-style: normal; color: var(--accent); }
 .page-h2 {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2rem);

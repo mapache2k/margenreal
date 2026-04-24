@@ -26,27 +26,18 @@ export default function Home() {
       </Head>
 
       <style>{`
-        .hero { position: relative; display: flex; flex-direction: column; justify-content: center; padding: var(--hero-pt) var(--section-x) var(--hero-pb); max-width: var(--section-max); margin: 0 auto; overflow: hidden; }
-        .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(249,215,27,.05) 0%, transparent 65%); pointer-events: none; }
-        .hero-inner { position: relative; z-index: 1; max-width: 680px; }
-        .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: 500; color: var(--muted); margin-bottom: 24px; letter-spacing: 0.01em; }
-        .hero-eyebrow .dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
-        .hero h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 4rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 20px; }
-        .hero h1 em { font-style: normal; color: var(--accent); }
-        .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 480px; margin-bottom: 36px; }
-        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
         .hero-stats { display: flex; gap: 40px; margin-top: 48px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid var(--border); }
         .hs-val { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
         .hs-label { font-size: 0.8125rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
 
-        .hooks-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: 16px; overflow: hidden; margin-top: 32px; }
-        @media(max-width:700px){ .hooks-grid{ grid-template-columns: 1fr 1fr; } }
-        @media(max-width:480px){ .hooks-grid{ grid-template-columns: 1fr; } }
-        .hook-card { background: var(--surface); padding: 28px 24px; transition: background var(--transition); }
-        .hook-card:hover { background: var(--surface-2); }
-        .hook-icon { font-size: 22px; margin-bottom: 12px; line-height: 1; }
-        .hook-title { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; margin-bottom: 8px; color: var(--text); line-height: 1.3; }
-        .hook-text { font-size: 0.8125rem; color: var(--muted); line-height: 1.65; }
+        .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: 16px; overflow: hidden; margin-top: 32px; }
+        @media(max-width:700px){ .feat-grid{ grid-template-columns: 1fr 1fr; } }
+        @media(max-width:480px){ .feat-grid{ grid-template-columns: 1fr; } }
+        .feat-card { background: var(--surface); padding: 28px 24px; transition: background var(--transition); }
+        .feat-card:hover { background: var(--surface-2); }
+        .feat-icon { font-size: 22px; margin-bottom: 12px; line-height: 1; }
+        .feat-title { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; margin-bottom: 8px; color: var(--text); line-height: 1.3; }
+        .feat-text { font-size: 0.8125rem; color: var(--muted); line-height: 1.65; }
 
         .hiw-list { margin-top: 32px; display: grid; gap: 1px; }
         .hiw-step { display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; background: var(--surface); padding: 24px 28px; transition: background var(--transition); }
@@ -56,63 +47,44 @@ export default function Home() {
         .hiw-num { font-size: 0.8125rem; font-weight: 700; color: var(--muted); letter-spacing: 0.05em; padding-top: 3px; }
         .hiw-title { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 700; margin-bottom: 6px; color: var(--text); line-height: 1.3; }
         .hiw-text  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
-
-        .faq-list { margin-top: 32px; display: grid; gap: 1px; }
-        .faq-item { background: var(--surface); padding: 20px 24px; cursor: pointer; transition: background var(--transition); }
-        .faq-item:first-child { border-radius: 16px 16px 0 0; }
-        .faq-item:last-child  { border-radius: 0 0 16px 16px; }
-        .faq-item:hover { background: var(--surface-2); }
-        .faq-q { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--text); }
-        .faq-toggle { color: var(--muted); font-size: 20px; flex-shrink: 0; transition: transform 0.3s, color 0.2s; line-height: 1; user-select: none; }
-        .faq-toggle.open { transform: rotate(45deg); color: var(--text); }
-        .faq-a { font-size: 0.875rem; color: var(--muted); line-height: 1.75; overflow: hidden; transition: max-height 0.4s ease, margin 0.3s; max-height: 0; }
-        .faq-a.open { max-height: 200px; margin-top: 12px; }
-
-        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; }
-        @media(max-width:640px){ .cta-banner{ padding: 40px 24px; } }
-
-        .heading { font-family: var(--font-display); font-size: clamp(1.5rem,3vw,2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); margin-bottom: 0; }      `}</style>
-
+      `}</style>
 
       <div className="page-wrap">
 
-        <section className="hero">
-          <div className="hero-bg" />
-          <div className="hero-inner">
-            <div className="hero-eyebrow">
-              <span className="dot" />
-              Para vendedores de MercadoLibre Chile
-            </div>
-            <h1>
-              Sabé exactamente<br />
-              <em>cuánto te queda</em><br />
-              después de ML.
-            </h1>
-            <p className="hero-sub">
-              Comisión por categoría + IVA 19% + costo de envío = tu margen real. Calculalo en 30 segundos, sin sorpresas al cobrar.
-            </p>
-            <div className="hero-actions">
-              <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }} onClick={() => posthog.capture('cta_click', { location: 'hero' })}>
-                Calcular mi margen gratis →
-              </Link>
-              <Link href="/importados#planes" className="btn btn-outline" style={{ textDecoration: 'none' }}>
-                Ver planes
-              </Link>
-            </div>
-            <div className="hero-stats">
-              <div><div className="hs-val">12</div><div className="hs-label">Categorías ML Chile con tarifas exactas</div></div>
-              <div><div className="hs-val">19%</div><div className="hs-label">IVA sobre comisión que casi nadie calcula</div></div>
-              <div><div className="hs-val">30 seg</div><div className="hs-label">Para saber tu margen real</div></div>
-            </div>
+        <div className="page-hero">
+          <div className="page-eyebrow">
+            <span className="dot" />
+            Para vendedores de MercadoLibre Chile
           </div>
-        </section>
+          <h1 className="page-h1">
+            Sabé exactamente<br />
+            <em>cuánto te queda</em><br />
+            después de ML.
+          </h1>
+          <p className="page-lead">
+            Comisión por categoría + IVA 19% + costo de envío = tu margen real. Calculalo en 30 segundos, sin sorpresas al cobrar.
+          </p>
+          <div className="page-actions">
+            <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }} onClick={() => posthog.capture('cta_click', { location: 'hero' })}>
+              Calcular mi margen gratis →
+            </Link>
+            <Link href="/importados#planes" className="btn btn-outline" style={{ textDecoration: 'none' }}>
+              Ver planes
+            </Link>
+          </div>
+          <div className="hero-stats">
+            <div><div className="hs-val">12</div><div className="hs-label">Categorías ML Chile con tarifas exactas</div></div>
+            <div><div className="hs-val">19%</div><div className="hs-label">IVA sobre comisión que casi nadie calcula</div></div>
+            <div><div className="hs-val">30 seg</div><div className="hs-label">Para saber tu margen real</div></div>
+          </div>
+        </div>
 
         <hr className="divider" />
 
         <section className="section">
           <div className="label">Lo que calculamos</div>
           <h2 className="heading">Todo lo que ML te descuenta<br />antes de pagarte.</h2>
-          <div className="hooks-grid">
+          <div className="feat-grid">
             {[
               { icon: '📊', title: 'Comisión por categoría', text: 'De 3% (automotor) a 20% (ropa Premium). Cada categoría tiene su tarifa — la calculamos automáticamente.' },
               { icon: '🧾', title: 'IVA 19% sobre la comisión', text: 'ML cobra IVA sobre su comisión. Un 15% de comisión se convierte en 17,85% de descuento real sobre tu venta.' },
@@ -121,10 +93,10 @@ export default function Home() {
               { icon: '📈', title: 'Precio para margen objetivo', text: '¿Querés 30% de margen? Te decimos exactamente a qué precio publicar para lograrlo después de ML.' },
               { icon: '⚖️', title: 'Clásica vs. Premium', text: 'Comparás el impacto de cada tipo de publicación en tu margen real. No siempre Premium sale más caro.' },
             ].map((h) => (
-              <div className="hook-card" key={h.title}>
-                <div className="hook-icon">{h.icon}</div>
-                <div className="hook-title">{h.title}</div>
-                <div className="hook-text">{h.text}</div>
+              <div className="feat-card" key={h.title}>
+                <div className="feat-icon">{h.icon}</div>
+                <div className="feat-title">{h.title}</div>
+                <div className="feat-text">{h.text}</div>
               </div>
             ))}
           </div>
