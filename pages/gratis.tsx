@@ -128,7 +128,7 @@ export default function Gratis() {
               </form>
             ) : (
               <div className="capture-success">
-                ¡Perfecto! Revisá tu email — el checklist ya está en camino.
+                ¡Listo! Revisá tu email — puede estar en la pestaña Promociones o Spam. Movelo a tu bandeja principal para no perderte nada.
               </div>
             )}
           </div>
