@@ -24,7 +24,7 @@ export function getAllGuias(includeDrafts = false): GuiaFrontmatter[] {
     .map(file => {
       const raw = fs.readFileSync(path.join(CONTENT_DIR, file), 'utf-8');
       const { data } = matter(raw);
-      return data as GuiaFrontmatter;
+      return { ...data, date: String(data.date) } as GuiaFrontmatter;
     })
     .filter(g => includeDrafts || !g.draft)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -38,7 +38,7 @@ export async function getGuia(slug: string): Promise<GuiaItem | null> {
     const { data, content } = matter(raw);
     if (data.slug === slug) {
       const processed = await remark().use(html).process(content);
-      return { ...(data as GuiaFrontmatter), contentHtml: processed.toString() };
+      return { ...(data as GuiaFrontmatter), date: String(data.date), contentHtml: processed.toString() };
     }
   }
   return null;
