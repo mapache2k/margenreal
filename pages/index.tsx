@@ -68,7 +68,7 @@ export default function Home() {
         .faq-a { font-size: 0.875rem; color: var(--muted); line-height: 1.75; overflow: hidden; transition: max-height 0.4s ease, margin 0.3s; max-height: 0; }
         .faq-a.open { max-height: 200px; margin-top: 12px; }
 
-        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 64px 40px; text-align: center; }
+        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; }
         @media(max-width:640px){ .cta-banner{ padding: 40px 24px; } }
 
         .heading { font-family: var(--font-display); font-size: clamp(1.5rem,3vw,2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); margin-bottom: 0; }      `}</style>

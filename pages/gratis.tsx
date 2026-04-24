@@ -1,39 +1,38 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
-import Link from 'next/link';
 import { useState } from 'react';
 import posthog from 'posthog-js';
 
 const ERRORES = [
   {
     n: '01',
-    titulo: 'No separás el costo real del precio de compra',
-    desc: 'El precio que pagaste por el producto es solo el punto de partida. Flete, aduana, gestión aduanera, seguro — todo eso suma. Ignorarlo te hace creer que tu margen es mayor de lo que es.',
-    ejemplo: 'Comprás una prenda a US$20. Con flete y aduana te sale US$28. Si calculás margen sobre US$20, tu número es mentira.',
+    titulo: 'No separás la comisión real del precio de venta',
+    desc: 'La comisión de ML no es solo el porcentaje que ves en la categoría. Es ese porcentaje MÁS el IVA del 19% sobre esa comisión. Si vendés en Electrónica Clásica, la comisión aparece como 8% — pero la comisión efectiva que ML te descuenta es 9.5%. Esa diferencia destruye tu margen.',
+    ejemplo: 'Vendés un producto a $50.000. Creés que ML se lleva $4.000 (8%). En realidad te descuenta $4.760 (9.52% efectivo con IVA). En 100 ventas al mes eso son $76.000 que no calculaste.',
   },
   {
     n: '02',
-    titulo: 'Calculás el margen sobre el precio de venta, no sobre el costo',
-    desc: 'Si vendés a $10.000 y tu costo es $7.000, no tenés 30% de margen. Tenés 30% de margen bruto sobre ventas, pero 42.8% de markup sobre costo. Son cosas distintas y confundirlas te hace tomar malas decisiones.',
-    ejemplo: 'Margen sobre venta: (10.000 - 7.000) / 10.000 = 30%. Markup sobre costo: (10.000 - 7.000) / 7.000 = 42.8%. No es lo mismo.',
+    titulo: 'Ignorás el costo de envío en tu estructura de precios',
+    desc: 'Con publicación Premium, el envío gratis lo pagás vos. ML estima el costo según el tamaño y destino del producto. Si no lo sumás al costo antes de fijar precio, estás subsidiando los envíos de tus compradores sin saberlo.',
+    ejemplo: 'Tu producto pesa 2kg y cuesta $8.000 enviarlo en promedio. Si lo ignorás, en 50 envíos al mes perdés $400.000 que nunca contabilizaste como costo.',
   },
   {
     n: '03',
-    titulo: 'Olvidás la comisión de la plataforma de pago',
-    desc: 'Mercado Pago, PayPal, Stripe, Shopify Payments — todos se llevan entre 3% y 6% de cada transacción. Si no lo sumás al costo, trabajás para ellos sin saberlo.',
-    ejemplo: 'Vendés a $10.000 con Mercado Pago (4.99% + IVA ≈ 6%). Recibís $9.400. Si calculaste margen sobre $10.000, tu número está inflado en $600.',
+    titulo: 'Calculás el margen sobre el precio de venta, no sobre el costo',
+    desc: 'Si vendés a $20.000 y tu costo total es $14.000, no tenés 30% de margen. Tenés 30% de margen sobre ventas, pero 42.8% de markup sobre costo. Son cosas distintas. Confundirlos te hace creer que ganás más de lo que ganás — y fijar precios que parecen rentables pero no lo son.',
+    ejemplo: 'Precio venta: $20.000. Costo total: $14.000. Margen sobre venta: 30%. Markup sobre costo: 42.8%. Si querés 30% de margen real sobre costo, tu precio mínimo es $18.200, no $20.000.',
   },
   {
     n: '04',
-    titulo: 'No contemplás la variación del tipo de cambio',
-    desc: 'Comprás hoy al dólar de hoy. Pero si tardás semanas en vender, el tipo de cambio puede moverse. Si el dólar sube y tu precio en pesos no se actualizó, tu margen en USD cae.',
-    ejemplo: 'Comprás a dólar 1000, ponés precio. Tres semanas después el dólar está a 1080. Si no ajustaste precio, perdiste 7.4% de margen en dólares.',
+    titulo: 'Copiás el precio de la competencia sin conocer sus costos',
+    desc: 'Si un competidor vende más barato, puede ser porque compra mayor volumen, tiene mejor proveedor, o simplemente está perdiendo plata y no lo sabe. Su precio no es referencia válida para tu negocio. Cada estructura de costos es diferente.',
+    ejemplo: 'Tu competidor vende a $15.000. Vos copiás el precio. Pero él compra 200 unidades con descuento del 20% y vos comprás 20. Su costo real es $8.000, el tuyo es $11.000. Al precio de $15.000, él gana $7.000 y vos perdés plata.',
   },
   {
     n: '05',
-    titulo: 'Copiás el precio de la competencia sin saber sus costos',
-    desc: 'Si el competidor está mal, vos también quedás mal. Si vende más volumen tiene descuentos que vos no tenés. Si importa de otro proveedor su estructura de costos es diferente. El precio de otro no es referencia válida para tu negocio.',
-    ejemplo: 'Tu competidor vende a $8.000. Vos lo copiás. Pero él compra 500 unidades con 15% de descuento y vos comprás 20. Su costo real es muy diferente al tuyo.',
+    titulo: 'No calculás el precio mínimo antes de publicar',
+    desc: 'El precio mínimo es el precio por debajo del cual cada venta te genera una pérdida. Incluye tu costo del producto, la comisión ML con IVA, el envío estimado y el margen mínimo que necesitás. Sin calcularlo antes, publicás a ciegas y descubrís el problema cuando ya es tarde.',
+    ejemplo: 'Costo producto: $8.000. Comisión ML efectiva (15%+IVA): $1.785. Envío estimado: $2.500. Solo para no perder plata necesitás vender a $12.285. Si querés 20% de margen, tu precio mínimo es $15.356. ¿Sabés cuál es el tuyo?',
   },
 ];
 
@@ -51,8 +50,8 @@ export default function Gratis() {
         body: JSON.stringify({ email }),
       });
       if (res.ok) {
-        posthog.capture('free_signup', { source: 'gratis' });
         setStatus('ok');
+        posthog.capture('free_signup', { source: 'gratis' });
       } else {
         setStatus('error');
       }
@@ -64,19 +63,12 @@ export default function Gratis() {
   return (
     <Layout>
       <Head>
-        <title>5 errores de pricing que te hacen vender sin margen — Margen Real</title>
-        <meta name="description" content="El checklist gratuito para vendedores de importados en Instagram. Los 5 errores más comunes que hacen que vendas bien pero ganes poco." />
+        <title>5 errores que te hacen vender sin margen en MercadoLibre Chile — Margen Real</title>
+        <meta name="description" content="Los 5 errores más comunes de vendedores en ML Chile. Comisiones, IVA, envíos y precios mínimos. Checklist gratuito." />
       </Head>
 
       <style>{`
-        .gratis-hero { padding: 72px 40px 60px; max-width: 720px; margin: 0 auto; text-align: center; }
-        @media(max-width:640px){ .gratis-hero { padding: 48px 20px 40px; } }
-        .gratis-hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px; }
-        .gratis-hero h1 em { font-style: normal; color: var(--accent); }
-        .gratis-hero .sub { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 520px; margin: 0 auto 36px; }
-
-        /* Email capture */
-        .capture-card { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.25); border-radius: 16px; padding: 32px; max-width: 480px; margin: 0 auto 64px; }
+        .capture-card { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.25); border-radius: var(--radius-lg); padding: 32px; max-width: 480px; margin: 32px auto 0; }
         .capture-title { font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; margin-bottom: 8px; }
         .capture-sub { font-size: 0.875rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
         .capture-form { display: flex; flex-direction: column; gap: 10px; }
@@ -87,45 +79,34 @@ export default function Gratis() {
         .capture-success { font-size: 0.9375rem; color: var(--success); font-weight: 600; text-align: center; padding: 16px 0; }
         .capture-hint { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 8px; }
 
-        /* Errores list */
-        .errores-wrap { max-width: 720px; margin: 0 auto; padding: 0 40px 80px; }
-        @media(max-width:640px){ .errores-wrap { padding: 0 20px 60px; } }
-        .errores-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
-
+        .errores-list { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--section-x) 80px; }
+        @media(max-width:640px){ .errores-list { padding: 0 20px 60px; } }
         .error-item { border-bottom: 1px solid var(--border); padding: 40px 0; }
         .error-item:last-child { border-bottom: none; }
         .error-num { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
         .error-titulo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--text); margin-bottom: 12px; line-height: 1.25; }
         .error-desc { font-size: 0.9375rem; color: var(--muted); line-height: 1.75; margin-bottom: 16px; }
-        .error-ejemplo { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; padding: 16px 20px; font-size: 0.875rem; color: var(--text-2); line-height: 1.7; }
+        .error-ejemplo { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-md); padding: 16px 20px; font-size: 0.875rem; color: var(--text-2); line-height: 1.7; }
         .error-ejemplo strong { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 
-        /* CTA final */
-        .cta-section { max-width: 720px; margin: 0 auto; padding: 0 40px 80px; }
-        @media(max-width:640px){ .cta-section { padding: 0 20px 60px; } }
-        .cta-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; text-align: center; }
-        @media(max-width:640px){ .cta-card { padding: 36px 24px; } }
-        .cta-card h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
-        .cta-card p { font-size: 0.9375rem; color: var(--muted); line-height: 1.7; margin-bottom: 28px; max-width: 440px; margin-left: auto; margin-right: auto; }
-        .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }      `}</style>
+        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 48px 40px; text-align: center; max-width: var(--content-max); margin: 0 auto 80px; }
+        @media(max-width:640px){ .cta-banner { padding: 36px 24px; margin: 0 20px 60px; } }
+        .cta-banner h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+        .cta-banner p { font-size: 0.9375rem; color: var(--muted); line-height: 1.7; margin-bottom: 28px; max-width: 440px; margin-left: auto; margin-right: auto; }
+        .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+      `}</style>
 
-      {/* Nav */}
-
-      {/* Hero */}
-      <div className="gratis-hero">
-        <div className="label" style={{ justifyContent: 'center', display: 'flex', marginBottom: 16 }}>Guía gratuita</div>
-        <h1>
-          Los <em>5 errores</em> que te<br />hacen vender sin margen
-        </h1>
-        <p className="sub">
-          El checklist para vendedores de importados en Instagram. Si cometés aunque sea uno de estos errores, estás dejando plata en la mesa — o peor, perdiendo sin saberlo.
+      <div className="page-hero narrow centered">
+        <div className="section-label">Guía gratuita · ML Chile</div>
+        <h1 className="page-h1">Los <span style={{ color: 'var(--accent)' }}>5 errores</span> que te<br />hacen vender sin margen</h1>
+        <p className="page-lead">
+          Si vendés en MercadoLibre Chile y cometés aunque sea uno de estos errores, estás dejando plata en la mesa — o peor, perdiendo sin saberlo.
         </p>
 
-        {/* Email capture */}
         <div className="capture-card">
           <div className="capture-title">Recibí el checklist completo</div>
           <div className="capture-sub">
-            Incluyendo la hoja de cálculo base y la fórmula de precio mínimo. Gratis, sin trampa.
+            Incluyendo la fórmula de precio mínimo para ML Chile. Gratis, sin trampa.
           </div>
           {status !== 'ok' ? (
             <form className="capture-form" onSubmit={handleSubmit}>
@@ -153,41 +134,33 @@ export default function Gratis() {
         </div>
       </div>
 
-      {/* Errores */}
-      <div className="errores-wrap">
-        <div className="label">Los 5 errores</div>
-        <h2 className="errores-title">Leelos todos. Seguro<br />te identificás con alguno.</h2>
+      <div className="errores-list">
+        <div className="section-label">Los 5 errores</div>
+        <h2 className="page-h2" style={{ marginBottom: 32 }}>Leelos todos. Seguro<br />te identificás con alguno.</h2>
 
-        <div style={{ marginTop: 32 }}>
-          {ERRORES.map((e) => (
-            <div className="error-item" key={e.n}>
-              <div className="error-num">Error {e.n}</div>
-              <div className="error-titulo">{e.titulo}</div>
-              <div className="error-desc">{e.desc}</div>
-              <div className="error-ejemplo">
-                <strong>Ejemplo real</strong>
-                {e.ejemplo}
-              </div>
+        {ERRORES.map((e) => (
+          <div className="error-item" key={e.n}>
+            <div className="error-num">Error {e.n}</div>
+            <div className="error-titulo">{e.titulo}</div>
+            <div className="error-desc">{e.desc}</div>
+            <div className="error-ejemplo">
+              <strong>Ejemplo real</strong>
+              {e.ejemplo}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
-      {/* CTA final */}
-      <div className="cta-section">
-        <div className="cta-card">
-          <h2>¿Y ahora qué?</h2>
-          <p>
-            Calculá el precio mínimo de tu próximo producto importado en 2 minutos, o llevate los frameworks completos para fijar precios con lógica.
-          </p>
-          <div className="cta-btns">
-            <Link href="/calculadora" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
-              Calcular mi precio gratis →
-            </Link>
-            <Link href="/importados#planes" className="btn btn-outline" style={{ textDecoration: 'none' }}>
-              Ver planes
-            </Link>
-          </div>
+      <div className="cta-banner">
+        <h2>¿Sabés cuál es tu precio mínimo?</h2>
+        <p>Calculá exactamente cuánto necesitás cobrar para no perder plata en cada venta de MercadoLibre Chile.</p>
+        <div className="cta-btns">
+          <a href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
+            Calcular mi margen gratis →
+          </a>
+          <a href="/guias" className="btn btn-outline btn-lg" style={{ textDecoration: 'none' }}>
+            Ver guías
+          </a>
         </div>
       </div>
 

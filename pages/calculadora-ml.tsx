@@ -81,11 +81,7 @@ export default function CalculadoraML() {
       </Head>
 
       <style>{`
-        .tool-header { padding: 56px 40px 32px; max-width: 1100px; margin: 0 auto; text-align: center; }
-        @media(max-width:640px){ .tool-header { padding: 40px 20px 24px; } }
-        .tool-header .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(249,215,27,0.1); border: 1px solid rgba(249,215,27,0.25); border-radius: 999px; padding: 5px 14px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
-        .tool-header h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; margin-bottom: 12px; }
-        .tool-header .sub { font-size: 1rem; color: var(--muted); line-height: 1.6; }
+
 
         .calc-wrap { max-width: 1060px; margin: 0 auto; padding: 16px 40px 80px; }
         @media(max-width:640px){ .calc-wrap { padding: 16px 20px 60px; } }
@@ -119,7 +115,7 @@ export default function CalculadoraML() {
         /* Results */
         .results-panel { }
         .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
         .metric-card.highlight { border-color: var(--accent); background: rgba(249,215,27,0.04); }
         .metric-card.danger { border-color: #ef4444; background: rgba(239,68,68,0.04); }
         .metric-lbl { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
@@ -129,7 +125,7 @@ export default function CalculadoraML() {
         .metric-val.green { color: #22c55e; }
         .metric-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
 
-        .desglose-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; }
+        .desglose-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
         .desglose-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
         .desglose-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
         .desglose-row:last-child { border-bottom: none; font-weight: 700; }
@@ -138,7 +134,7 @@ export default function CalculadoraML() {
         .desglose-val.red { color: #ef4444; }
         .desglose-val.green { color: #22c55e; }
 
-        .ideal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; }
+        .ideal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
         .ideal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
         .ideal-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
         .ideal-margen-input { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 10px; }
@@ -149,7 +145,7 @@ export default function CalculadoraML() {
         .ideal-sub { font-size: 0.8125rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
         /* Alert */
-        .alert-card { border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; font-size: 0.875rem; line-height: 1.6; }
+        .alert-card { border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; font-size: 0.875rem; line-height: 1.6; }
         .alert-card.red { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); color: var(--text); }
         .alert-card.green { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2); color: var(--text); }
         .alert-icon { font-size: 1.25rem; flex-shrink: 0; line-height: 1.3; }
@@ -172,12 +168,11 @@ export default function CalculadoraML() {
         .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }      `}</style>
 
 
-      {/* Header */}
-      <div className="tool-header">
-        <div className="badge">MercadoLibre Chile</div>
-        <h1>¿Cuánto te queda<br />después de ML?</h1>
-        <p className="sub">
-          Calculá tu margen real como vendedor. Incluye comisión por categoría,<br />
+      <div className="page-hero centered">
+        <div className="section-label">MercadoLibre Chile</div>
+        <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
+        <p className="page-lead">
+          Calculá tu margen real como vendedor. Incluye comisión por categoría,
           IVA 19% y costo de envío. Sin sorpresas.
         </p>
       </div>

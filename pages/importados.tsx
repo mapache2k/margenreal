@@ -31,7 +31,7 @@ export default function Importados() {
 
       <style>{`
         /* ── Hero ── */
-        .imp-hero { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 72px var(--section-x) 80px; max-width: var(--section-max); margin: 0 auto; overflow: hidden; }
+        .imp-hero { position: relative; display: flex; flex-direction: column; justify-content: center; padding: var(--hero-pt) var(--section-x) var(--hero-pb); max-width: var(--section-max); margin: 0 auto; overflow: hidden; }
         .imp-hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(249,215,27,.05) 0%, transparent 65%); pointer-events: none; }
         .imp-hero-inner { position: relative; z-index: 1; max-width: 680px; }
         .imp-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: 500; color: var(--muted); margin-bottom: 24px; letter-spacing: 0.01em; }
@@ -75,7 +75,7 @@ export default function Importados() {
         .faq-a.open { max-height: 200px; margin-top: 12px; }
 
         /* ── CTA banner ── */
-        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 64px 40px; text-align: center; }
+        .cta-banner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; }
         @media(max-width:640px){ .cta-banner { padding: 40px 24px; } }
 
         .heading { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); margin-bottom: 0; }      `}</style>

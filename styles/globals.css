@@ -33,15 +33,16 @@
 
   /* Layout / spacing */
   --section-max: 1200px;
-  --section-x: 24px;
+  --content-max: 760px;
+  --section-x: 40px;
   --sp-6: 12px;
   --sp-10: 20px;
   --sp-12: 32px;
-  --hero-pt: 56px;
+  --hero-pt: 64px;
   --hero-pb: 72px;
   --radius-sm: 8px;
   --radius-md: 10px;
-  --radius-lg: 12px;
+  --radius-lg: 16px;
 
   /* Misc */
   --transition: 180ms ease;
@@ -332,6 +333,63 @@ table td { padding:12px; border-bottom:1px solid var(--border); }
    Small helpers for dev & debugging (optional, remove in prod)
    ========================= */
 /* .outline * { outline: 1px solid rgba(255,0,0,0.08); } */
+
+/* =========================
+   Layout utilities (use these in every page)
+   ========================= */
+.page-hero {
+  padding: var(--hero-pt) var(--section-x) var(--hero-pb);
+  max-width: var(--section-max);
+  margin: 0 auto;
+}
+.page-hero.narrow { max-width: var(--content-max); }
+.page-hero.centered { text-align: center; }
+@media (max-width: 640px) {
+  .page-hero { padding: 40px 20px 48px; }
+}
+
+.page-section {
+  max-width: var(--section-max);
+  margin: 0 auto;
+  padding: 64px var(--section-x) 80px;
+}
+.page-section.narrow { max-width: var(--content-max); }
+@media (max-width: 640px) {
+  .page-section { padding: 40px 20px 60px; }
+}
+
+.page-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.page-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.page-lead {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+}
+.page-hero.centered .page-lead { margin: 0 auto; }
+
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
 
 /* =========================
    Navigation & Footer (shared across pages)
