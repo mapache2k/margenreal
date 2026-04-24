@@ -8,7 +8,7 @@ export default function Importados() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    posthog.capture('landing_visit');
+    posthog.capture('shop_page_view');
   }, []);
 
   const faqs = [

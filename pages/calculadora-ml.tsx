@@ -30,6 +30,14 @@ export default function CalculadoraML() {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
   const capturedOnce = useRef(false);
+  const startedOnce = useRef(false);
+
+  const trackStart = () => {
+    if (!startedOnce.current) {
+      startedOnce.current = true;
+      posthog.capture('calculator_started', { calculator: 'ml_chile' });
+    }
+  };
 
   const costoNum = parseFloat(costo) || 0;
   const precioNum = parseFloat(precio) || 0;
@@ -233,7 +241,7 @@ export default function CalculadoraML() {
                 type="number"
                 placeholder="15.000"
                 value={costo}
-                onChange={e => setCosto(e.target.value)}
+                onChange={e => { trackStart(); setCosto(e.target.value); }}
               />
             </div>
 

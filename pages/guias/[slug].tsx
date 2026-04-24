@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { getAllGuias, getGuia, type GuiaItem } from '../../lib/guias';
+import posthog from 'posthog-js';
 
 type Props = { guia: GuiaItem };
 
@@ -21,6 +23,10 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 };
 
 export default function GuiaPage({ guia }: Props) {
+  useEffect(() => {
+    posthog.capture('guide_view', { slug: guia.slug, tags: guia.tags });
+  }, [guia.slug]);
+
   return (
     <Layout>
       <Head>
