@@ -168,8 +168,11 @@ export default function CalculadoraML() {
         .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }      `}</style>
 
 
-      <div className="page-hero centered">
-        <div className="section-label">MercadoLibre Chile</div>
+      <div className="page-hero">
+        <div className="page-eyebrow">
+          <span className="dot" />
+          Para vendedores de MercadoLibre Chile
+        </div>
         <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
         <p className="page-lead">
           Calculá tu margen real como vendedor. Incluye comisión por categoría,
