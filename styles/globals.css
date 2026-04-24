@@ -337,9 +337,10 @@ table td { padding:12px; border-bottom:1px solid var(--border); }
    Navigation & Footer (shared across pages)
    ========================= */
 nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   padding: 0 40px;
   height: 64px;
   border-bottom: 1px solid var(--border);
@@ -349,7 +350,7 @@ nav {
   z-index: 100;
 }
 @media (max-width: 640px) {
-  nav { padding: 0 20px; }
+  nav { padding: 0 20px; grid-template-columns: auto 1fr auto; }
   .nav-links { display: none; }
 }
 .nav-logo {
@@ -359,14 +360,12 @@ nav {
   color: var(--text);
   text-decoration: none;
   letter-spacing: -0.02em;
-  flex: 0 0 auto;
-  margin-right: 24px;
 }
 .nav-logo span { color: var(--accent); }
 .nav-links {
   display: flex;
   gap: 2px;
-  flex: 1;
+  justify-content: center;
 }
 .nav-link {
   font-size: 0.875rem;
@@ -379,15 +378,13 @@ nav {
   white-space: nowrap;
 }
 .nav-link:hover { color: var(--text); background: var(--surface); }
-.nav-link.active { color: var(--text); background: rgba(249,215,27,0.10); font-weight: 600; }
+.nav-link.active { color: var(--text); background: rgba(249,215,27,0.10); }
 .nav-cta {
   font-size: 0.8125rem;
   font-weight: 700;
   padding: 9px 18px;
   border-radius: 9px;
   white-space: nowrap;
-  flex: 0 0 auto;
-  min-width: 180px;
   text-align: center;
 }
 
