@@ -135,12 +135,12 @@ export default function CalculadoraML() {
         .desglose-val.green { color: #22c55e; }
 
         .ideal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
-        .ideal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .ideal-header { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
         .ideal-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-        .ideal-margen-input { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 10px; }
-        .ideal-margen-input input { width: 44px; background: transparent; border: none; color: var(--text); font-family: var(--font-display); font-size: 0.9375rem; font-weight: 800; outline: none; text-align: right; -moz-appearance: textfield; }
+        .ideal-margen-input { display: inline-flex; align-items: center; gap: 4px; background: var(--bg); border: 1.5px solid var(--accent); border-radius: 6px; padding: 2px 8px; }
+        .ideal-margen-input input { width: 36px; background: transparent; border: none; color: var(--accent); font-family: var(--font-display); font-size: 0.9375rem; font-weight: 800; outline: none; text-align: center; -moz-appearance: textfield; }
         .ideal-margen-input input::-webkit-outer-spin-button, .ideal-margen-input input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .ideal-margen-input span { color: var(--muted); font-size: 0.875rem; }
+        .ideal-margen-input span { color: var(--muted); font-size: 0.8125rem; }
         .ideal-price { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); line-height: 1; }
         .ideal-sub { font-size: 0.8125rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
@@ -362,7 +362,7 @@ export default function CalculadoraML() {
                 {/* Precio ideal para margen objetivo */}
                 <div className="ideal-card">
                   <div className="ideal-header">
-                    <div className="ideal-title">¿A qué precio vender para lograr</div>
+                    <div className="ideal-title">¿A qué precio para lograr</div>
                     <div className="ideal-margen-input">
                       <input
                         type="number"
@@ -371,8 +371,9 @@ export default function CalculadoraML() {
                         min={1}
                         max={80}
                       />
-                      <span>% de margen?</span>
+                      <span>%</span>
                     </div>
+                    <div className="ideal-title">de margen?</div>
                   </div>
                   {precioIdeal > 0 ? (
                     <>
