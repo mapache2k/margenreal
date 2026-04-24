@@ -1,0 +1,131 @@
+import Head from 'next/head';
+import Link from 'next/link';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import ReactMarkdown from 'react-markdown';
+import { getAllGuias, getGuia, type GuiaItem } from '../../lib/guias';
+
+type Props = { guia: GuiaItem };
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const guias = getAllGuias(true);
+  return {
+    paths: guias.map(g => ({ params: { slug: g.slug } })),
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
+  const guia = getGuia(params!.slug as string);
+  if (!guia) return { notFound: true };
+  return { props: { guia } };
+};
+
+export default function GuiaPage({ guia }: Props) {
+  return (
+    <>
+      <Head>
+        <title>{guia.title} — Margen Real</title>
+        <meta name="description" content={guia.description} />
+      </Head>
+
+      <style>{`
+        .guia-wrap { max-width: 720px; margin: 0 auto; padding: 56px 40px 80px; }
+        @media(max-width:640px){ .guia-wrap { padding: 32px 20px 60px; } }
+
+        .guia-back { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--muted); text-decoration: none; margin-bottom: 32px; transition: color 0.15s; }
+        .guia-back:hover { color: var(--text); }
+
+        .guia-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+        .guia-tag { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: rgba(249,215,27,0.08); border-radius: 4px; padding: 2px 8px; }
+
+        .guia-title { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; }
+        .guia-desc { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+
+        .guia-body h2 { font-family: var(--font-display); font-size: 1.375rem; font-weight: 800; letter-spacing: -0.02em; margin: 40px 0 16px; color: var(--text); }
+        .guia-body h3 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 700; margin: 28px 0 12px; color: var(--text); }
+        .guia-body p { font-size: 0.9375rem; color: var(--text-2, var(--muted)); line-height: 1.8; margin-bottom: 16px; }
+        .guia-body strong { color: var(--text); font-weight: 700; }
+        .guia-body ul, .guia-body ol { padding-left: 20px; margin-bottom: 16px; }
+        .guia-body li { font-size: 0.9375rem; color: var(--text-2, var(--muted)); line-height: 1.8; margin-bottom: 6px; }
+        .guia-body pre { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; overflow-x: auto; margin-bottom: 20px; }
+        .guia-body code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.875rem; color: var(--accent); }
+        .guia-body pre code { color: var(--text); }
+        .guia-body blockquote { border-left: 3px solid var(--accent); padding: 12px 20px; background: rgba(249,215,27,0.04); border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        .guia-body blockquote p { margin-bottom: 0; }
+        .guia-body table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.875rem; }
+        .guia-body th { background: var(--surface); padding: 10px 14px; text-align: left; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--border); }
+        .guia-body td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
+        .guia-body tr:last-child td { border-bottom: none; }
+        .guia-body a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .guia-body a:hover { text-decoration: underline; }
+
+        .guia-cta { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.2); border-radius: 16px; padding: 28px; margin-top: 48px; text-align: center; }
+        .guia-cta p { color: var(--muted); font-size: 0.9375rem; margin-bottom: 16px; }
+
+        ${guia.draft ? `.draft-banner { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px 20px; font-size: 0.875rem; color: #ef4444; font-weight: 600; margin-bottom: 24px; }` : ''}
+
+        footer { max-width: var(--section-max); margin: 40px auto 0; padding: 40px var(--section-x) 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; border-top: 1px solid var(--border); }
+        .footer-logo { font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 18px; text-decoration: none; }
+        .footer-logo span { color: var(--accent); }
+        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .footer-link { font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
+        .footer-link:hover { color: var(--text); }
+        .footer-copy { font-size: 0.75rem; color: var(--muted); }
+      `}</style>
+
+      <nav>
+        <Link href="/" className="nav-logo" style={{ textDecoration: 'none' }}>
+          margen<span style={{ color: 'var(--accent)' }}>real</span>
+        </Link>
+        <div className="nav-links">
+          <Link href="/" className="nav-link" style={{ textDecoration: 'none' }}>Inicio</Link>
+          <Link href="/calculadora-ml" className="nav-link" style={{ textDecoration: 'none' }}>Calculadora ML</Link>
+          <Link href="/guias" className="nav-link active" style={{ textDecoration: 'none' }}>Guías</Link>
+          <Link href="/importados" className="nav-link" style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
+        </div>
+        <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
+          Calcular mi margen →
+        </Link>
+      </nav>
+
+      <div className="guia-wrap">
+        <Link href="/guias" className="guia-back">← Volver a guías</Link>
+
+        {guia.draft && (
+          <div className="draft-banner">Borrador — no publicado</div>
+        )}
+
+        <div className="guia-tags">
+          {guia.tags.map(t => <span key={t} className="guia-tag">{t}</span>)}
+        </div>
+
+        <h1 className="guia-title">{guia.title}</h1>
+        <p className="guia-desc">{guia.description}</p>
+
+        <div className="guia-body">
+          <ReactMarkdown>{guia.content}</ReactMarkdown>
+        </div>
+
+        <div className="guia-cta">
+          <p>¿Querés ver estos números para tu producto específico?</p>
+          <Link href="/calculadora-ml" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+            Calcular mi margen en ML Chile →
+          </Link>
+        </div>
+      </div>
+
+      <footer>
+        <Link href="/" className="footer-logo" style={{ textDecoration: 'none' }}>
+          margen<span>real</span>
+        </Link>
+        <div className="footer-links">
+          <Link href="/calculadora-ml" className="footer-link">Calculadora ML</Link>
+          <Link href="/guias" className="footer-link">Guías</Link>
+          <Link href="/importados" className="footer-link">Para vendedores ML</Link>
+          <Link href="/privacy" className="footer-link">Privacidad</Link>
+        </div>
+        <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
+      </footer>
+    </>
+  );
+}
