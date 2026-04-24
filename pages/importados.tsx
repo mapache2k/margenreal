@@ -11,20 +11,20 @@ export default function Importados() {
   }, []);
 
   const faqs = [
-    { q: '¿Necesito saber de finanzas para usar esto?', a: 'No. Solo necesitás saber cuánto pagaste por el producto, cuánto cuesta traerlo y a cuánto lo vendés. Nosotros calculamos el resto.' },
-    { q: '¿Funciona para cualquier tipo de importado?', a: 'Sí. Ropa, cosméticos, accesorios, gadgets, artículos de hogar. Cualquier producto que comprás en el exterior y vendés en tu país.' },
+    { q: '¿Las comisiones son exactas?', a: 'Sí. Usamos las tarifas vigentes de MercadoLibre Chile por categoría, incluyendo el IVA 19% que ML cobra sobre su comisión. Te recomendamos verificar siempre en el portal oficial de ML ante cambios de tarifas.' },
+    { q: '¿Para qué sirve la diferencia entre Clásica y Premium?', a: 'Clásica tiene menor comisión pero el comprador paga el envío. Premium tiene mayor comisión pero el envío es gratis para el comprador — ese costo lo absorbés vos. La calculadora muestra cuál te conviene más según tu margen.' },
     { q: '¿Mis datos son privados?', a: 'Todo se calcula en tu navegador. No guardamos ningún número tuyo en ningún servidor.' },
-    { q: '¿Puedo probar antes de pagar?', a: 'Sí. La calculadora y el checklist de errores son completamente gratis. Pagás solo si querés los frameworks completos.' },
+    { q: '¿Puedo probar antes de pagar?', a: 'Sí. La calculadora de margen ML es completamente gratis. Pagás solo si querés los frameworks y spreadsheets completos.' },
     { q: '¿Se puede comprar una sola vez?', a: 'Exacto. Es un pago único — no hay suscripción. Comprás una vez y el material es tuyo para siempre.' },
   ];
 
   return (
     <>
       <Head>
-        <title>Margen Real — Deja de vender sin saber cuánto ganás</title>
-        <meta name="description" content="La guía práctica para vendedores de importados en Instagram. Calculá tu precio real, cubrí todos tus costos y dejá de regalar ganancia." />
-        <meta property="og:title" content="Margen Real — Deja de vender sin saber cuánto ganás" />
-        <meta property="og:description" content="Frameworks, calculadora y guías en español para vendedores de importados. Precio real, margen real." />
+        <title>Margen Real para MercadoLibre Chile — Calculá tu margen real</title>
+        <meta name="description" content="Calculá exactamente cuánto te queda después de comisiones ML, IVA 19% y envío. La herramienta para vendedores de MercadoLibre Chile." />
+        <meta property="og:title" content="Margen Real para MercadoLibre Chile" />
+        <meta property="og:description" content="Calculadora de margen real para vendedores ML Chile. Comisiones por categoría, IVA 19%, costo de envío. Sin sorpresas." />
         <meta property="og:type" content="website" />
       </Head>
 
@@ -99,8 +99,8 @@ export default function Importados() {
           <Link href="/importados" className="nav-link active" style={{ textDecoration: 'none' }}>Para Importadores</Link>
           <Link href="/about" className="nav-link" style={{ textDecoration: 'none' }}>Nosotros</Link>
         </div>
-        <Link href="/calculadora" className="btn nav-cta" style={{ textDecoration: 'none' }}>
-          Calcular mi precio →
+        <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
+          Calcular mi margen →
         </Link>
       </nav>
 
@@ -112,19 +112,19 @@ export default function Importados() {
           <div className="imp-hero-inner">
             <div className="imp-eyebrow">
               <span className="dot" />
-              Para vendedores de importados en Instagram
+              Para vendedores de MercadoLibre Chile
             </div>
             <h1>
-              Dejá de vender<br />
-              sin saber<br />
-              <em>cuánto ganás.</em>
+              ¿Cuánto te queda<br />
+              después de que<br />
+              <em>ML se cobra todo?</em>
             </h1>
             <p className="imp-hero-sub">
-              Comprás en dólares, vendés en pesos, pagás comisiones, flete y aduana — y al final no sabés si ganaste o perdiste. Eso se termina.
+              Comisión por categoría, IVA 19% sobre esa comisión, costo de envío — y recién ahí sabés si ganaste o perdiste. Calculalo en 30 segundos.
             </p>
             <div className="imp-hero-actions">
-              <Link href="/calculadora" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
-                Calcular mi precio gratis →
+              <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
+                Calcular mi margen gratis →
               </Link>
               <Link href="/gratis" className="btn btn-outline" style={{ textDecoration: 'none' }}>
                 Ver guía gratuita
@@ -138,15 +138,15 @@ export default function Importados() {
         {/* Dolor */}
         <section className="section">
           <div className="label">El problema</div>
-          <h2 className="heading">Los errores que le cuestan<br />plata a casi todos.</h2>
+          <h2 className="heading">Lo que ML te cobra<br />y casi nadie calcula bien.</h2>
           <div className="pain-grid">
             {[
-              { icon: '💱', title: 'Ignorás el tipo de cambio real', text: 'Comprás al dólar de hoy, vendés la semana que viene. Si el cambio se mueve y no lo contemplaste, perdés sin darte cuenta.' },
-              { icon: '🚢', title: 'No contás el flete ni la aduana', text: 'El costo del producto es solo parte del costo real. Flete, aduana, gastos de gestión — todo eso baja tu margen sin que lo veas.' },
-              { icon: '📱', title: 'Copiás precios de la competencia', text: 'Si ellos están mal, vos también quedás mal. El único precio que importa es el que cubre tus costos y te deja ganancia.' },
-              { icon: '💳', title: 'Olvidás la comisión de la plataforma', text: 'Mercado Pago, Shopify, Instagram Shopping — cada uno se lleva su porcentaje. Si no lo sumás, trabajás para ellos.' },
-              { icon: '📉', title: 'Calculás margen sobre el precio de venta', text: 'El error clásico. El margen real se calcula sobre el costo, no sobre lo que cobrás. La diferencia puede ser brutal.' },
-              { icon: '🤷', title: 'Ponés el precio "de ojo"', text: 'Cuando no tenés un método, confiás en la intuición. Y la intuición no paga el alquiler del depósito.' },
+              { icon: '📊', title: 'Comisión por categoría', text: 'No es lo mismo vender ropa (17%) que electrónica (13%). La categoría define cuánto te descuenta ML antes de pagarte.' },
+              { icon: '🧾', title: 'IVA 19% sobre la comisión', text: 'ML cobra IVA sobre su propia comisión. Si vendés a $20.000 con 15% de comisión, el descuento real es 17,85% — no 15%.' },
+              { icon: '📦', title: 'Costo de envío que absorbés', text: 'En publicaciones Premium el envío gratis lo pagás vos. $3.990 a $8.990 por paquete que sale directo de tu margen.' },
+              { icon: '🏷️', title: 'Precio copiado de la competencia', text: 'Si el competidor calculó mal, vos también quedás mal. El único precio que importa es el que cubre tus costos reales.' },
+              { icon: '📉', title: 'Margen calculado sobre el precio de venta', text: 'El error clásico. El margen real se calcula sobre el costo, no sobre lo que publicás. La diferencia puede ser brutal.' },
+              { icon: '🔢', title: 'Precio de lista vs. precio neto', text: 'Lo que ves en tu dashboard de ML no es lo que entra a tu bolsillo. El neto es lo que importa para decidir.' },
             ].map((p) => (
               <div className="pain-card" key={p.title}>
                 <div className="pain-icon">{p.icon}</div>
@@ -162,7 +162,7 @@ export default function Importados() {
         {/* Planes */}
         <section className="section" id="planes">
           <div className="label">Lo que incluye</div>
-          <h2 className="heading">Elegí tu nivel<br />de claridad.</h2>
+          <h2 className="heading">Elegí tu nivel<br />de claridad en ML Chile.</h2>
           <div className="tiers-grid">
 
             {/* Free */}
@@ -178,7 +178,7 @@ export default function Importados() {
                 <li className="off">Ejemplos por rubro</li>
                 <li className="off">Spreadsheets descargables</li>
               </ul>
-              <Link href="/calculadora" className="btn btn-plan btn-plan-outline" style={{ textDecoration: 'none' }}>
+              <Link href="/calculadora-ml" className="btn btn-plan btn-plan-outline" style={{ textDecoration: 'none' }}>
                 Empezar gratis →
               </Link>
             </div>
@@ -233,10 +233,10 @@ export default function Importados() {
           <h2 className="heading">Del caos al número<br />en cuatro pasos.</h2>
           <div className="steps-list">
             {[
-              { n: '01', title: 'Ingresás tus costos reales', text: 'Costo del producto en USD, tipo de cambio, flete, aduana, comisión de plataforma. Todo lo que realmente pagás.' },
-              { n: '02', title: 'La calculadora te da el precio mínimo', text: 'El número por debajo del cual estás perdiendo plata. No es el precio de venta — es el piso desde el que empezás a ganar.' },
-              { n: '03', title: 'Aplicás el framework de tu rubro', text: 'Ropa importada, cosméticos, accesorios de celular — cada categoría tiene sus propias variables. Los frameworks te guían paso a paso.' },
-              { n: '04', title: 'Fijás precios con lógica, no de ojo', text: 'Sabés exactamente cuánto ganás en cada venta. Podés subir precios con fundamento o hacer descuentos sin perder margen.' },
+              { n: '01', title: 'Ingresás tu producto y categoría ML', text: 'Costo del producto, precio de publicación, categoría de MercadoLibre y tipo de publicación (Clásica o Premium).' },
+              { n: '02', title: 'Ves tu margen real al instante', text: 'Comisión ML, IVA 19% sobre esa comisión, costo de envío — todo desglosado. Lo que realmente entra a tu bolsillo.' },
+              { n: '03', title: 'Calculás el precio para tu margen objetivo', text: '¿Querés 30% de margen? La calculadora te dice exactamente a qué precio publicar para lograrlo después de todos los descuentos ML.' },
+              { n: '04', title: 'Publicás con números, no de ojo', text: 'Sabés exactamente cuánto ganás en cada venta. Podés ajustar precio o cambiar de Clásica a Premium con datos reales.' },
             ].map((s) => (
               <div className="step" key={s.n}>
                 <div className="step-num">{s.n}</div>
@@ -273,13 +273,13 @@ export default function Importados() {
           <div className="cta-banner">
             <div className="label" style={{ textAlign: 'center' }}>Empezá ahora</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 600, textAlign: 'center' }}>
-              ¿Cuánto ganás realmente<br />en tu próxima venta?
+              ¿Cuánto te queda realmente<br />después de ML?
             </h2>
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7, textAlign: 'center' }}>
-              Calculalo en 2 minutos. Gratis. Sin registro.
+              Calculalo en 30 segundos. Gratis. Sin registro.
             </p>
-            <Link href="/calculadora" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
-              Calcular mi precio →
+            <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
+              Calcular mi margen →
             </Link>
           </div>
         </section>
