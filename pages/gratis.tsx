@@ -124,12 +124,12 @@ export default function Gratis() {
         </Link>
         <div className="nav-links">
           <Link href="/" className="nav-link" style={{ textDecoration: 'none' }}>Inicio</Link>
-          <Link href="/tool" className="nav-link" style={{ textDecoration: 'none' }}>Herramienta Gratis</Link>
-          <Link href="/importados" className="nav-link" style={{ textDecoration: 'none' }}>Para Importadores</Link>
-          <Link href="/about" className="nav-link" style={{ textDecoration: 'none' }}>Nosotros</Link>
+          <Link href="/calculadora-ml" className="nav-link" style={{ textDecoration: 'none' }}>Calculadora ML</Link>
+          <Link href="/guias" className="nav-link" style={{ textDecoration: 'none' }}>Guías</Link>
+          <Link href="/importados" className="nav-link" style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
         </div>
-        <Link href="/calculadora" className="btn nav-cta" style={{ textDecoration: 'none' }}>
-          Calcular mi precio →
+        <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
+          Calcular mi margen →
         </Link>
       </nav>
 
