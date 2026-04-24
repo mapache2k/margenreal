@@ -406,7 +406,7 @@ nav {
   transition: color var(--transition), background var(--transition);
 }
 .nav-link:hover { color: var(--text); background: var(--surface); }
-.nav-link.active { color: var(--text); font-weight: 700; }
+.nav-link.active { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
 .nav-cta {
   font-size: 0.8125rem;
   font-weight: 700;
