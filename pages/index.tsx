@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import NavBar from '../components/NavBar';
 import Link from 'next/link';
 import { useState } from 'react';
 import posthog from 'posthog-js';
@@ -81,20 +82,7 @@ export default function Home() {
         .footer-copy { font-size: 0.75rem; color: var(--muted); }
       `}</style>
 
-      <nav>
-        <Link href="/" className="nav-logo" style={{ textDecoration: 'none' }}>
-          margen<span style={{ color: 'var(--accent)' }}>real</span>
-        </Link>
-        <div className="nav-links">
-          <Link href="/" className="nav-link active" style={{ textDecoration: 'none' }}>Inicio</Link>
-          <Link href="/calculadora-ml" className="nav-link" style={{ textDecoration: 'none' }}>Calculadora ML</Link>
-          <Link href="/importados" className="nav-link" style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
-          <Link href="/gratis" className="nav-link" style={{ textDecoration: 'none' }}>Guía gratuita</Link>
-        </div>
-        <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
-          Calcular mi margen →
-        </Link>
-      </nav>
+      <NavBar />
 
       <div className="page-wrap">
 

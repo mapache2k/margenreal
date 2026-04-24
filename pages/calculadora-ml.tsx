@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import NavBar from '../components/NavBar';
 import { useState, useEffect, useRef } from 'react';
 import posthog from 'posthog-js';
 import {
@@ -179,21 +180,7 @@ export default function CalculadoraML() {
         .footer-copy { font-size: 0.75rem; color: var(--muted); }
       `}</style>
 
-      {/* Nav */}
-      <nav>
-        <Link href="/" className="nav-logo" style={{ textDecoration: 'none' }}>
-          margen<span style={{ color: 'var(--accent)' }}>real</span>
-        </Link>
-        <div className="nav-links">
-          <Link href="/" className="nav-link" style={{ textDecoration: 'none' }}>Inicio</Link>
-          <Link href="/calculadora-ml" className="nav-link active" style={{ textDecoration: 'none' }}>Calculadora ML</Link>
-          <Link href="/guias" className="nav-link" style={{ textDecoration: 'none' }}>Guías</Link>
-          <Link href="/importados" className="nav-link" style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
-        </div>
-        <Link href="/importados#planes" className="btn nav-cta" style={{ textDecoration: 'none' }}>
-          Ver planes →
-        </Link>
-      </nav>
+      <NavBar />
 
       {/* Header */}
       <div className="tool-header">

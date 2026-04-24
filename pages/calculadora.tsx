@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import NavBar from '../components/NavBar';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import posthog from 'posthog-js';
@@ -164,20 +165,7 @@ export default function Calculadora() {
       `}</style>
 
       {/* Nav */}
-      <nav>
-        <Link href="/" className="nav-logo" style={{ textDecoration: 'none' }}>
-          margen<span style={{ color: 'var(--accent)' }}>real</span>
-        </Link>
-        <div className="nav-links">
-          <Link href="/" className="nav-link" style={{ textDecoration: 'none' }}>Inicio</Link>
-          <Link href="/calculadora-ml" className="nav-link" style={{ textDecoration: 'none' }}>Calculadora ML</Link>
-          <Link href="/guias" className="nav-link" style={{ textDecoration: 'none' }}>Guías</Link>
-          <Link href="/importados" className="nav-link" style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
-        </div>
-        <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
-          Calcular mi margen →
-        </Link>
-      </nav>
+      <NavBar />
 
       {/* Header */}
       <div className="tool-header">

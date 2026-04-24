@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import NavBar from '../components/NavBar';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
 import { getAllGuias, getGuia, type GuiaItem } from '../lib/guias';
@@ -69,14 +70,7 @@ export default function Review({ guias }: Props) {
         .footer-copy { font-size: 0.75rem; color: var(--muted); }
       `}</style>
 
-      <nav>
-        <Link href="/" className="nav-logo" style={{ textDecoration: 'none' }}>
-          margen<span style={{ color: 'var(--accent)' }}>real</span>
-        </Link>
-        <div className="nav-links">
-          <Link href="/guias" className="nav-link" style={{ textDecoration: 'none' }}>Guías públicas</Link>
-        </div>
-      </nav>
+      <NavBar />
 
       <div className="review-wrap">
         <div className="review-header">
