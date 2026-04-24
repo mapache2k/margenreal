@@ -9,8 +9,6 @@ export default function NavBar() {
     return pathname === href || pathname.startsWith(href + '/');
   };
 
-  const onCalc = pathname === '/calculadora-ml';
-
   return (
     <nav>
       <Link href="/" className="nav-logo" style={{ textDecoration: 'none' }}>
@@ -22,12 +20,8 @@ export default function NavBar() {
         <Link href="/guias" className={`nav-link${isActive('/guias') ? ' active' : ''}`} style={{ textDecoration: 'none' }}>Guías</Link>
         <Link href="/importados" className={`nav-link${isActive('/importados') ? ' active' : ''}`} style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
       </div>
-      <Link
-        href={onCalc ? '/importados#planes' : '/calculadora-ml'}
-        className="btn nav-cta"
-        style={{ textDecoration: 'none' }}
-      >
-        {onCalc ? 'Ver planes →' : 'Calcular mi margen →'}
+      <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
+        Calcular mi margen →
       </Link>
     </nav>
   );
