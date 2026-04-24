@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { remark } from 'remark';
+import html from 'remark-html';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'guias');
 
@@ -13,7 +15,7 @@ export type GuiaFrontmatter = {
   tags: string[];
 };
 
-export type GuiaItem = GuiaFrontmatter & { content: string };
+export type GuiaItem = GuiaFrontmatter & { contentHtml: string };
 
 export function getAllGuias(includeDrafts = false): GuiaFrontmatter[] {
   if (!fs.existsSync(CONTENT_DIR)) return [];
@@ -28,13 +30,16 @@ export function getAllGuias(includeDrafts = false): GuiaFrontmatter[] {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
-export function getGuia(slug: string): GuiaItem | null {
+export async function getGuia(slug: string): Promise<GuiaItem | null> {
   if (!fs.existsSync(CONTENT_DIR)) return null;
   const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.mdx'));
   for (const file of files) {
     const raw = fs.readFileSync(path.join(CONTENT_DIR, file), 'utf-8');
     const { data, content } = matter(raw);
-    if (data.slug === slug) return { ...(data as GuiaFrontmatter), content };
+    if (data.slug === slug) {
+      const processed = await remark().use(html).process(content);
+      return { ...(data as GuiaFrontmatter), contentHtml: processed.toString() };
+    }
   }
   return null;
 }

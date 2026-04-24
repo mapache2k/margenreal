@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import ReactMarkdown from 'react-markdown';
 import { getAllGuias, getGuia, type GuiaItem } from '../../lib/guias';
 
 type Props = { guia: GuiaItem };
@@ -15,7 +14,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
-  const guia = getGuia(params!.slug as string);
+  const guia = await getGuia(params!.slug as string);
   if (!guia) return { notFound: true };
   return { props: { guia } };
 };
@@ -102,9 +101,7 @@ export default function GuiaPage({ guia }: Props) {
         <h1 className="guia-title">{guia.title}</h1>
         <p className="guia-desc">{guia.description}</p>
 
-        <div className="guia-body">
-          <ReactMarkdown>{guia.content}</ReactMarkdown>
-        </div>
+        <div className="guia-body" dangerouslySetInnerHTML={{ __html: guia.contentHtml }} />
 
         <div className="guia-cta">
           <p>¿Querés ver estos números para tu producto específico?</p>

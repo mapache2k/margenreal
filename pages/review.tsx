@@ -1,17 +1,13 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
-import ReactMarkdown from 'react-markdown';
-import { getAllGuias, getGuia, type GuiaFrontmatter, type GuiaItem } from '../lib/guias';
+import { getAllGuias, getGuia, type GuiaItem } from '../lib/guias';
 
-type Props = { guias: (GuiaFrontmatter & { content: string })[] };
+type Props = { guias: GuiaItem[] };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const all = getAllGuias(true);
-  const guias = all.map(g => {
-    const full = getGuia(g.slug);
-    return full!;
-  });
+  const guias = await Promise.all(all.map(g => getGuia(g.slug).then(r => r!)));
   return { props: { guias } };
 };
 
@@ -134,9 +130,7 @@ function GuiaCard({ guia }: { guia: GuiaItem }) {
           {guia.tags.map(t => <span key={t} className="guia-tag">{t}</span>)}
         </div>
         <div className="guia-item-desc">{guia.description}</div>
-        <div className="md-preview">
-          <ReactMarkdown>{guia.content}</ReactMarkdown>
-        </div>
+        <div className="md-preview" dangerouslySetInnerHTML={{ __html: guia.contentHtml }} />
       </div>
     </div>
   );
