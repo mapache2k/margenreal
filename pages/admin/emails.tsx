@@ -102,7 +102,7 @@ export default function EmailTemplatesPage() {
         <title>Email Templates — Margen Real Admin</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <style>{\
+      <style>{`
         * { box-sizing: border-box; }
         body { background: #0a0a0e; color: #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; }
         .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
@@ -122,7 +122,7 @@ export default function EmailTemplatesPage() {
         .instructions h3 { font-size: 0.875rem; font-weight: 700; margin: 0 0 12px; }
         .instructions ol { margin: 0; padding-left: 20px; }
         .instructions li { font-size: 0.875rem; color: #888; line-height: 1.8; }
-      \}</style>
+      `}</style>
 
       <div className="wrap">
         <h1>Email Templates — Nurture Sequence</h1>
