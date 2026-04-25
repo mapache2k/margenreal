@@ -1,11 +1,21 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+const NAV_LINKS = [
+  { href: '/', label: 'Inicio', exact: true },
+  { href: '/calculadora-ml', label: 'Calculadora ML' },
+  { href: '/gratis', label: 'Gratis' },
+  { href: '/guias', label: 'Guías' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/pricing', label: 'Planes' },
+  { href: '/about', label: 'Nosotros' },
+];
+
 export default function NavBar() {
   const { pathname } = useRouter();
 
-  const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
+  const isActive = (href: string, exact?: boolean) => {
+    if (exact) return pathname === href;
     return pathname === href || pathname.startsWith(href + '/');
   };
 
@@ -15,10 +25,16 @@ export default function NavBar() {
         margen<span style={{ color: 'var(--accent)' }}>real</span>
       </Link>
       <div className="nav-links">
-        <Link href="/" className={`nav-link${isActive('/') ? ' active' : ''}`} style={{ textDecoration: 'none' }}>Inicio</Link>
-        <Link href="/calculadora-ml" className={`nav-link${isActive('/calculadora-ml') ? ' active' : ''}`} style={{ textDecoration: 'none' }}>Calculadora ML</Link>
-        <Link href="/guias" className={`nav-link${isActive('/guias') ? ' active' : ''}`} style={{ textDecoration: 'none' }}>Guías</Link>
-        <Link href="/importados" className={`nav-link${isActive('/importados') ? ' active' : ''}`} style={{ textDecoration: 'none' }}>Para vendedores ML</Link>
+        {NAV_LINKS.map(({ href, label, exact }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`nav-link${isActive(href, exact) ? ' active' : ''}`}
+            style={{ textDecoration: 'none' }}
+          >
+            {label}
+          </Link>
+        ))}
       </div>
       <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
         Calcular mi margen →

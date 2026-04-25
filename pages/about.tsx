@@ -1,30 +1,16 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
+import Layout from "../components/Layout";
 
 export default function AboutPage(): React.JSX.Element {
   return (
-    <>
+    <Layout>
       <Head>
         <title>Nosotros — margenreal</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Epilogue:wght@400;500;600&display=swap" rel="stylesheet" />
       </Head>
 
       <div className="page-wrap">
-        <nav>
-          <Link className="nav-logo" href="/">
-            margen<span>real</span>
-          </Link>
-          <div className="nav-links">
-            <Link className="nav-link" href="/">Inicio</Link>
-            <Link className="nav-link" href="/tool">Herramienta Gratis</Link>
-          <Link className="nav-link" href="/pro">Herramienta Pro</Link>
-            <Link className="nav-link" href="/pricing">Planes</Link>
-            <Link className="nav-link active" href="/about">Nosotros</Link>
-          </div>
-          <Link className="btn nav-cta" href="/tool">Diagnosticar mi negocio →</Link>
-        </nav>
 
         <section className="section">
           <div className="label">Nuestra misión</div>
@@ -168,19 +154,7 @@ export default function AboutPage(): React.JSX.Element {
           </div>
         </section>
 
-        <footer>
-          <Link className="footer-logo" href="/">margen<span>real</span></Link>
-          <div className="footer-links">
-            <Link className="footer-link" href="/">Inicio</Link>
-            <Link className="footer-link" href="/tool">Herramienta</Link>
-            <Link className="footer-link" href="/pricing">Planes</Link>
-            <Link className="footer-link" href="/privacy">Privacidad</Link>
-            <Link className="footer-link" href="/terms">Términos</Link>
-            <a className="footer-link" href="mailto:contacto@margenreal.io">Contacto</a>
-          </div>
-          <div className="footer-copy">© 2025 margenreal · Hecho en LatAm</div>
-        </footer>
       </div>
-    </>
+    </Layout>
   );
 }
