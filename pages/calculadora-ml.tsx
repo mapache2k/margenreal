@@ -20,7 +20,21 @@ const CATEGORIAS_OPTIONS = Object.entries(ML_CATEGORIAS).map(([k, v]) => ({
   pctPremium: Math.round(v.comisionPremium * 100),
 }));
 
+type ProductoGuardado = {
+  id: number;
+  nombre: string;
+  costo: number;
+  precio: number;
+  margenPct: number;
+  ganancia: number;
+  esCosteable: boolean;
+  categoria: string;
+};
+
+let _nextId = 1;
+
 export default function CalculadoraML() {
+  const [nombre, setNombre] = useState('');
   const [costo, setCosto] = useState('');
   const [precio, setPrecio] = useState('');
   const [margenObj, setMargenObj] = useState('30');
@@ -29,6 +43,7 @@ export default function CalculadoraML() {
   const [envioKey, setEnvioKey] = useState<EstimadoEnvioKey>('mediano');
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
+  const [productos, setProductos] = useState<ProductoGuardado[]>([]);
   const capturedOnce = useRef(false);
   const startedOnce = useRef(false);
 
@@ -64,6 +79,28 @@ export default function CalculadoraML() {
 
   const fmtPct = (n: number) =>
     n.toFixed(1).replace('.', ',') + '%';
+
+  const handleAgregarProducto = () => {
+    if (!resultado) return;
+    const catLabel = ML_CATEGORIAS[categoria].label;
+    setProductos(prev => {
+      const nuevo: ProductoGuardado = {
+        id: _nextId++,
+        nombre: nombre.trim() || `Producto ${_nextId - 1}`,
+        costo: costoNum,
+        precio: precioNum,
+        margenPct: resultado.margenPct,
+        ganancia: resultado.gananciaAbsoluta,
+        esCosteable: resultado.esCosteable,
+        categoria: catLabel,
+      };
+      return [...prev, nuevo].sort((a, b) => a.margenPct - b.margenPct);
+    });
+  };
+
+  const handleEliminarProducto = (id: number) => {
+    setProductos(prev => prev.filter(p => p.id !== id));
+  };
 
   const handleEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -174,7 +211,36 @@ export default function CalculadoraML() {
         .lead-form input:focus { border-color: var(--accent); }
         .lead-form button { background: var(--accent); color: #0a0a0e; font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; padding: 11px 20px; border-radius: 9px; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
         .lead-form button:hover { opacity: 0.9; }
-        .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }      `}</style>
+        .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }
+
+        /* Multi-producto */
+        .btn-agregar { width: 100%; margin-top: 16px; padding: 12px; background: var(--surface); border: 1.5px solid var(--border); color: var(--text); font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; border-radius: 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+        .btn-agregar:hover { border-color: var(--accent); background: rgba(249,215,27,0.04); }
+        .comparacion-wrap { margin-top: 40px; }
+        .comparacion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .comparacion-title { font-family: var(--font-display); font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
+        .btn-limpiar { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+        .btn-limpiar:hover { border-color: #ef4444; color: #ef4444; }
+        .comp-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .comp-table th { font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        .comp-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .comp-table tr:last-child td { border-bottom: none; }
+        .comp-table tr.loss { background: rgba(239,68,68,0.04); }
+        .comp-table tr.low { background: rgba(249,215,27,0.02); }
+        .comp-nombre { font-weight: 700; color: var(--text); }
+        .comp-cat { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+        .comp-badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+        .comp-badge.loss { background: rgba(239,68,68,0.12); color: #ef4444; }
+        .comp-badge.low { background: rgba(249,215,27,0.12); color: #d4a700; }
+        .comp-badge.ok { background: rgba(34,197,94,0.12); color: #22c55e; }
+        .comp-margen { font-family: var(--font-display); font-weight: 800; font-size: 1rem; }
+        .comp-margen.loss { color: #ef4444; }
+        .comp-margen.low { color: #d4a700; }
+        .comp-margen.ok { color: #22c55e; }
+        .comp-ganancia { font-family: var(--font-display); font-weight: 700; }
+        .btn-del { background: none; border: none; color: var(--muted); font-size: 1rem; cursor: pointer; padding: 4px 6px; border-radius: 4px; }
+        .btn-del:hover { color: #ef4444; }
+      `}</style>
 
 
       <div className="page-wrap">
@@ -197,6 +263,17 @@ export default function CalculadoraML() {
           {/* Panel de inputs */}
           <div className="inputs-card">
             <h3>Tu publicación</h3>
+
+            {/* Nombre del producto */}
+            <div className="sf">
+              <label>Nombre del producto (opcional)</label>
+              <input
+                type="text"
+                placeholder="ej. Zapatillas Nike Air"
+                value={nombre}
+                onChange={e => setNombre(e.target.value)}
+              />
+            </div>
 
             {/* Tipo de publicación */}
             <div style={{ marginBottom: 16 }}>
@@ -398,8 +475,13 @@ export default function CalculadoraML() {
                   )}
                 </div>
 
+                {/* Agregar a comparación */}
+                <button className="btn-agregar" onClick={handleAgregarProducto}>
+                  + Agregar a comparación de productos
+                </button>
+
                 {/* Lead magnet */}
-                <div className="lead-card">
+                <div className="lead-card" style={{ marginTop: 16 }}>
                   <div className="lead-title">¿Quieres dominar los números de tu tienda ML?</div>
                   <div className="lead-text">
                     Recibe gratis el checklist de los 5 errores de pricing que más dinero les cuestan a los vendedores de MercadoLibre Chile.
@@ -432,6 +514,56 @@ export default function CalculadoraML() {
             )}
           </div>
         </div>
+
+        {/* Tabla comparación multi-producto */}
+        {productos.length > 0 && (
+          <div className="comparacion-wrap">
+            <div className="comparacion-header">
+              <div className="comparacion-title">Comparación de productos ({productos.length})</div>
+              <button className="btn-limpiar" onClick={() => setProductos([])}>Limpiar lista</button>
+            </div>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
+              <table className="comp-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Costo</th>
+                    <th>Precio venta</th>
+                    <th>Margen</th>
+                    <th>Ganancia / unidad</th>
+                    <th>Estado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productos.map(p => {
+                    const cls = !p.esCosteable ? 'loss' : p.margenPct < 15 ? 'low' : 'ok';
+                    const badge = cls === 'loss' ? 'Pérdida' : cls === 'low' ? 'Margen bajo' : 'Rentable';
+                    const fmt = (n: number) => n.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                    return (
+                      <tr key={p.id} className={cls}>
+                        <td>
+                          <div className="comp-nombre">{p.nombre}</div>
+                          <div className="comp-cat">{p.categoria}</div>
+                        </td>
+                        <td>${fmt(p.costo)}</td>
+                        <td>${fmt(p.precio)}</td>
+                        <td><span className={`comp-margen ${cls}`}>{p.margenPct.toFixed(1).replace('.', ',')}%</span></td>
+                        <td>
+                          <span className="comp-ganancia" style={{ color: p.esCosteable ? '#22c55e' : '#ef4444' }}>
+                            {p.esCosteable ? '' : '−'}${fmt(Math.abs(p.ganancia))}
+                          </span>
+                        </td>
+                        <td><span className={`comp-badge ${cls}`}>{badge}</span></td>
+                        <td><button className="btn-del" onClick={() => handleEliminarProducto(p.id)} title="Eliminar">×</button></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
     </Layout>
