@@ -423,27 +423,7 @@ table td { padding:12px; border-bottom:1px solid var(--border); }
 /* =========================
    Navigation & Footer (shared across pages)
    ========================= */
-nav {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 16px;
-  padding: 0 40px;
-  height: 64px;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--bg);
-  z-index: 100;
-}
-@media (max-width: 860px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .nav-cta { display: none; }
-}
-@media (min-width: 861px) {
-  .nav-hamburger { display: none; }
-}
+/* nav element no longer used — layout handled by Layout.tsx sidebar */
 
 /* Hamburger button */
 .nav-hamburger {
