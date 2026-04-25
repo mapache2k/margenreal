@@ -228,9 +228,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         {/* Regular nav items */}
         {NAV.map(({ href, icon, label, exact }) => (
           <div key={href} className="sb-tooltip-wrap">
-            <Link href={href} className={`sb-item${isActive(href, exact) ? ' active' : ''}`}>
-              <span className="sb-icon"><Ico d={ICONS[icon as keyof typeof ICONS]} /></span>
-              <span className="sb-label">{label}</span>
+            <Link href={href} className={`sb-item${isActive(href, exact) ? ' active' : ''}${href === '/pro' ? ' pro' : ''}`}>
+              <span className="sb-icon" style={href === '/pro' ? { color: 'var(--accent)' } : undefined}><Ico d={ICONS[icon as keyof typeof ICONS]} /></span>
+              <span className="sb-label" style={href === '/pro' ? { color: 'var(--accent)', fontWeight: 700 } : undefined}>{label}</span>
             </Link>
             <div className="sb-tooltip">{label}</div>
           </div>
