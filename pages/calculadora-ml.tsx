@@ -243,6 +243,30 @@ export default function CalculadoraML() {
                 : 'Resultados automáticos. Comisiones basadas en tarifas vigentes ML Chile.'
               }
             </div>
+
+            {/* Duda — ¿Cómo calculamos esto? */}
+            <div className="como-calc" style={{ marginTop: 12 }}>
+              <button className="como-calc-toggle" onClick={() => setShowComoCalc(v => !v)}>
+                {showComoCalc ? '−' : '+'} ¿Cómo calculamos esto?
+              </button>
+              {showComoCalc && (
+                <div className="como-calc-body">
+                  <p>Tarifas oficiales ML Chile 2025: comisión por categoría (11%–17%) + IVA 19% sobre la comisión + envío que asumís vos.</p>
+                  <code>Ganancia = Precio − Comisión×1,19 − Envío − Costo</code>
+                  <p style={{ marginTop: 8 }}>Margen = Ganancia ÷ Precio. Precio mínimo = punto donde Ganancia = $0.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Control — Agregar a comparación */}
+            {resultado && (
+              <button className="btn-agregar" style={{ marginTop: 12 }} onClick={handleAgregarProducto}>
+                {productos.length > 0
+                  ? `+ Agregar · ${productos.length} producto${productos.length > 1 ? 's' : ''} en comparación`
+                  : '+ Comparar con otros productos'
+                }
+              </button>
+            )}
           </div>
 
           {/* Panel de resultados */}
@@ -342,21 +366,6 @@ export default function CalculadoraML() {
                   </div>
                 </div>
 
-                {/* Duda — ¿Cómo calculamos esto? */}
-                <div className="como-calc">
-                  <button className="como-calc-toggle" onClick={() => setShowComoCalc(v => !v)}>
-                    {showComoCalc ? '−' : '+'} ¿Cómo calculamos esto?
-                  </button>
-                  {showComoCalc && (
-                    <div className="como-calc-body">
-                      <p>Usamos las tarifas oficiales de MercadoLibre Chile vigentes en 2025:</p>
-                      <p><strong>Comisión ML</strong> según categoría (11%–17%) + <strong>IVA 19%</strong> sobre la comisión + <strong>costo de envío</strong> que asumís vos. La fórmula:</p>
-                      <code>Ganancia = Precio − Comisión×1,19 − Envío − Costo del producto</code>
-                      <p style={{marginTop: 8}}>El margen sobre venta es Ganancia ÷ Precio. El precio mínimo rentable es el punto donde la ganancia es $0.</p>
-                    </div>
-                  )}
-                </div>
-
                 {/* Precio ideal para margen objetivo */}
                 <div className="ideal-card">
                   <div className="ideal-title">Precio para tu margen objetivo</div>
@@ -396,14 +405,6 @@ export default function CalculadoraML() {
                     <Link href="/importados" className="btn-upgrade">Ver Plan Starter — USD 19 →</Link>
                   </div>
                 </div>
-
-                {/* Control — Agregar a comparación */}
-                <button className="btn-agregar" onClick={handleAgregarProducto}>
-                  {productos.length > 0
-                    ? `+ Agregar · ${productos.length} producto${productos.length > 1 ? 's' : ''} en comparación`
-                    : '+ Comparar con otros productos'
-                  }
-                </button>
 
                 {/* Acción — Lead magnet */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
