@@ -541,14 +541,6 @@ nav {
 }
 .nav-link:hover { color: var(--text); background: var(--surface); }
 .nav-link.active { color: var(--text); background: rgba(249,215,27,0.10); }
-.nav-cta {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  padding: 9px 18px;
-  border-radius: 9px;
-  white-space: nowrap;
-  text-align: center;
-}
 
 footer {
   max-width: var(--section-max);

@@ -177,21 +177,16 @@ export default function NavBar() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Link href="/calculadora-ml" className="btn nav-cta" style={{ textDecoration: 'none' }}>
-            Calcular mi margen →
-          </Link>
-          <button
-            className="nav-hamburger"
-            onClick={() => setMenuOpen(o => !o)}
-            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-            aria-expanded={menuOpen}
-          >
-            <span className={`ham-line${menuOpen ? ' open' : ''}`} />
-            <span className={`ham-line${menuOpen ? ' open' : ''}`} />
-            <span className={`ham-line${menuOpen ? ' open' : ''}`} />
-          </button>
-        </div>
+        <button
+          className="nav-hamburger"
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={menuOpen}
+        >
+          <span className={`ham-line${menuOpen ? ' open' : ''}`} />
+          <span className={`ham-line${menuOpen ? ' open' : ''}`} />
+          <span className={`ham-line${menuOpen ? ' open' : ''}`} />
+        </button>
       </nav>
 
       {menuOpen && (
