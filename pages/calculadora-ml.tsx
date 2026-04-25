@@ -84,9 +84,7 @@ export default function CalculadoraML() {
 
   const fmtPct = (n: number) => {
     const abs = Math.abs(n);
-    const sign = n < 0 ? '−' : '';
-    if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(1).replace('.', ',')}M%`;
-    if (abs >= 1_000) return `${sign}${Math.round(abs / 1_000)}k%`;
+    if (abs >= 1_000) return n < 0 ? '<−999%' : '>999%';
     return n.toFixed(1).replace('.', ',') + '%';
   };
 
@@ -289,7 +287,7 @@ export default function CalculadoraML() {
                   <div className="metric-card">
                     <div className="metric-lbl">Margen sobre costo</div>
                     <div className="metric-val">
-                      {resultado.margenSobreCosto > 999 ? '+999%' : fmtPct(resultado.margenSobreCosto)}
+                      {fmtPct(resultado.margenSobreCosto)}
                     </div>
                     <div className="metric-sub">Ganancia / costo producto</div>
                   </div>
