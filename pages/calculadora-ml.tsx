@@ -74,11 +74,15 @@ export default function CalculadoraML() {
     }
   }, [resultado]);
 
-  const fmt = (n: number) =>
-    n.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const fmt = (n: number) => {
+    if (Math.abs(n) >= 100_000_000) return n > 0 ? '+$99M' : '-$99M';
+    return n.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  };
 
-  const fmtPct = (n: number) =>
-    n.toFixed(1).replace('.', ',') + '%';
+  const fmtPct = (n: number) => {
+    if (Math.abs(n) >= 10_000) return n > 0 ? '+9999%' : '-9999%';
+    return n.toFixed(1).replace('.', ',') + '%';
+  };
 
   const handleAgregarProducto = () => {
     if (!resultado) return;
@@ -159,12 +163,12 @@ export default function CalculadoraML() {
 
         /* Results */
         .results-panel { }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; overflow: hidden; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; overflow: hidden; min-width: 0; }
         .metric-card.highlight { border-color: var(--accent); background: rgba(249,215,27,0.04); }
         .metric-card.danger { border-color: #ef4444; background: rgba(239,68,68,0.04); }
         .metric-lbl { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-        .metric-val { font-family: var(--font-display); font-size: clamp(1.125rem, 3vw, 1.75rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .metric-val { font-family: var(--font-display); font-size: clamp(1rem, 2.5vw, 1.625rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
         .metric-val.accent { color: var(--accent); }
         .metric-val.danger { color: #ef4444; }
         .metric-val.green { color: #22c55e; }
