@@ -135,124 +135,6 @@ export default function CalculadoraML() {
         <meta name="description" content="Calculá tu margen real como vendedor en MercadoLibre Chile. Incluye comisiones por categoría, IVA 19% y costos de envío reales." />
       </Head>
 
-      <style>{`
-        .results-panel { display: block; }
-
-        .calc-wrap { max-width: 1060px; margin: 0 auto; padding: 16px 40px 80px; }
-        @media(max-width:640px){ .calc-wrap { padding: 16px 20px 60px; } }
-
-        .calc-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
-        @media(max-width:900px){ .calc-grid { grid-template-columns: 1fr; } }
-
-        .inputs-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; }
-        .inputs-card h3 { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 22px; line-height: 1; }
-
-        .sf { margin-bottom: 16px; }
-        .sf label { display: block; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; line-height: 1; }
-        .sf input, .sf select { width: 100%; background: var(--bg); border: 1.5px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 1rem; font-weight: 600; line-height: 1.2; padding: 11px 14px; border-radius: 9px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; -moz-appearance: textfield; }
-        .sf input::-webkit-outer-spin-button, .sf input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .sf input:focus, .sf select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(249,215,27,0.08); }
-        .sf input::placeholder { color: var(--border); }
-        .sf select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
-        .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        /* Toggle */
-        .tipo-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 16px; }
-        .tipo-btn { padding: 10px 12px; border-radius: 9px; border: 1.5px solid var(--border); background: var(--bg); color: var(--muted); font-family: var(--font-display); font-weight: 700; font-size: 0.8125rem; cursor: pointer; transition: all 0.15s; text-align: center; line-height: 1.2; }
-        .tipo-btn span { display: block; font-size: 0.6875rem; font-weight: 400; color: var(--muted); margin-top: 3px; }
-        .tipo-btn.active { border-color: var(--accent); background: rgba(249,215,27,0.08); color: var(--text); }
-        .tipo-btn.active span { color: var(--accent); }
-        .tipo-label { font-size: 0.625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-
-        /* Comision chip */
-        .comision-chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(249,215,27,0.08); border: 1px solid rgba(249,215,27,0.2); border-radius: 6px; padding: 4px 10px; font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-top: 6px; }
-
-        /* Results */
-        .results-panel { }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; overflow: hidden; min-width: 0; }
-        .metric-card.highlight { border-color: var(--accent); background: rgba(249,215,27,0.04); }
-        .metric-card.danger { border-color: #ef4444; background: rgba(239,68,68,0.04); }
-        .metric-lbl { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-        .metric-val { font-family: var(--font-display); font-size: clamp(1rem, 2.5vw, 1.625rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
-        .metric-val.accent { color: var(--accent); }
-        .metric-val.danger { color: #ef4444; }
-        .metric-val.green { color: #22c55e; }
-        .metric-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
-
-        .desglose-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
-        .desglose-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
-        .desglose-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
-        .desglose-row:last-child { border-bottom: none; font-weight: 700; }
-        .desglose-lbl { color: var(--muted); }
-        .desglose-val { font-family: var(--font-display); font-weight: 700; color: var(--text); }
-        .desglose-val.red { color: #ef4444; }
-        .desglose-val.green { color: #22c55e; }
-
-        .ideal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
-        .ideal-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
-        .ideal-margen-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-        .ideal-margen-input { position: relative; width: 100px; }
-        .ideal-margen-input input { width: 100%; background: var(--bg); border: 1.5px solid var(--accent); color: var(--accent); font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; outline: none; padding: 8px 32px 8px 14px; border-radius: 8px; -moz-appearance: textfield; }
-        .ideal-margen-input input::-webkit-outer-spin-button, .ideal-margen-input input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .ideal-margen-input .pct-symbol { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1rem; font-weight: 700; pointer-events: none; }
-        .ideal-margen-label { font-size: 0.9375rem; color: var(--muted); }
-        .ideal-price { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); line-height: 1; }
-        .ideal-sub { font-size: 0.8125rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
-
-        /* Alert */
-        .alert-card { border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; font-size: 0.875rem; line-height: 1.6; }
-        .alert-card.red { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); color: var(--text); }
-        .alert-card.green { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2); color: var(--text); }
-        .alert-icon { font-size: 1.25rem; flex-shrink: 0; line-height: 1.3; }
-
-        /* Empty state */
-        .es { background: var(--surface); border: 1.5px dashed var(--border); border-radius: 16px; padding: 48px 32px; text-align: center; }
-        .es-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
-        .es-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.02em; }
-        .es-text { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
-
-        /* Lead magnet */
-        .lead-card { background: rgba(249,215,27,0.04); border: 1px solid rgba(249,215,27,0.2); border-radius: 16px; padding: 28px; margin-top: 4px; }
-        .lead-title { font-family: var(--font-display); font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
-        .lead-text { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
-        .lead-form { display: flex; gap: 10px; flex-wrap: wrap; }
-        .lead-form input { flex: 1; min-width: 200px; background: var(--bg); border: 1.5px solid var(--border); color: var(--text); font-family: var(--font-body); font-size: 0.9375rem; padding: 11px 14px; border-radius: 9px; outline: none; transition: border-color 0.2s; }
-        .lead-form input:focus { border-color: var(--accent); }
-        .lead-form button { background: var(--accent); color: #0a0a0e; font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; padding: 11px 20px; border-radius: 9px; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
-        .lead-form button:hover { opacity: 0.9; }
-        .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }
-
-        /* Multi-producto */
-        .btn-agregar { width: 100%; margin-top: 16px; padding: 12px; background: var(--surface); border: 1.5px solid var(--border); color: var(--text); font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; border-radius: 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
-        .btn-agregar:hover { border-color: var(--accent); background: rgba(249,215,27,0.04); }
-        .comparacion-wrap { margin-top: 40px; }
-        .comparacion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .comparacion-title { font-family: var(--font-display); font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
-        .btn-limpiar { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
-        .btn-limpiar:hover { border-color: #ef4444; color: #ef4444; }
-        .comp-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-        .comp-table th { font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
-        .comp-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .comp-table tr:last-child td { border-bottom: none; }
-        .comp-table tr.loss { background: rgba(239,68,68,0.04); }
-        .comp-table tr.low { background: rgba(249,215,27,0.02); }
-        .comp-nombre { font-weight: 700; color: var(--text); }
-        .comp-cat { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-        .comp-badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-        .comp-badge.loss { background: rgba(239,68,68,0.12); color: #ef4444; }
-        .comp-badge.low { background: rgba(249,215,27,0.12); color: #d4a700; }
-        .comp-badge.ok { background: rgba(34,197,94,0.12); color: #22c55e; }
-        .comp-margen { font-family: var(--font-display); font-weight: 800; font-size: 1rem; }
-        .comp-margen.loss { color: #ef4444; }
-        .comp-margen.low { color: #d4a700; }
-        .comp-margen.ok { color: #22c55e; }
-        .comp-ganancia { font-family: var(--font-display); font-weight: 700; }
-        .btn-del { background: none; border: none; color: var(--muted); font-size: 1rem; cursor: pointer; padding: 4px 6px; border-radius: 4px; }
-        .btn-del:hover { color: #ef4444; }
-      `}</style>
-
-
       <div className="page-wrap">
         <div className="page-hero">
           <div className="page-eyebrow">
@@ -267,8 +149,8 @@ export default function CalculadoraML() {
         </div>
       </div>
 
-      <div className="calc-wrap">
-        <div className="calc-grid">
+      <div className="single-wrap">
+        <div className="tool-grid">
 
           {/* Panel de inputs */}
           <div className="inputs-card">
@@ -363,7 +245,7 @@ export default function CalculadoraML() {
           {/* Panel de resultados */}
           <div>
             {resultado ? (
-              <div className="results-panel">
+              <div>
                 {/* Alert según rentabilidad */}
                 {!resultado.esCosteable ? (
                   <div className="alert-card red">

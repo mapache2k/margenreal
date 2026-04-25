@@ -1,5 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+async function addToAudience(email: string) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
+  const listRes = await fetch('https://api.resend.com/audiences', {
+    headers: { Authorization: `Bearer ${key}` },
+  });
+  const { data: audiences } = await listRes.json();
+  const audienceId = audiences?.[0]?.id;
+  if (!audienceId) return;
+  await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, unsubscribed: false }),
+  });
+}
+
 async function sendEmail(to: string, subject: string, html: string, text: string) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -44,6 +60,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `<p>Nuevo lead: <strong>${email}</strong><br>${new Date().toISOString()}</p>`,
       `Nuevo lead: ${email}\n${new Date().toISOString()}`
     );
+
+    await addToAudience(email);
 
     return res.status(200).json({ ok: true });
   } catch (err) {
