@@ -134,7 +134,7 @@ export default function CalculadoraML() {
         .calc-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
         @media(max-width:900px){ .calc-grid { grid-template-columns: 1fr; } }
 
-        .inputs-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; position: sticky; top: 80px; }
+        .inputs-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; }
         .inputs-card h3 { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 22px; line-height: 1; }
 
         .sf { margin-bottom: 16px; }
