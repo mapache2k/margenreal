@@ -75,12 +75,18 @@ export default function CalculadoraML() {
   }, [resultado]);
 
   const fmt = (n: number) => {
-    if (Math.abs(n) >= 100_000_000) return n > 0 ? '+$99M' : '-$99M';
+    const abs = Math.abs(n);
+    const sign = n < 0 ? '−' : '';
+    if (abs >= 1_000_000_000) return `${sign}$${(abs / 1_000_000_000).toFixed(1).replace('.', ',')}B`;
+    if (abs >= 1_000_000) return `${sign}$${(abs / 1_000_000).toFixed(1).replace('.', ',')}M`;
     return n.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   };
 
   const fmtPct = (n: number) => {
-    if (Math.abs(n) >= 10_000) return n > 0 ? '+9999%' : '-9999%';
+    const abs = Math.abs(n);
+    const sign = n < 0 ? '−' : '';
+    if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(1).replace('.', ',')}M%`;
+    if (abs >= 1_000) return `${sign}${Math.round(abs / 1_000)}k%`;
     return n.toFixed(1).replace('.', ',') + '%';
   };
 
