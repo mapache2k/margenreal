@@ -182,10 +182,10 @@ export default function CalculadoraML() {
         .ideal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
         .ideal-title { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
         .ideal-margen-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-        .ideal-margen-input { display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1.5px solid var(--accent); border-radius: 8px; padding: 8px 14px; }
-        .ideal-margen-input input { width: 48px; background: transparent; border: none; color: var(--accent); font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; outline: none; text-align: center; -moz-appearance: textfield; }
+        .ideal-margen-input { position: relative; width: 100px; }
+        .ideal-margen-input input { width: 100%; background: var(--bg); border: 1.5px solid var(--accent); color: var(--accent); font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; outline: none; padding: 8px 32px 8px 14px; border-radius: 8px; -moz-appearance: textfield; }
         .ideal-margen-input input::-webkit-outer-spin-button, .ideal-margen-input input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .ideal-margen-input span { color: var(--accent); font-size: 1rem; font-weight: 700; }
+        .ideal-margen-input .pct-symbol { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1rem; font-weight: 700; pointer-events: none; }
         .ideal-margen-label { font-size: 0.9375rem; color: var(--muted); }
         .ideal-price { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); line-height: 1; }
         .ideal-sub { font-size: 0.8125rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
@@ -457,9 +457,9 @@ export default function CalculadoraML() {
                         min={1}
                         max={80}
                       />
-                      <span>%</span>
+                      <span className="pct-symbol">%</span>
                     </div>
-                    <span className="ideal-margen-label">de margen</span>
+                    <span className="ideal-margen-label">de margen objetivo</span>
                   </div>
                   {precioIdeal > 0 ? (
                     <>
