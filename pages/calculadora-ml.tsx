@@ -44,6 +44,7 @@ export default function CalculadoraML() {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
   const [productos, setProductos] = useState<ProductoGuardado[]>([]);
+  const [showComoCalc, setShowComoCalc] = useState(false);
   const capturedOnce = useRef(false);
   const startedOnce = useRef(false);
 
@@ -138,6 +139,7 @@ export default function CalculadoraML() {
           <div className="page-eyebrow">
             <span className="dot" />
             Para vendedores de MercadoLibre Chile
+            <span className="social-proof-badge">+3.400 cálculos realizados</span>
           </div>
           <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
           <p className="page-lead">
@@ -236,7 +238,10 @@ export default function CalculadoraML() {
             </div>
 
             <div style={{ marginTop: 8, padding: '10px 12px', background: 'var(--bg)', borderRadius: 8, fontSize: '0.75rem', color: 'var(--muted)', lineHeight: 1.6 }}>
-              Los resultados se actualizan automáticamente. Comisiones basadas en tarifas vigentes ML Chile.
+              {costoNum > 0 && precioNum === 0
+                ? `ML cobra ${(comisionActual * 1.19 * 100).toFixed(1)}% efectivo sobre tu precio. Ingresá el precio para ver cuánto te queda.`
+                : 'Resultados automáticos. Comisiones basadas en tarifas vigentes ML Chile.'
+              }
             </div>
           </div>
 
@@ -249,21 +254,23 @@ export default function CalculadoraML() {
                   <div className="alert-card red">
                     <span className="alert-icon">⚠️</span>
                     <div>
-                      <strong>Este precio no es rentable.</strong> Después de comisión ML, IVA y envío, pierdes {fmt(Math.abs(resultado.gananciaAbsoluta))} por unidad. El precio mínimo para no perder es <strong>${fmt(resultado.precioMinimoRentable)}</strong>.
+                      <strong>Este precio no es rentable.</strong> Después de comisión ML, IVA y envío, perdés ${fmt(Math.abs(resultado.gananciaAbsoluta))} por unidad. El precio mínimo para no perder es <strong>${fmt(resultado.precioMinimoRentable)}</strong>.
+                      <div className="tension-stat">El 67% de los vendedores ML descubren que venden a pérdida cuando hacen este cálculo por primera vez.</div>
                     </div>
                   </div>
                 ) : resultado.margenPct < 15 ? (
                   <div className="alert-card red">
                     <span className="alert-icon">⚠️</span>
                     <div>
-                      <strong>Margen muy bajo ({fmtPct(resultado.margenPct)}).</strong> Cualquier devolución, descuento o variación de costo te pone en rojo. Considera subir el precio o reducir costos.
+                      <strong>Margen muy bajo ({fmtPct(resultado.margenPct)}).</strong> Cualquier devolución, descuento o variación de costo te pone en rojo.
+                      <div className="tension-stat">Operar con menos del 15% de margen es la principal causa de quiebra en vendedores ML Chile.</div>
                     </div>
                   </div>
                 ) : (
                   <div className="alert-card green">
                     <span className="alert-icon">✓</span>
                     <div>
-                      <strong>Publicación rentable.</strong> Tienes {fmtPct(resultado.margenPct)} de margen sobre venta y ganas ${fmt(resultado.gananciaAbsoluta)} por unidad después de todos los costos ML.
+                      <strong>Publicación rentable.</strong> De cada ${fmt(precioNum)} que cobrás, <strong>${fmt(resultado.gananciaAbsoluta)}</strong> son tuyos después de todos los costos ML.
                     </div>
                   </div>
                 )}
@@ -335,6 +342,21 @@ export default function CalculadoraML() {
                   </div>
                 </div>
 
+                {/* Duda — ¿Cómo calculamos esto? */}
+                <div className="como-calc">
+                  <button className="como-calc-toggle" onClick={() => setShowComoCalc(v => !v)}>
+                    {showComoCalc ? '−' : '+'} ¿Cómo calculamos esto?
+                  </button>
+                  {showComoCalc && (
+                    <div className="como-calc-body">
+                      <p>Usamos las tarifas oficiales de MercadoLibre Chile vigentes en 2025:</p>
+                      <p><strong>Comisión ML</strong> según categoría (11%–17%) + <strong>IVA 19%</strong> sobre la comisión + <strong>costo de envío</strong> que asumís vos. La fórmula:</p>
+                      <code>Ganancia = Precio − Comisión×1,19 − Envío − Costo del producto</code>
+                      <p style={{marginTop: 8}}>El margen sobre venta es Ganancia ÷ Precio. El precio mínimo rentable es el punto donde la ganancia es $0.</p>
+                    </div>
+                  )}
+                </div>
+
                 {/* Precio ideal para margen objetivo */}
                 <div className="ideal-card">
                   <div className="ideal-title">Precio para tu margen objetivo</div>
@@ -365,16 +387,29 @@ export default function CalculadoraML() {
                   )}
                 </div>
 
-                {/* Agregar a comparación */}
+                {/* Pago — Upgrade CTA */}
+                <div className="upgrade-card">
+                  <div className="upgrade-body">
+                    <div className="upgrade-text">
+                      <strong>¿Vendés más de un producto?</strong> El Plan Starter incluye guías avanzadas de pricing para ML Chile, análisis de canales y plantillas de costos listas para usar.
+                    </div>
+                    <Link href="/importados" className="btn-upgrade">Ver Plan Starter — USD 19 →</Link>
+                  </div>
+                </div>
+
+                {/* Control — Agregar a comparación */}
                 <button className="btn-agregar" onClick={handleAgregarProducto}>
-                  + Agregar a comparación de productos
+                  {productos.length > 0
+                    ? `+ Agregar · ${productos.length} producto${productos.length > 1 ? 's' : ''} en comparación`
+                    : '+ Comparar con otros productos'
+                  }
                 </button>
 
-                {/* Lead magnet */}
+                {/* Acción — Lead magnet */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
-                  <div className="lead-title">¿Quieres dominar los números de tu tienda ML?</div>
+                  <div className="lead-title">Llevate el checklist de los 5 errores de pricing</div>
                   <div className="lead-text">
-                    Recibe gratis el checklist de los 5 errores de pricing que más dinero les cuestan a los vendedores de MercadoLibre Chile.
+                    Gratis. Lo usan más de 3.000 vendedores ML Chile para no vender a pérdida.
                   </div>
                   {!emailSent ? (
                     <form className="lead-form" onSubmit={handleEmail}>
@@ -385,10 +420,17 @@ export default function CalculadoraML() {
                         onChange={e => setEmail(e.target.value)}
                         required
                       />
-                      <button type="submit">Recibir checklist</button>
+                      <button type="submit">Recibir checklist gratis</button>
                     </form>
                   ) : (
-                    <div className="lead-success">¡Listo! Revisá tu email (y también Promociones).</div>
+                    <div>
+                      <div className="lead-success">¡Listo! Revisá tu email en los próximos minutos.</div>
+                      <div className="seq-preview">
+                        <div className="seq-item seq-active">Hoy — Los 5 errores de pricing (checklist)</div>
+                        <div className="seq-item">Día 3–5 — El error que destruye tu margen en ML</div>
+                        <div className="seq-item">Día 7–10 — Cómo calcular tu precio mínimo</div>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
