@@ -30,19 +30,14 @@ const CALC_FREE = [
   { href: '/calculadora-ml', label: 'Calculadora ML', desc: 'Margen real en MercadoLibre' },
   { href: '/importados', label: 'Importados', desc: 'Productos con costos de importación' },
 ];
-const CALC_PRO = [
-  { href: '/pro', label: 'Dashboard Pro', desc: 'Vista general de tu negocio' },
-  { href: '/pro/diagnostico', label: 'Diagnóstico IA', desc: 'Análisis y plan de acción' },
-  { href: '/pro/forecast', label: 'Forecast', desc: 'Proyección de caja a 6 meses' },
-  { href: '/pro/simuladores', label: 'Simuladores', desc: 'Deuda, equipo, crisis' },
-];
-const CALC_PATHS = ['/calculadora-ml', '/importados', '/pro'];
+const CALC_PATHS = ['/calculadora-ml', '/importados'];
 
 const NAV = [
   { href: '/',        icon: 'home', label: 'Inicio',   exact: true },
   { href: '/gratis',  icon: 'gift', label: 'Gratis' },
   { href: '/guias',   icon: 'book', label: 'Guías' },
   { href: '/blog',    icon: 'edit', label: 'Blog' },
+  { href: '/pro',     icon: 'calc', label: 'Pro' },
   { href: '/pricing', icon: 'tag',  label: 'Planes' },
   { href: '/about',   icon: 'user', label: 'Nosotros' },
 ];
@@ -221,17 +216,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
 
         <div className={`sb-sub${calcOpen && expanded ? ' open' : ''}`}>
-          <div className="sb-sub-label">Gratis</div>
           {CALC_FREE.map(item => (
             <Link key={item.href} href={item.href} className={`sb-sub-item${isActive(item.href) ? ' active' : ''}`}>
               {item.label}
-            </Link>
-          ))}
-          <div className="sb-sub-label" style={{ marginTop: 4 }}>Pro</div>
-          {CALC_PRO.map(item => (
-            <Link key={item.href} href={item.href} className={`sb-sub-item${isActive(item.href) ? ' active' : ''}`}>
-              {item.label}
-              <span className="sb-pro-dot">Pro</span>
             </Link>
           ))}
         </div>
