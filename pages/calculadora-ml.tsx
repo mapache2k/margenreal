@@ -455,7 +455,7 @@ export default function CalculadoraML() {
               <div className="comparacion-title">Comparación de productos ({productos.length})</div>
               <button className="btn-limpiar" onClick={() => setProductos([])}>Limpiar lista</button>
             </div>
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
+            <div className="comp-table-wrap" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
               <table className="comp-table">
                 <thead>
                   <tr>
