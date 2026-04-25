@@ -160,11 +160,11 @@ export default function CalculadoraML() {
         /* Results */
         .results-panel { }
         .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
+        .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; overflow: hidden; }
         .metric-card.highlight { border-color: var(--accent); background: rgba(249,215,27,0.04); }
         .metric-card.danger { border-color: #ef4444; background: rgba(239,68,68,0.04); }
         .metric-lbl { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-        .metric-val { font-family: var(--font-display); font-size: 1.75rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
+        .metric-val { font-family: var(--font-display); font-size: clamp(1.125rem, 3vw, 1.75rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .metric-val.accent { color: var(--accent); }
         .metric-val.danger { color: #ef4444; }
         .metric-val.green { color: #22c55e; }
@@ -397,7 +397,7 @@ export default function CalculadoraML() {
                   <div className="metric-card">
                     <div className="metric-lbl">Margen sobre costo</div>
                     <div className="metric-val">
-                      {fmtPct(resultado.margenSobreCosto)}
+                      {resultado.margenSobreCosto > 999 ? '+999%' : fmtPct(resultado.margenSobreCosto)}
                     </div>
                     <div className="metric-sub">Ganancia / costo producto</div>
                   </div>
