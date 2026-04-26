@@ -1,0 +1,123 @@
+---
+title: "Playbook: Cómo fijar precios correctamente en MercadoLibre Chile"
+slug: playbook-fijar-precios-ml
+description: "Guía paso a paso para calcular y fijar precios en ML Chile con margen real. Incluye fórmula completa, umbrales por tipo de negocio y decisiones tácticas con números."
+date: 2025-04-26
+draft: false
+tags: [mercadolibre, pricing, playbook, chile]
+type: playbook
+---
+
+## El problema que este playbook resuelve
+
+Fijás un precio. Se ve razonable. ML te dice que vendiste. Y al mes siguiente, tu cuenta bancaria no refleja lo que esperabas.
+
+El problema no es el volumen de ventas. Es que el precio que fijaste no incorpora todos los costos reales de vender en ML. Este playbook te lleva paso a paso por la metodología correcta.
+
+---
+
+## Paso 1 — Mapeá todos tus costos reales
+
+Antes de pensar en precio, necesitás saber cuánto cuesta vender en ML. Los costos son de dos tipos:
+
+**Costos del producto:**
+- Precio de compra al proveedor
+- Flete de importación (si aplica)
+- Costo de embalaje adicional
+
+**Costos de la plataforma ML:**
+- Comisión ML por categoría (11% a 17% según categoría)
+- IVA 19% sobre esa comisión
+- Costo de envío si vas con Mercado Envíos
+
+**La fórmula completa:**
+```
+Ganancia real = Precio de venta
+              − Comisión ML × 1,19
+              − Costo de envío asumido
+              − Costo del producto
+```
+
+> Si no conocés la comisión exacta de tu categoría, usá la [calculadora de Margen Real](https://margenreal.io/calculadora-ml) para obtenerla al instante.
+
+---
+
+## Paso 2 — Determiná tu precio mínimo (el piso)
+
+El precio mínimo es el punto donde tu ganancia es exactamente $0. No es donde querés operar — es el límite que no podés cruzar.
+
+**Fórmula del precio mínimo:**
+```
+Precio mínimo = (Costo producto + Costo envío) / (1 − Comisión × 1,19)
+```
+
+Si tu precio de lista está por debajo de este número, estás perdiendo dinero en cada venta. No importa cuánto vendas.
+
+**Regla de emergencia:** Si hoy tenés productos con precio por debajo del mínimo, subí el precio inmediatamente. El volumen no arregla un precio roto — lo multiplica.
+
+---
+
+## Paso 3 — Definí tu margen objetivo
+
+El margen objetivo es el % de ganancia sobre el precio de venta que necesitás para que tu negocio sea viable. No es un número arbitrario.
+
+| Tipo de negocio | Margen mínimo recomendado |
+|---|---|
+| Reventa de productos masivos | 20% |
+| Artículos importados con flete | 25% |
+| Productos de marca propia | 30%+ |
+| Artículos de temporada (alto riesgo stock) | 35%+ |
+
+**Por qué estos umbrales:**
+- Con menos del 15%, una sola devolución (ML reembolsa al comprador, vos perdés el envío) puede ponerte en rojo.
+- Con menos del 20%, cualquier descuento puntual o variación de costo te quita el margen.
+- 25-30% es el umbral donde podés absorber imprevistos y aún seguir siendo rentable.
+
+---
+
+## Paso 4 — Calculá tu precio objetivo
+
+Con el margen objetivo definido, calculá el precio que lo alcanza:
+
+```
+Precio objetivo = (Costo producto + Costo envío) / (1 − Comisión × 1,19 − Margen objetivo)
+```
+
+Este es el precio al que deberías publicar. Si el mercado no tolera ese precio, tenés tres opciones:
+
+1. **Reducir costos** — ¿Podés negociar con tu proveedor? ¿Cambiar de embalaje? ¿Optimizar el envío?
+2. **Cambiar de canal** — ML no es rentable para todos los productos. Evaluá venta directa, Instagram, o mercado físico.
+3. **Eliminar el producto** — Vender a pérdida o con margen cero no es mejor que no vender. Libera el capital para productos que sí son rentables.
+
+---
+
+## Paso 5 — Monitoreá y ajustá trimestralmente
+
+Los costos cambian. Las comisiones ML pueden ajustarse. El precio del dólar afecta tus importaciones. Un precio correcto hoy puede estar incorrecto en 3 meses.
+
+**Proceso de revisión trimestral:**
+1. Revisá el precio de compra de cada producto con tu proveedor.
+2. Recalculá el precio mínimo y el precio objetivo con los costos actualizados.
+3. Ajustá el precio de publicación si es necesario.
+4. Eliminá del catálogo los productos donde el ajuste necesario es demasiado grande para ser competitivo.
+
+---
+
+## Decisiones tácticas frecuentes
+
+**"¿Bajo el precio para competir con otro vendedor?"**
+Primero calculá si ese precio todavía te da margen. Si el competidor vende por debajo de tu precio mínimo, probablemente está vendiendo a pérdida. No lo imites — esperá.
+
+**"ML me sugiere bajar el precio para ganar más ventas."**
+ML optimiza para su propia conversión, no para tu rentabilidad. Su sugerencia no incorpora tu costo de producto. Ignorá la sugerencia y calculá primero.
+
+**"Tengo mucho stock sin mover, ¿bajo para liquidar?"**
+Calculá cuánto perdés por unidad con el precio de liquidación. Multiplicalo por las unidades que querés mover. Si ese número es menor a lo que costaría seguir guardando el stock, liquidá. Si no, mantené el precio y reducí la compra futura.
+
+---
+
+## Herramientas incluidas en este playbook
+
+- [Calculadora de margen ML Chile](https://margenreal.io/calculadora-ml) — para calcular precio mínimo y precio objetivo por producto
+- Tabla de comisiones por categoría ML Chile 2025
+- Spreadsheet de análisis multi-producto (disponible para usuarios Pro)

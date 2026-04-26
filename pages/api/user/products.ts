@@ -41,6 +41,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(201).json({ ok: true });
   }
 
+  if (req.method === 'PUT') {
+    const { id, precio, costo, margen_pct, ganancia } = req.body;
+    if (!id || !precio || !costo) return res.status(400).json({ error: 'Datos incompletos' });
+
+    await withTenant(schemaName, async client => {
+      await client.query(
+        `UPDATE calculations
+         SET precio = $1, costo = $2, margen_pct = $3,
+             detalle = detalle || jsonb_build_object('ganancia', $4::numeric)
+         WHERE id = $5`,
+        [precio, costo, margen_pct || 0, ganancia ?? 0, Number(id)]
+      );
+    });
+    return res.status(200).json({ ok: true });
+  }
+
   if (req.method === 'DELETE') {
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: 'Falta id' });

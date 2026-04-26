@@ -559,6 +559,41 @@ export default function CalculadoraML() {
                   </p>
                 </div>
 
+                {/* Qué podés hacer ahora */}
+                {(() => {
+                  const acciones = !resultado.esCosteable ? [
+                    { icon: '📈', titulo: `Subir precio a $${fmt(resultado.precioMinimoRentable)}`, detalle: 'El mínimo para no perder dinero en cada venta.' },
+                    { icon: '✂️', titulo: 'Reducir costos del producto o envío', detalle: 'Cada peso que bajás en costos sube tu margen directamente.' },
+                    { icon: '🚫', titulo: 'Evaluar si ML es el canal correcto', detalle: 'Algunos productos no soportan las comisiones. La venta directa puede ser más rentable.' },
+                  ] : resultado.margenPct < 15 ? [
+                    { icon: '📈', titulo: `Subir precio a $${fmt(precioIdeal)}`, detalle: `Para alcanzar el ${margenObj}% de margen objetivo y protegerte de devoluciones o descuentos.` },
+                    { icon: '✂️', titulo: 'Negociar costos con tu proveedor', detalle: 'Cada reducción en costo se convierte directamente en margen.' },
+                    { icon: '📦', titulo: 'Revisá el tipo de publicación', detalle: 'Premium da más visibilidad pero cobra más comisión. Calculá si el volumen lo justifica.' },
+                  ] : [
+                    { icon: '✅', titulo: 'Mantener este precio', detalle: `Tu margen de ${fmtPct(resultado.margenPct)} es sólido. Protegerlo es tan importante como conseguirlo.` },
+                    { icon: '📊', titulo: 'Revisá el resto de tu catálogo', detalle: 'Es raro que todos tus productos tengan el mismo margen. Encontrá los que están en rojo.' },
+                    { icon: '🔁', titulo: 'Escalá lo que funciona', detalle: 'Ponele más esfuerzo a los productos con mejor margen, no solo a los que más venden.' },
+                  ];
+                  return (
+                    <div style={{ margin: '16px 0', padding: '18px 22px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12 }}>
+                      <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 12 }}>
+                        Qué podés hacer ahora
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {acciones.map((a, i) => (
+                          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px', background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)' }}>
+                            <span style={{ fontSize: '1.125rem', lineHeight: 1.4 }}>{a.icon}</span>
+                            <div>
+                              <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{a.titulo}</div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: 2, lineHeight: 1.5 }}>{a.detalle}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {/* Impacto mensual */}
                 <div style={{ padding: '14px 20px', background: resultado.esCosteable ? 'rgba(45,212,160,0.07)' : 'rgba(232,85,85,0.07)', borderRadius: 10, marginBottom: 16, fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.6 }}>
                   Si vendés <strong style={{ color: 'var(--text)' }}>10 unidades al mes</strong> a este precio,{' '}
@@ -568,7 +603,86 @@ export default function CalculadoraML() {
                   }
                 </div>
 
-                {/* Acción — Lead magnet */}
+                {/* Primary CTA — Esto es solo un producto */}
+                <div style={{ marginTop: 16, padding: '24px 22px', background: 'linear-gradient(135deg, rgba(249,215,27,0.06), rgba(249,215,27,0.02))', border: '1.5px solid var(--border)', borderRadius: 16, textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text)', marginBottom: 8, fontFamily: 'var(--font-display)' }}>
+                    Esto es solo un producto
+                  </div>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.6, maxWidth: 380, margin: '0 auto 20px' }}>
+                    Si tenés varios productos, es muy probable que estés perdiendo margen en más de uno. La mayoría lo descubre demasiado tarde.
+                  </p>
+                  <Link
+                    href="/pricing"
+                    style={{ display: 'inline-block', background: 'var(--accent)', color: 'var(--bg)', fontWeight: 800, fontSize: '0.9375rem', padding: '13px 28px', borderRadius: 12, textDecoration: 'none' }}
+                    onClick={() => posthog.capture('cta_analizar_todos', { source: 'calculadora_resultado' })}
+                  >
+                    Analizar todos mis productos →
+                  </Link>
+                </div>
+
+                {/* Preview multi-producto — solo usuarios free */}
+                {!isPro && (
+                  <div style={{ marginTop: 16, border: '1.5px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
+                    <div style={{ padding: '16px 20px', background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.9375rem', color: 'var(--text)', marginBottom: 4 }}>Estás viendo solo un producto</div>
+                      <div style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>Tu margen no depende de un solo producto.</div>
+                    </div>
+                    <div style={{ padding: '10px 20px', background: 'rgba(232,85,85,0.07)', borderBottom: '1px solid var(--border)', fontSize: '0.8125rem', color: '#e85555', fontWeight: 600 }}>
+                      ⚠️ Probablemente tenés productos perdiendo dinero sin darte cuenta
+                    </div>
+                    {(() => {
+                      const getEstado = (m: number) => m < 0 ? '❌ Pérdida' : m < 15 ? '⚠️ Bajo' : '✅ Saludable';
+                      const getPrioridad = (g: number, m: number) => g < 0 || m < 10 ? '🔥 Alta' : m < 20 ? '⚠️ Media' : '—';
+                      const visibleRows = [
+                        { nombre: nombre.trim() || 'Este producto', ganancia: resultado.gananciaAbsoluta, margenPct: resultado.margenPct, current: true },
+                        { nombre: 'Mochila Outdoor 45L', ganancia: -1430, margenPct: -8.4, current: false },
+                        { nombre: 'Auriculares Inalámbricos', ganancia: 5900, margenPct: 23.6, current: false },
+                      ];
+                      return (
+                        <>
+                          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '7px 16px', background: 'var(--bg)', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)', borderBottom: '1px solid var(--border)' }}>
+                            <span>Producto</span><span>Ganancia/u.</span><span>Estado</span><span>Prioridad</span>
+                          </div>
+                          {visibleRows.map((row, i) => (
+                            <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 16px', borderBottom: '1px solid var(--border)', alignItems: 'center', background: row.current ? 'rgba(249,215,27,0.04)' : 'transparent' }}>
+                              <span style={{ fontWeight: row.current ? 700 : 500, color: 'var(--text)', fontSize: '0.8125rem' }}>
+                                {row.nombre}
+                                {row.current && <span style={{ marginLeft: 6, fontSize: '0.5625rem', background: 'rgba(249,215,27,0.18)', color: 'var(--accent)', fontWeight: 800, padding: '1px 5px', borderRadius: 4 }}>tú</span>}
+                              </span>
+                              <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: row.ganancia >= 0 ? '#2dd4a0' : '#e85555' }}>
+                                {row.ganancia < 0 ? '−' : ''}${fmt(Math.abs(row.ganancia))}
+                              </span>
+                              <span style={{ fontSize: '0.75rem' }}>{getEstado(row.margenPct)}</span>
+                              <span style={{ fontSize: '0.75rem' }}>{getPrioridad(row.ganancia, row.margenPct)}</span>
+                            </div>
+                          ))}
+                          {[0, 1].map(i => (
+                            <div key={`locked-${i}`} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 16px', borderBottom: i === 0 ? '1px solid var(--border)' : undefined, alignItems: 'center', filter: 'blur(3px)', opacity: 0.45, userSelect: 'none', pointerEvents: 'none' as const }}>
+                              <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>🔒 Producto {i + 4}</span>
+                              <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>$—</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>—</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>—</span>
+                            </div>
+                          ))}
+                          <div style={{ padding: '16px 20px', background: 'var(--surface)', textAlign: 'center' }}>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: 12 }}>
+                              Aquí solo podés analizar un producto a la vez.
+                            </div>
+                            <Link
+                              href="/pricing"
+                              style={{ display: 'inline-block', background: 'var(--accent)', color: 'var(--bg)', fontWeight: 800, fontSize: '0.875rem', padding: '11px 24px', borderRadius: 10, textDecoration: 'none' }}
+                              onClick={() => posthog.capture('cta_analizar_todos', { source: 'preview_table' })}
+                            >
+                              Analizar todos mis productos →
+                            </Link>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* Acción — Lead magnet (secundario) */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
                   <div className="lead-title">¿Preferís empezar con una guía gratuita?</div>
                   <div className="lead-text">
