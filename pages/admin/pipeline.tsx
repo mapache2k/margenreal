@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import AdminGate from '../../components/AdminGate';
+import Layout from '../../components/Layout';
 
 const CONTENT_TYPES = [
   { value: 'tier3_case_study', label: 'Tier 3 — Case study (empresa grande)', needsResearch: true },
@@ -49,7 +50,7 @@ export default function PipelinePage() {
 
   return (
     <AdminGate>
-    <>
+    <Layout>
       <Head>
         <title>Content Pipeline — Margen Real Admin</title>
         <meta name="robots" content="noindex" />
@@ -142,7 +143,7 @@ export default function PipelinePage() {
           </div>
         )}
       </div>
-    </>
+    </Layout>
     </AdminGate>
   );
 }
