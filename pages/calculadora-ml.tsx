@@ -139,7 +139,6 @@ export default function CalculadoraML() {
           <div className="page-eyebrow">
             <span className="dot" />
             Para vendedores de MercadoLibre Chile
-            <span className="social-proof-badge">+3.400 cálculos realizados</span>
           </div>
           <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
           <p className="page-lead">
