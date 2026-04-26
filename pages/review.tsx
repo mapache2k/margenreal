@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import Link from 'next/link';
+import AdminGate from '../components/AdminGate';
 import { GetStaticProps } from 'next';
 import { getAllGuias, getGuia, type GuiaItem } from '../lib/guias';
 
@@ -17,6 +18,7 @@ export default function Review({ guias }: Props) {
   const published = guias.filter(g => !g.draft);
 
   return (
+    <AdminGate>
     <Layout>
       <Head>
         <title>Review interno — Margen Real</title>
@@ -85,6 +87,7 @@ export default function Review({ guias }: Props) {
       </div>
 
     </Layout>
+    </AdminGate>
   );
 }
 
