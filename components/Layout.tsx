@@ -313,6 +313,20 @@ export default function Layout({ children }: { children: ReactNode }) {
 
         <hr className="sb-divider" />
 
+        {/* Dashboard — solo logueado */}
+        {userInitial && (
+          <>
+            <div className="sb-tooltip-wrap">
+              <Link href="/dashboard" className={`sb-item${isActive('/dashboard') ? ' active' : ''}`}>
+                <span className="sb-icon"><Ico d={ICONS.user} /></span>
+                <span className="sb-label" style={{ color: 'var(--accent)', fontWeight: 700 }}>Mi cuenta</span>
+              </Link>
+              <div className="sb-tooltip">Mi cuenta</div>
+            </div>
+            <hr className="sb-divider" />
+          </>
+        )}
+
         {/* Regular nav items */}
         {NAV.map(({ href, icon, label, exact }) => (
           <div key={href} className="sb-tooltip-wrap">
