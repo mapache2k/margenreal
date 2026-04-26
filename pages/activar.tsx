@@ -37,7 +37,7 @@ export default function ActivarPage() {
     const data = await res.json();
 
     if (res.ok && data.ok) {
-      localStorage.setItem(SESSION_KEY, data.session);
+      localStorage.setItem(SESSION_KEY, data.accessToken);
       localStorage.setItem('mr_user_email', data.email);
       localStorage.setItem('mr_user_plan', data.plan);
       setStatus('done');

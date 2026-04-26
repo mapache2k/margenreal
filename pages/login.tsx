@@ -34,7 +34,7 @@ export default function LoginPage() {
     const data = await res.json();
 
     if (res.ok && data.ok) {
-      localStorage.setItem(SESSION_KEY, data.session);
+      localStorage.setItem(SESSION_KEY, data.accessToken);
       localStorage.setItem('mr_user_email', data.email);
       localStorage.setItem('mr_user_plan', data.plan);
       router.replace(typeof next === 'string' ? next : '/calculadora-ml');
