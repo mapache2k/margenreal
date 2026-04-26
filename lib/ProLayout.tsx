@@ -56,22 +56,31 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-tab-lock { font-size: 0.625rem; opacity: 0.5; }
 
         .pro-metrics-bar {
-          display: flex; gap: 32px; align-items: center; flex-wrap: wrap;
-          padding: 12px 40px;
+          display: flex; gap: 6px; align-items: center;
+          padding: 10px 40px;
           border-bottom: 1px solid var(--border);
-          background: var(--surface);
+          background: var(--bg);
+          overflow-x: auto; -webkit-overflow-scrolling: touch;
         }
-        @media(max-width:640px){ .pro-metrics-bar { padding: 12px 20px; gap: 20px; } }
-        .pro-metric-item { display: flex; flex-direction: column; gap: 2px; }
-        .pro-metric-lbl { font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-2); }
-        .pro-metric-val { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 800; color: var(--text); }
-        .pro-score-pill {
-          display: inline-flex; align-items: center; gap: 6px;
-          font-size: 0.75rem; font-weight: 700;
-          padding: 3px 10px; border-radius: 99px;
-          background: rgba(255,255,255,0.05);
+        @media(max-width:640px){ .pro-metrics-bar { padding: 10px 20px; } }
+
+        .pm-score {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 8px 14px; border-radius: 10px; border: 1px solid;
+          white-space: nowrap; flex-shrink: 0; margin-right: 4px;
         }
-        .pro-score-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .pm-score-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .pm-score-label { font-family: var(--font-display); font-size: 0.8125rem; font-weight: 800; letter-spacing: -0.01em; }
+        .pm-score-num { font-size: 0.6875rem; font-weight: 600; opacity: 0.75; }
+
+        .pm-chip {
+          display: inline-flex; flex-direction: column; gap: 2px;
+          padding: 7px 13px; border-radius: 10px;
+          border: 1px solid var(--border); background: var(--surface);
+          white-space: nowrap; flex-shrink: 0;
+        }
+        .pm-chip-lbl { font-size: 0.45rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted-2); }
+        .pm-chip-val { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; }
 
         .pro-content { padding: 0; }
       `}</style>
@@ -100,21 +109,50 @@ export default function ProLayout({ children }: { children: ReactNode }) {
       {/* Metrics bar — only when data exists */}
       {calc && (
         <div className="pro-metrics-bar">
-          <div className="pro-score-pill" style={{ color: scoreColor(calc.score), background: `${scoreColor(calc.score)}18` }}>
-            <span className="pro-score-dot" style={{ background: scoreColor(calc.score) }} />
-            {scoreLabel(calc.score)} · {calc.score}/100
+          {/* Score chip */}
+          <div
+            className="pm-score"
+            style={{
+              color: scoreColor(calc.score),
+              borderColor: `${scoreColor(calc.score)}30`,
+              background: `${scoreColor(calc.score)}0e`,
+            }}
+          >
+            <span className="pm-score-dot" style={{ background: scoreColor(calc.score) }} />
+            <span className="pm-score-label">{scoreLabel(calc.score)}</span>
+            <span className="pm-score-num">{calc.score}/100</span>
           </div>
-          <div className="pro-metric-item">
-            <span className="pro-metric-lbl">EBITDA</span>
-            <span className="pro-metric-val" style={{ color: calc.ebitda >= 0 ? '#2dd4a0' : '#e85555' }}>{fmtCLP(calc.ebitda)}</span>
+
+          {/* EBITDA */}
+          <div className="pm-chip">
+            <span className="pm-chip-lbl">EBITDA</span>
+            <span className="pm-chip-val" style={{ color: calc.ebitda >= 0 ? 'var(--accent)' : 'var(--danger)' }}>
+              {fmtCLP(calc.ebitda)}
+            </span>
           </div>
-          <div className="pro-metric-item">
-            <span className="pro-metric-lbl">Runway</span>
-            <span className="pro-metric-val">{isFinite(calc.runway) ? `${calc.runway.toFixed(1)}m` : '∞'}</span>
+
+          {/* Runway */}
+          <div className="pm-chip">
+            <span className="pm-chip-lbl">Runway</span>
+            <span className="pm-chip-val" style={{ color: !isFinite(calc.runway) || calc.runway > 12 ? 'var(--accent)' : calc.runway > 3 ? 'var(--warning)' : 'var(--danger)' }}>
+              {isFinite(calc.runway) ? `${calc.runway.toFixed(1)}m` : '∞'}
+            </span>
           </div>
-          <div className="pro-metric-item">
-            <span className="pro-metric-lbl">Margen</span>
-            <span className="pro-metric-val">{calc.grossMarginPct.toFixed(1)}%</span>
+
+          {/* Margen bruto */}
+          <div className="pm-chip">
+            <span className="pm-chip-lbl">Margen bruto</span>
+            <span className="pm-chip-val" style={{ color: calc.grossMarginPct >= 30 ? 'var(--accent)' : calc.grossMarginPct >= 20 ? 'var(--warning)' : 'var(--danger)' }}>
+              {calc.grossMarginPct.toFixed(1)}%
+            </span>
+          </div>
+
+          {/* Caja */}
+          <div className="pm-chip">
+            <span className="pm-chip-lbl">Caja</span>
+            <span className="pm-chip-val" style={{ color: 'var(--text)' }}>
+              {fmtCLP(calc.cashAdjustedStart)}
+            </span>
           </div>
         </div>
       )}
