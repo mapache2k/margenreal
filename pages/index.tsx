@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import posthog from 'posthog-js';
@@ -59,7 +59,7 @@ export default function Home() {
     <Layout>
       <Head>
         <title>Margen Real — Calculadora de margen para MercadoLibre Chile</title>
-        <meta name="description" content="Calculá exactamente cuánto te queda después de comisiones ML, IVA 19% y envío. Herramientas gratuitas para vendedores de MercadoLibre Chile." />
+        <meta name="description" content="Calcula exactamente cuánto te queda después de comisiones ML, IVA 19% y envío. Herramientas gratuitas para vendedores de MercadoLibre Chile." />
         <meta property="og:title" content="Margen Real — Calculadora ML Chile" />
         <meta property="og:description" content="Comisión por categoría + IVA 19% + envío = tu margen real. Gratis, al instante, sin registro." />
         <meta property="og:type" content="website" />
@@ -92,7 +92,7 @@ export default function Home() {
                 '@id': 'https://margenreal.io/#webpage',
                 url: 'https://margenreal.io/',
                 name: 'Margen Real — Calculadora de margen para MercadoLibre Chile',
-                description: 'Calculá exactamente cuánto te queda después de comisiones ML, IVA 19% y envío.',
+                description: 'Calcula exactamente cuánto te queda después de comisiones ML, IVA 19% y envío.',
                 isPartOf: { '@id': 'https://margenreal.io/#website' },
                 about: { '@id': 'https://margenreal.io/#organization' },
               },
@@ -185,7 +185,7 @@ export default function Home() {
           <div className="tools-grid" style={{ marginTop: 24 }}>
             {[
               { icon: '📊', title: 'La comisión real no es la que anuncian', desc: 'ML cobra comisión + IVA 19% sobre esa comisión. Si la categoría tiene 13%, el descuento real es 15,47%. No 13%.' },
-              { icon: '📦', title: 'El envío gratis lo pagás vos', desc: 'En publicaciones Premium, el costo de envío sale de tu bolsillo. Entre $3.990 y $8.990 por paquete — directo de tu margen.' },
+              { icon: '📦', title: 'El envío gratis lo pagas vos', desc: 'En publicaciones Premium, el costo de envío sale de tu bolsillo. Entre $3.990 y $8.990 por paquete — directo de tu margen.' },
               { icon: '🔢', title: 'Tu precio mínimo no es costo × 2', desc: 'Esa regla no contempla comisión efectiva, IVA ni envío. El precio mínimo real se calcula con la fórmula que usamos acá.' },
             ].map(item => (
               <div key={item.title} className="tool-card" style={{ cursor: 'default' }}>
@@ -203,7 +203,7 @@ export default function Home() {
 
         <section className="section">
           <div className="label">Herramientas</div>
-          <h2 className="heading">Todo lo que necesitás<br />para vender con margen.</h2>
+          <h2 className="heading">Todo lo que necesitas<br />para vender con margen.</h2>
           <div className="tools-grid">
             {TOOLS.map(tool => (
               <Link key={tool.href} href={tool.href} className="tool-card">

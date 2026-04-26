@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
+﻿import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { rateLimit } from './RateLimiter';
 
 interface Options {
@@ -18,7 +18,7 @@ export function withRateLimit(handler: NextApiHandler, opts: Options): NextApiHa
     res.setHeader('X-RateLimit-Reset',     Math.ceil(resetAt / 1000));
 
     if (!allowed) {
-      return res.status(429).json({ error: 'Demasiados intentos. Esperá unos minutos.' });
+      return res.status(429).json({ error: 'Demasiados intentos. Espera unos minutos.' });
     }
     return handler(req, res);
   };

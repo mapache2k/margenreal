@@ -1,12 +1,46 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import posthog from 'posthog-js';
+import { useRouter } from 'next/router';
 
 const STARTER_URL = 'https://margenreal.lemonsqueezy.com/checkout/buy/be78bcd3-c734-4b95-b164-d4996478b598';
 const PRO_URL = 'https://margenreal.lemonsqueezy.com/checkout/buy/535e6adb-a287-4c6c-9f58-d72457f17044';
 
+function PaidConfirmation() {
+  return (
+    <div style={{ maxWidth: 480, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
+      <div style={{ fontSize: 52, marginBottom: 20 }}>✅</div>
+      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 900, color: 'var(--text)', marginBottom: 12, lineHeight: 1.2 }}>
+        ¡Pago confirmado!
+      </h1>
+      <p style={{ fontSize: '0.9375rem', color: 'var(--muted)', lineHeight: 1.7, marginBottom: 32 }}>
+        Te enviamos un email con el enlace para activar tu cuenta y crear tu contraseña.
+        Revisa tu bandeja de entrada — debería llegar en menos de un minuto.
+      </p>
+      <div style={{ background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 14, padding: '20px 24px', marginBottom: 32, textAlign: 'left' }}>
+        <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 12 }}>Próximos pasos</div>
+        <div style={{ fontSize: '0.875rem', color: 'var(--text)', lineHeight: 1.7 }}>
+          <div style={{ marginBottom: 8 }}>1. Abre el email de activación de Margen Real</div>
+          <div style={{ marginBottom: 8 }}>2. Haz clic en "Activar mi cuenta" y elige tu contraseña</div>
+          <div>3. Accede al dashboard con todos tus productos desbloqueados</div>
+        </div>
+      </div>
+      <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginBottom: 20 }}>
+        ¿No llegó el email? Revisa spam o escríbenos a{' '}
+        <a href="mailto:contacto@margenreal.io" style={{ color: 'var(--accent)' }}>contacto@margenreal.io</a>
+      </p>
+      <Link href="/calculadora-ml" style={{ fontSize: '0.875rem', color: 'var(--muted)', textDecoration: 'none' }}>
+        ← Volver a la calculadora
+      </Link>
+    </div>
+  );
+}
+
 export default function CheckoutPage() {
+  const router = useRouter();
+  const paid = router.query.paid === 'true';
+
   return (
     <Layout>
       <Head>
@@ -47,7 +81,7 @@ export default function CheckoutPage() {
         .co-back:hover { color: var(--text); }
       `}</style>
 
-      <div className="co-wrap">
+      {paid ? <PaidConfirmation /> : <div className="co-wrap">
         <div className="co-eyebrow">Análisis completo</div>
         <h1 className="co-title">Desbloquea el análisis<br />de todos tus productos</h1>
         <p className="co-context">
@@ -55,11 +89,11 @@ export default function CheckoutPage() {
         </p>
 
         <div className="co-outcomes">
-          <div className="co-outcomes-title">Con esto podés</div>
+          <div className="co-outcomes-title">Con esto puedes</div>
           <div className="co-outcome"><span className="co-outcome-icon">→</span> Ver el margen real de cada producto en tu catálogo</div>
           <div className="co-outcome"><span className="co-outcome-icon">→</span> Identificar qué productos están en pérdida, cuáles son frágiles y cuáles están bien</div>
           <div className="co-outcome"><span className="co-outcome-icon">→</span> Saber exactamente cuánto estás perdiendo por mes y en qué productos</div>
-          <div className="co-outcome"><span className="co-outcome-icon">→</span> Simular qué pasa si subís el precio o bajás el costo de cada producto</div>
+          <div className="co-outcome"><span className="co-outcome-icon">→</span> Simular qué pasa si subes el precio o bajas el costo de cada producto</div>
           <div className="co-outcome"><span className="co-outcome-icon">→</span> Priorizar dónde actuar primero para mejorar tu rentabilidad</div>
         </div>
 
@@ -118,7 +152,7 @@ export default function CheckoutPage() {
         <Link href="/calculadora-ml" className="co-back">
           ← Volver al cálculo
         </Link>
-      </div>
+      </div>}
     </Layout>
   );
 }

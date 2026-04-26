@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -113,7 +113,7 @@ export default function GuiaPage({ guia }: Props) {
 
         {guia.type === 'playbook' ? (
           <div className="guia-cta">
-            <p>Calculá el margen de cada producto de tu catálogo y encontrá cuáles están en pérdida.</p>
+            <p>Calcula el margen de cada producto de tu catálogo y encontrá cuáles están en pérdida.</p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/calculadora-ml" className="btn btn-outline" style={{ textDecoration: 'none' }}>
                 Calculadora gratuita →
@@ -125,7 +125,7 @@ export default function GuiaPage({ guia }: Props) {
           </div>
         ) : (
           <div className="guia-cta">
-            <p>¿Querés ver estos números para tu producto específico?</p>
+            <p>¿Quieres ver estos números para tu producto específico?</p>
             <Link href="/calculadora-ml" className="btn btn-primary" style={{ textDecoration: 'none' }}>
               Calcular mi margen en ML Chile →
             </Link>

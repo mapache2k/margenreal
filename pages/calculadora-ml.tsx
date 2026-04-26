@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import { useState, useEffect, useRef } from 'react';
@@ -191,7 +191,7 @@ export default function CalculadoraML() {
     <Layout>
       <Head>
         <title>Calculadora de Margen para MercadoLibre Chile — Margen Real</title>
-        <meta name="description" content="Calculá tu margen real como vendedor en MercadoLibre Chile. Incluye comisiones por categoría, IVA 19% y costos de envío reales." />
+        <meta name="description" content="Calcula tu margen real como vendedor en MercadoLibre Chile. Incluye comisiones por categoría, IVA 19% y costos de envío reales." />
         <meta property="og:title" content="Calculadora de Margen MercadoLibre Chile — Margen Real" />
         <meta property="og:description" content="Comisión por categoría + IVA 19% + envío = tu margen real. Resultado instantáneo, sin registro." />
         <meta property="og:url" content="https://margenreal.io/calculadora-ml" />
@@ -255,7 +255,7 @@ export default function CalculadoraML() {
           </div>
           <h1 className="page-h1">¿Cuánto te queda<br />después de ML?</h1>
           <p className="page-lead">
-            Calculá tu margen real como vendedor. Incluye comisión por categoría,
+            Calcula tu margen real como vendedor. Incluye comisión por categoría,
             IVA 19% y costo de envío. Sin sorpresas.
           </p>
         </div>
@@ -351,8 +351,8 @@ export default function CalculadoraML() {
 
             <div style={{ marginTop: 8, padding: '10px 12px', background: 'var(--bg)', borderRadius: 8, fontSize: '0.75rem', color: 'var(--muted)', lineHeight: 1.6 }}>
               {costoNum > 0 && precioNum === 0
-                ? `ML cobra ${(comisionActual * 1.19 * 100).toFixed(1)}% efectivo sobre tu precio. Ingresá el precio para ver cuánto te queda.`
-                : 'Resultados automáticos. Comisiones basadas en tarifas vigentes ML Chile.'
+                ? `ML cobra ${(comisionActual * 1.19 * 100).toFixed(1)}% efectivo sobre tu precio. Ingresa el precio para ver cuánto te queda.`
+                : 'Resultados automaticos. Comisiones basadas en tarifas vigentes ML Chile.'
               }
             </div>
 
@@ -363,7 +363,7 @@ export default function CalculadoraML() {
               </button>
               {showComoCalc && (
                 <div className="como-calc-body">
-                  <p>Tarifas oficiales ML Chile 2025: comisión por categoría (11%–17%) + IVA 19% sobre la comisión + envío que asumís vos.</p>
+                  <p>Tarifas oficiales ML Chile 2025: comisión por categoría (11%–17%) + IVA 19% sobre la comisión + envío que asumes vos.</p>
                   <code>Ganancia = Precio − Comisión×1,19 − Envío − Costo</code>
                   <p style={{ marginTop: 8 }}>Margen = Ganancia ÷ Precio. Precio mínimo = punto donde Ganancia = $0.</p>
                 </div>
@@ -390,8 +390,8 @@ export default function CalculadoraML() {
             ) : (
               <button className="btn-agregar" disabled style={{ marginTop: 12, opacity: 0.4, cursor: 'not-allowed' }}>
                 {slotsUsados > 0
-                  ? isPro ? `Calculá otro producto para agregar · ${slotsUsados} guardados` : `Calculá otro producto para agregar · ${slotsUsados}/${FREE_LIMIT}`
-                  : 'Calculá un producto para comparar'}
+                  ? isPro ? `Calcula otro producto para agregar · ${slotsUsados} guardados` : `Calcula otro producto para agregar · ${slotsUsados}/${FREE_LIMIT}`
+                  : 'Calcula un producto para comparar'}
               </button>
             )}
 
@@ -417,7 +417,7 @@ export default function CalculadoraML() {
               <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', fontSize: '0.8125rem' }}>
                 {productos.length === 0 ? (
                   <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.6 }}>
-                    Calculá un producto y hacé clic en<br /><em>Comparar</em> para verlo aquí.
+                    Calcula un producto y haz clic en<br /><em>Comparar</em> para verlo aquí.
                   </div>
                 ) : (
                   <>
@@ -479,7 +479,7 @@ export default function CalculadoraML() {
                   <div className="alert-card red">
                     <span className="alert-icon">⚠️</span>
                     <div>
-                      <strong>Este precio no es rentable.</strong> Después de comisión ML, IVA y envío, perdés ${fmt(Math.abs(resultado.gananciaAbsoluta))} por unidad. El precio mínimo para no perder es <strong>${fmt(resultado.precioMinimoRentable)}</strong>.
+                      <strong>Este precio no es rentable.</strong> Después de comisión ML, IVA y envío, pierdes ${fmt(Math.abs(resultado.gananciaAbsoluta))} por unidad. El precio mínimo para no perder es <strong>${fmt(resultado.precioMinimoRentable)}</strong>.
                       <div className="tension-stat">El 67% de los vendedores ML descubren que venden a pérdida cuando hacen este cálculo por primera vez.</div>
                     </div>
                   </div>
@@ -495,7 +495,7 @@ export default function CalculadoraML() {
                   <div className="alert-card green">
                     <span className="alert-icon">✓</span>
                     <div>
-                      <strong>Publicación rentable.</strong> De cada ${fmt(precioNum)} que cobrás, <strong>${fmt(resultado.gananciaAbsoluta)}</strong> son tuyos después de todos los costos ML.
+                      <strong>Publicación rentable.</strong> De cada ${fmt(precioNum)} que cobras, <strong>${fmt(resultado.gananciaAbsoluta)}</strong> son tuyos después de todos los costos ML.
                     </div>
                   </div>
                 )}
@@ -604,33 +604,33 @@ export default function CalculadoraML() {
                   </div>
                   <p style={{ fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
                     {!resultado.esCosteable
-                      ? `Estás vendiendo a pérdida. Por cada unidad que vendés, perdés $${fmt(Math.abs(resultado.gananciaAbsoluta))}. Eso no se compensa con volumen — se multiplica.`
+                      ? `Estás vendiendo a pérdida. Por cada unidad que vendes, pierdes $${fmt(Math.abs(resultado.gananciaAbsoluta))}. Eso no se compensa con volumen — se multiplica.`
                       : resultado.margenPct < 15
                       ? `Tu margen de ${fmtPct(resultado.margenPct)} es frágil. Una devolución, un descuento del 10% o un ajuste de envío puede ponerte en rojo. Se recomienda al menos 20% para operar con seguridad.`
-                      : `Tu margen de ${fmtPct(resultado.margenPct)} es sólido para este producto. Pero revisá todos tus productos — es raro que todos tengan el mismo margen.`
+                      : `Tu margen de ${fmtPct(resultado.margenPct)} es sólido para este producto. Pero revisa todos tus productos — es raro que todos tengan el mismo margen.`
                     }
                   </p>
                 </div>
 
-                {/* Qué podés hacer ahora */}
+                {/* Qué puedes hacer ahora */}
                 {(() => {
                   const acciones = !resultado.esCosteable ? [
                     { icon: '📈', titulo: `Subir precio a $${fmt(resultado.precioMinimoRentable)}`, detalle: 'El mínimo para no perder dinero en cada venta.' },
-                    { icon: '✂️', titulo: 'Reducir costos del producto o envío', detalle: 'Cada peso que bajás en costos sube tu margen directamente.' },
+                    { icon: '✂️', titulo: 'Reducir costos del producto o envío', detalle: 'Cada peso que bajas en costos sube tu margen directamente.' },
                     { icon: '🚫', titulo: 'Evaluar si ML es el canal correcto', detalle: 'Algunos productos no soportan las comisiones. La venta directa puede ser más rentable.' },
                   ] : resultado.margenPct < 15 ? [
                     { icon: '📈', titulo: `Subir precio a $${fmt(precioIdeal)}`, detalle: `Para alcanzar el ${margenObj}% de margen objetivo y protegerte de devoluciones o descuentos.` },
                     { icon: '✂️', titulo: 'Negociar costos con tu proveedor', detalle: 'Cada reducción en costo se convierte directamente en margen.' },
-                    { icon: '📦', titulo: 'Revisá el tipo de publicación', detalle: 'Premium da más visibilidad pero cobra más comisión. Calculá si el volumen lo justifica.' },
+                    { icon: '📦', titulo: 'Revisa el tipo de publicación', detalle: 'Premium da más visibilidad pero cobra más comisión. Calcula si el volumen lo justifica.' },
                   ] : [
                     { icon: '✅', titulo: 'Mantener este precio', detalle: `Tu margen de ${fmtPct(resultado.margenPct)} es sólido. Protegerlo es tan importante como conseguirlo.` },
-                    { icon: '📊', titulo: 'Revisá el resto de tu catálogo', detalle: 'Es raro que todos tus productos tengan el mismo margen. Encontrá los que están en rojo.' },
-                    { icon: '🔁', titulo: 'Escalá lo que funciona', detalle: 'Ponele más esfuerzo a los productos con mejor margen, no solo a los que más venden.' },
+                    { icon: '📊', titulo: 'Revisa el resto de tu catálogo', detalle: 'Es raro que todos tus productos tengan el mismo margen. Encuentra los que están en rojo.' },
+                    { icon: '🔁', titulo: 'Escala lo que funciona', detalle: 'Ponle más esfuerzo a los productos con mejor margen, no solo a los que más venden.' },
                   ];
                   return (
                     <div style={{ margin: '16px 0', padding: '18px 22px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12 }}>
                       <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 12 }}>
-                        Qué podés hacer ahora
+                        Qué puedes hacer ahora
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {acciones.map((a, i) => (
@@ -649,10 +649,10 @@ export default function CalculadoraML() {
 
                 {/* Impacto mensual */}
                 <div style={{ padding: '14px 20px', background: resultado.esCosteable ? 'rgba(45,212,160,0.07)' : 'rgba(232,85,85,0.07)', borderRadius: 10, marginBottom: 16, fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.6 }}>
-                  Si vendés <strong style={{ color: 'var(--text)' }}>10 unidades al mes</strong> a este precio,{' '}
+                  Si vendes <strong style={{ color: 'var(--text)' }}>10 unidades al mes</strong> a este precio,{' '}
                   {resultado.esCosteable
-                    ? <><strong style={{ color: '#2dd4a0' }}>ganás ${fmt(resultado.gananciaAbsoluta * 10)}</strong> al mes después de todos los costos ML.</>
-                    : <><strong style={{ color: '#e85555' }}>perdés ${fmt(Math.abs(resultado.gananciaAbsoluta * 10))}</strong> al mes aunque vendas bien.</>
+                    ? <><strong style={{ color: '#2dd4a0' }}>ganas ${fmt(resultado.gananciaAbsoluta * 10)}</strong> al mes después de todos los costos ML.</>
+                    : <><strong style={{ color: '#e85555' }}>pierdes ${fmt(Math.abs(resultado.gananciaAbsoluta * 10))}</strong> al mes aunque vendas bien.</>
                   }
                 </div>
 
@@ -662,7 +662,7 @@ export default function CalculadoraML() {
                     Esto es solo un producto
                   </div>
                   <p style={{ fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.6, maxWidth: 380, margin: '0 auto 20px' }}>
-                    Si tenés varios productos, es muy probable que estés perdiendo margen en más de uno. La mayoría lo descubre demasiado tarde.
+                    Si tienes varios productos, es muy probable que estés perdiendo margen en más de uno. La mayoría lo descubre demasiado tarde.
                   </p>
                   <Link
                     href="/checkout"
@@ -681,7 +681,7 @@ export default function CalculadoraML() {
                       <div style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>Tu margen no depende de un solo producto.</div>
                     </div>
                     <div style={{ padding: '10px 20px', background: 'rgba(232,85,85,0.07)', borderBottom: '1px solid var(--border)', fontSize: '0.8125rem', color: '#e85555', fontWeight: 600 }}>
-                      ⚠️ Probablemente tenés productos perdiendo dinero sin darte cuenta
+                      ⚠️ Probablemente tienes productos perdiendo dinero sin darte cuenta
                     </div>
                     {(() => {
                       const getEstado = (m: number) => m < 0 ? '❌ Pérdida' : m < 15 ? '⚠️ Bajo' : '✅ Saludable';
@@ -719,7 +719,7 @@ export default function CalculadoraML() {
                           ))}
                           <div style={{ padding: '16px 20px', background: 'var(--surface)', textAlign: 'center' }}>
                             <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: 12 }}>
-                              Aquí solo podés analizar un producto a la vez.
+                              Aquí solo puedes analizar un producto a la vez.
                             </div>
                             <Link
                               href="/checkout"
@@ -754,7 +754,7 @@ export default function CalculadoraML() {
                     </form>
                   ) : (
                     <div>
-                      <div className="lead-success">¡Listo! Revisá tu email en los próximos minutos.</div>
+                      <div className="lead-success">¡Listo! Revisa tu email en los próximos minutos.</div>
                       <div className="seq-preview">
                         <div className="seq-item seq-active">Hoy — Los 5 errores de pricing (checklist)</div>
                         <div className="seq-item">Día 3–5 — El error que destruye tu margen en ML</div>

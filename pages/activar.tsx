@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -84,16 +84,16 @@ export default function ActivarPage() {
             <div className="act-success">
               <div className="act-success-icon">✅</div>
               <div className="act-success-title">¡Cuenta activada!</div>
-              <div className="act-success-sub">Ya tenés acceso completo a tu plan. Empezá a calcular sin límites.</div>
+              <div className="act-success-sub">Ya tienes acceso completo a tu plan. Empieza a calcular sin límites.</div>
               <Link href="/dashboard" className="act-cta">Ir a mi cuenta →</Link>
             </div>
           ) : (
             <>
-              <h1 className="act-title">Activá tu cuenta</h1>
-              <p className="act-sub">Elegí una contraseña para acceder a tu plan desde cualquier dispositivo.</p>
+              <h1 className="act-title">Activa tu cuenta</h1>
+              <p className="act-sub">Elige una contraseña para acceder a tu plan desde cualquier dispositivo.</p>
 
               {!token ? (
-                <p className="act-error">Enlace inválido. Revisá el email de activación o <Link href="/login" style={{ color: 'var(--accent)' }}>iniciá sesión</Link>.</p>
+                <p className="act-error">Enlace inválido. Revisa el email de activación o <Link href="/login" style={{ color: 'var(--accent)' }}>inicia sesión</Link>.</p>
               ) : (
                 <form onSubmit={handleSubmit}>
                   <div className="act-field">
@@ -102,7 +102,7 @@ export default function ActivarPage() {
                   </div>
                   <div className="act-field">
                     <label className="act-label">Repetir contraseña</label>
-                    <input className="act-input" type="password" placeholder="Repetí la contraseña" value={password2} onChange={e => setPassword2(e.target.value)} required />
+                    <input className="act-input" type="password" placeholder="Repite la contraseña" value={password2} onChange={e => setPassword2(e.target.value)} required />
                   </div>
                   <button className="act-btn" type="submit" disabled={status === 'loading'}>
                     {status === 'loading' ? 'Activando...' : 'Activar cuenta →'}

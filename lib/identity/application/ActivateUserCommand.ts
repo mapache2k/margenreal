@@ -1,4 +1,4 @@
-import { IUserRepository } from '../domain/IUserRepository';
+﻿import { IUserRepository } from '../domain/IUserRepository';
 import { Password } from '../domain/Password';
 import { TokenService } from '../infrastructure/TokenService';
 import { AuditLogService } from '../infrastructure/AuditLogService';
@@ -30,7 +30,7 @@ export class ActivateUserCommand {
     if (!payload) throw new Error('Enlace inválido o expirado');
 
     const existingUser = await this.userRepo.findByEmail(payload.email);
-    if (!existingUser) throw new Error('No se encontró la cuenta. Contactá a soporte.');
+    if (!existingUser) throw new Error('No se encontró la cuenta. Contacta a soporte.');
 
     // Si ya está activado, verificar contraseña y emitir tokens
     if (existingUser.isActivated()) {

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -56,7 +56,7 @@ function TabPipeline() {
       <button className="a-btn" onClick={handleGenerate} disabled={status === 'loading' || !topic.trim()}>
         {status === 'loading' ? 'Generando...' : 'Generar borrador →'}
       </button>
-      {status === 'error' && <div className="a-error">Error. Verificá que ANTHROPIC_API_KEY esté configurada.</div>}
+      {status === 'error' && <div className="a-error">Error. Verifica que ANTHROPIC_API_KEY esté configurada.</div>}
       {status === 'done' && draft && (
         <div className="a-draft">
           <div className="a-draft-header">
@@ -100,7 +100,7 @@ function TabEmails() {
 
       <div className="a-instr">
         <strong>Cómo enviar en Resend:</strong>
-        <ol><li>Resend → Broadcasts → New Broadcast</li><li>Elegí la audiencia</li><li>Pegá Subject y HTML</li><li>Enviá preview a tu email antes de mandar a toda la lista</li></ol>
+        <ol><li>Resend → Broadcasts → New Broadcast</li><li>Elige la audiencia</li><li>Pegá Subject y HTML</li><li>Enviá preview a tu email antes de mandar a toda la lista</li></ol>
       </div>
 
       {EMAIL_SECTIONS.map((s, i) => (

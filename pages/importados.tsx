@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import Link from 'next/link';
@@ -13,8 +13,8 @@ export default function Importados() {
   }, []);
 
   const faqs = [
-    { q: '¿El tipo de cambio afecta tanto el margen?', a: 'Mucho más de lo que parece. Un dólar que sube $50 CLP en un producto de US$30 son $1.500 CLP menos de margen por unidad. Si vendés 50 unidades al mes, son $75.000 CLP que desaparecen sin que cambies nada.' },
-    { q: '¿Cómo calculo el arancel correcto para mi producto?', a: 'El arancel depende del código arancelario (partida). En Chile el arancel general es 6%, pero hay excepciones por tratados comerciales (TLC con China, EE.UU., etc.). La calculadora usa el 6% base — verificá la partida exacta en el Servicio Nacional de Aduanas.' },
+    { q: '¿El tipo de cambio afecta tanto el margen?', a: 'Mucho más de lo que parece. Un dólar que sube $50 CLP en un producto de US$30 son $1.500 CLP menos de margen por unidad. Si vendes 50 unidades al mes, son $75.000 CLP que desaparecen sin que cambies nada.' },
+    { q: '¿Cómo calculo el arancel correcto para mi producto?', a: 'El arancel depende del código arancelario (partida). En Chile el arancel general es 6%, pero hay excepciones por tratados comerciales (TLC con China, EE.UU., etc.). La calculadora usa el 6% base — verifica la partida exacta en el Servicio Nacional de Aduanas.' },
     { q: '¿Qué pasa si compro en cantidad y baja el costo unitario?', a: 'Es el escenario ideal. La calculadora te permite simular distintos costos de compra para ver desde qué volumen el margen es rentable en ML después de todos los costos de importación.' },
     { q: '¿Las comisiones ML aplican igual que en productos nacionales?', a: 'Exactamente igual. ML cobra por categoría más IVA 19% sobre esa comisión, independientemente de dónde venga el producto. La diferencia está en que el costo real del producto importado incluye flete, arancel y bodegaje.' },
     { q: '¿Puedo probar la calculadora antes de comprar?', a: 'Sí. La calculadora base es gratis. Los frameworks de importación, planillas de escenarios y playbook de implementación están en los planes pagados.' },
@@ -24,9 +24,9 @@ export default function Importados() {
     <Layout>
       <Head>
         <title>Calculadora de margen para importados en MercadoLibre Chile — Margen Real</title>
-        <meta name="description" content="Calculá el margen real de tus productos importados en ML Chile: flete, arancel, bodegaje, tipo de cambio y comisiones ML en un solo número." />
+        <meta name="description" content="Calcula el margen real de tus productos importados en ML Chile: flete, arancel, bodegaje, tipo de cambio y comisiones ML en un solo número." />
         <meta property="og:title" content="Calculadora margen importados MercadoLibre Chile" />
-        <meta property="og:description" content="Flete + arancel + bodegaje + tipo de cambio + comisión ML = tu margen real. Calculalo antes de importar." />
+        <meta property="og:description" content="Flete + arancel + bodegaje + tipo de cambio + comisión ML = tu margen real. Calcúlalo antes de importar." />
         <meta property="og:type" content="website" />
       </Head>
 
@@ -81,7 +81,7 @@ export default function Importados() {
             <em>vender con margen.</em>
           </h1>
           <p className="page-lead">
-            Flete, arancel, bodegaje, tipo de cambio — y recién después las comisiones ML. Calculá todos los costos en un número antes de hacer el pedido.
+            Flete, arancel, bodegaje, tipo de cambio — y recién después las comisiones ML. Calcula todos los costos en un número antes de hacer el pedido.
           </p>
           <div className="page-actions">
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
@@ -103,7 +103,7 @@ export default function Importados() {
               { icon: '🚢', label: 'Costo 1', name: 'Flete internacional', desc: 'Marítimo o aéreo. El precio por kilo varía brutalmente según temporada y ruta. Muchos lo subestiman un 30%.' },
               { icon: '🏛️', label: 'Costo 2', name: 'Arancel aduanero', desc: 'En Chile el arancel base es 6% sobre el valor CIF. Varía según partida arancelaria y tratado de libre comercio aplicable.' },
               { icon: '🏭', label: 'Costo 3', name: 'Bodegaje y preparación', desc: 'Recepción, control de calidad, etiquetado y fulfillment. Entre $300 y $800 CLP por unidad según el servicio.' },
-              { icon: '💱', label: 'Costo 4', name: 'Tipo de cambio', desc: 'Comprás en USD, vendés en CLP. Una variación de $50 en el dólar sobre un producto de US$30 son $1.500 menos por unidad.' },
+              { icon: '💱', label: 'Costo 4', name: 'Tipo de cambio', desc: 'Compras en USD, vendes en CLP. Una variación de $50 en el dólar sobre un producto de US$30 son $1.500 menos por unidad.' },
             ].map(c => (
               <div className="cost-item" key={c.name}>
                 <span className="cost-item-icon">{c.icon}</span>
@@ -142,10 +142,10 @@ export default function Importados() {
           <h2 className="heading">Del precio FOB al margen real<br />en cuatro pasos.</h2>
           <div className="steps-list">
             {[
-              { n: '01', title: 'Ingresás el costo FOB y los costos de importación', text: 'Precio de compra en origen, tipo de cambio, flete estimado, arancel y bodegaje. Todo en CLP para tener el costo real del producto en Chile.' },
-              { n: '02', title: 'Definís el precio de publicación en ML', text: 'Ingresás la categoría, tipo de publicación (Clásica o Premium) y el precio al que querés publicar.' },
+              { n: '01', title: 'Ingresas el costo FOB y los costos de importación', text: 'Precio de compra en origen, tipo de cambio, flete estimado, arancel y bodegaje. Todo en CLP para tener el costo real del producto en Chile.' },
+              { n: '02', title: 'Defines el precio de publicación en ML', text: 'Ingresas la categoría, tipo de publicación (Clásica o Premium) y el precio al que quieres publicar.' },
               { n: '03', title: 'Ves el margen real después de todo', text: 'Costo total importado + comisión ML + IVA + envío = lo que realmente te queda. En pesos, en porcentaje, sin sorpresas.' },
-              { n: '04', title: 'Simulás el precio mínimo para tu margen objetivo', text: '¿Querés 25%? La calculadora te dice el precio exacto de publicación para lograrlo después de importación y comisiones ML.' },
+              { n: '04', title: 'Simulás el precio mínimo para tu margen objetivo', text: '¿Quieres 25%? La calculadora te dice el precio exacto de publicación para lograrlo después de importación y comisiones ML.' },
             ].map(s => (
               <div className="step" key={s.n}>
                 <div className="step-num">{s.n}</div>
@@ -162,7 +162,7 @@ export default function Importados() {
 
         <section className="section" id="planes">
           <div className="label">Planes</div>
-          <h2 className="heading">Elegí tu nivel<br />de claridad.</h2>
+          <h2 className="heading">Elige tu nivel<br />de claridad.</h2>
           <div className="tiers-grid">
 
             <div className="plan">
@@ -254,12 +254,12 @@ export default function Importados() {
 
         <section className="section">
           <div className="cta-banner">
-            <div className="label" style={{ textAlign: 'center' }}>Calculá antes de importar</div>
+            <div className="label" style={{ textAlign: 'center' }}>Calcula antes de importar</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 600, textAlign: 'center' }}>
               ¿El precio que estás pagando<br />deja margen después de ML?
             </h2>
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7, textAlign: 'center' }}>
-              Calculalo en 30 segundos. Gratis. Sin registro.
+              Calcúlalo en 30 segundos. Gratis. Sin registro.
             </p>
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
               Calcular mi margen →

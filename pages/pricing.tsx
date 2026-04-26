@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import posthog from 'posthog-js';
@@ -8,7 +8,7 @@ export default function PricingPage() {
     <Layout>
       <Head>
         <title>Planes — Margen Real</title>
-        <meta name="description" content="Elegí tu nivel de claridad. Calculadora gratis o frameworks completos con pago único." />
+        <meta name="description" content="Elige tu nivel de claridad. Calculadora gratis o frameworks completos con pago único." />
       </Head>
 
       <style>{`
@@ -20,8 +20,8 @@ export default function PricingPage() {
       <div className="page-wrap">
         <div className="page-hero">
           <div className="page-eyebrow"><span className="dot" />Planes</div>
-          <h1 className="page-h1">Elegí tu nivel<br />de claridad en ML Chile.</h1>
-          <p className="page-lead">Empezá gratis con la calculadora. Sumá frameworks y spreadsheets cuando estés listo — pago único, sin suscripción.</p>
+          <h1 className="page-h1">Elige tu nivel<br />de claridad en ML Chile.</h1>
+          <p className="page-lead">Empieza gratis con la calculadora. Suma frameworks y spreadsheets cuando estés listo — pago único, sin suscripción.</p>
         </div>
 
         <div className="tiers-grid">
@@ -96,9 +96,9 @@ export default function PricingPage() {
 
         <section className="section">
           <div className="cta-banner">
-            <div className="label" style={{ textAlign: 'center' }}>¿Dudás?</div>
+            <div className="label" style={{ textAlign: 'center' }}>¿Dudas?</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 520, textAlign: 'center' }}>
-              Empezá con la calculadora gratis.<br />Comprá cuando veas el valor.
+              Empieza con la calculadora gratis.<br />Compra cuando veas el valor.
             </h2>
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
               Ir a la calculadora →

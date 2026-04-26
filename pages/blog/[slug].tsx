@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { GetStaticProps, GetStaticPaths } from 'next';
@@ -87,7 +87,7 @@ export default function BlogPost({ post }: { post: Post }) {
         <div className="blog-body" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
 
         <div className="blog-cta">
-          <p>Calculá el margen real de tus productos en segundos.</p>
+          <p>Calcula el margen real de tus productos en segundos.</p>
           <Link href="/calculadora-ml" className="btn btn-primary" style={{ textDecoration: 'none' }}>
             Ir a la calculadora →
           </Link>

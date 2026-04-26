@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -99,8 +99,8 @@ export default function RegistroPage() {
 
           {step === 'plan' ? (
             <>
-              <h1 className="reg-title">Elegí tu plan</h1>
-              <p className="reg-sub">Empezá gratis o comprá un plan pago. Si ya pagaste, revisá tu email para activar tu cuenta.</p>
+              <h1 className="reg-title">Elige tu plan</h1>
+              <p className="reg-sub">Empieza gratis o compra un plan pago. Si ya pagaste, revisa tu email para activar tu cuenta.</p>
 
               <div className="plan-cards">
                 {/* Gratis */}
@@ -135,14 +135,14 @@ export default function RegistroPage() {
               </div>
 
               <div className="reg-footer" style={{ marginTop: 24 }}>
-                ¿Ya tenés cuenta? <Link href="/login">Iniciá sesión →</Link>
+                ¿Ya tienes cuenta? <Link href="/login">Inicia sesión →</Link>
               </div>
             </>
           ) : (
             <>
               <button className="reg-back" onClick={() => setStep('plan')}>← Volver a los planes</button>
               <h1 className="reg-title">Crear cuenta gratis</h1>
-              <p className="reg-sub">Sin tarjeta de crédito. Podés comprar un plan en cualquier momento.</p>
+              <p className="reg-sub">Sin tarjeta de crédito. Puedes comprar un plan en cualquier momento.</p>
 
               <form onSubmit={handleSubmit}>
                 <div className="reg-field">
@@ -155,7 +155,7 @@ export default function RegistroPage() {
                 </div>
                 <div className="reg-field">
                   <label className="reg-label">Repetir contraseña</label>
-                  <input className="reg-input" type="password" placeholder="Repetí la contraseña" value={password2} onChange={e => setPassword2(e.target.value)} required />
+                  <input className="reg-input" type="password" placeholder="Repite la contraseña" value={password2} onChange={e => setPassword2(e.target.value)} required />
                 </div>
                 <button className="reg-btn" type="submit" disabled={status === 'loading'}>
                   {status === 'loading' ? 'Creando cuenta...' : 'Crear cuenta gratis →'}
@@ -164,7 +164,7 @@ export default function RegistroPage() {
               </form>
 
               <div className="reg-footer">
-                ¿Ya tenés cuenta? <Link href="/login">Iniciá sesión →</Link>
+                ¿Ya tienes cuenta? <Link href="/login">Inicia sesión →</Link>
               </div>
             </>
           )}

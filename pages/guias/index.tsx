@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
@@ -136,7 +136,7 @@ export default function GuiasIndex({ guias }: Props) {
 
         <section className="section">
           <div className="cta-banner">
-            <div className="label" style={{ textAlign: 'center' }}>Calculá ahora</div>
+            <div className="label" style={{ textAlign: 'center' }}>Calcula ahora</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 560, textAlign: 'center' }}>
               ¿Cuánto te queda realmente<br />después de comisiones ML?
             </h2>

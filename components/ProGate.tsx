@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from 'react';
+﻿import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -61,7 +61,7 @@ export default function ProGate({ children, planRequired = 'starter' }: Props) {
         <div className="pro-gate-icon">🔒</div>
         <div className="pro-gate-title">Función exclusiva para miembros</div>
         <div className="pro-gate-desc">
-          Esta herramienta está disponible en los planes Starter y Pro. Comprá tu plan una vez y accedé para siempre.
+          Esta herramienta está disponible en los planes Starter y Pro. Compra tu plan una vez y accedé para siempre.
         </div>
         <div className="pro-gate-actions">
           <Link href="/pricing" className="pro-gate-btn pro-gate-primary">Ver planes →</Link>

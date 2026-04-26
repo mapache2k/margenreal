@@ -33,12 +33,12 @@ async function sendActivationEmail(email: string, token: string, plan: string) {
     body: JSON.stringify({
       from: 'Margen Real <contacto@margenreal.io>',
       to:   [email],
-      subject: `Activá tu cuenta Margen Real ${planLabel}`,
+      subject: `Activa tu cuenta Margen Real ${planLabel}`,
       html: `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:40px 20px;background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;color:#111;line-height:1.7;max-width:600px;">
 <p>Tu compra del plan <strong>${planLabel}</strong> fue confirmada.</p>
 <p style="margin:28px 0;">
-  <a href="${link}" style="background:#f9d71b;color:#0a0a0e;font-weight:800;font-size:15px;padding:14px 28px;border-radius:10px;text-decoration:none;display:inline-block;">Activar mi cuenta →</a>
+  <a href="${link}" style="background:#f9d71b;color:#0a0a0e;font-weight:800;font-size:15px;padding:14px 28px;border-radius:10px;text-decoration:none;display:inline-block;">Activa tu cuenta →</a>
 </p>
 <p style="color:#888;font-size:13px;">Válido por 7 días.</p>
 <p>Saludos,<br>Margen Real</p>

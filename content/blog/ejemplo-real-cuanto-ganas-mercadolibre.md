@@ -1,4 +1,4 @@
----
+﻿---
 title: "Ejemplo real: cuánto ganas vendiendo en MercadoLibre Chile"
 date: "2026-04-12"
 excerpt: "Tres productos reales, tres categorías distintas. El desglose completo de lo que queda después de comisión, IVA y envío. Sin números inventados."
@@ -82,8 +82,8 @@ Margen ajustado. El paquete pesado encarece el envío y la diferencia precio-cos
 2. El peso del paquete puede destruir el margen en productos de precio medio
 3. No todos los productos son rentables en Premium — hay que calcular antes de publicar
 
-## Calculá el tuyo
+## Calcula el tuyo
 
 Los tres ejemplos son reales, pero tu producto tiene su propio precio, costo y peso. El cálculo cambia para cada caso.
 
-**[Calculá el margen real de tu producto en ML →](https://margenreal.io/calculadora-ml)**
+**[Calcula el margen real de tu producto en ML →](https://margenreal.io/calculadora-ml)**

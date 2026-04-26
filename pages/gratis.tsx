@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Layout from '../components/Layout';
 import { useState } from 'react';
 import posthog from 'posthog-js';
@@ -128,7 +128,7 @@ export default function Gratis() {
               </form>
             ) : (
               <div className="capture-success">
-                ¡Listo! Revisá tu email — puede estar en la pestaña Promociones o Spam. Movelo a tu bandeja principal para no perderte nada.
+                ¡Listo! Revisa tu email — puede estar en la pestaña Promociones o Spam. Movelo a tu bandeja principal para no perderte nada.
               </div>
             )}
           </div>

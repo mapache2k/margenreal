@@ -1,27 +1,27 @@
----
+﻿---
 title: "Clásica vs Premium en MercadoLibre: cuál conviene realmente"
 date: "2026-04-14"
 excerpt: "La respuesta no es siempre Premium. Depende del precio, del peso del paquete y de cuánto vale para vos la exposición extra. Acá está el análisis."
 category: "MercadoLibre Chile"
 ---
 
-La pregunta más común de los vendedores que empiezan en MercadoLibre Chile: ¿pongo Clásica o Premium? La respuesta que se repite en foros es "siempre Premium porque tenés más exposición". El problema es que más exposición no equivale a más margen — y en algunos casos, Premium destruye el negocio.
+La pregunta más común de los vendedores que empiezan en MercadoLibre Chile: ¿pongo Clásica o Premium? La respuesta que se repite en foros es "siempre Premium porque tienes más exposición". El problema es que más exposición no equivale a más margen — y en algunos casos, Premium destruye el negocio.
 
 ## Las diferencias clave
 
 | | Clásica | Premium |
 |---|---|---|
 | Comisión de categoría | Igual | Igual |
-| Envío para el comprador | Lo paga el comprador | Gratis (lo pagás vos) |
+| Envío para el comprador | Lo paga el comprador | Gratis (lo pagas vos) |
 | Posición en búsqueda | Estándar | Prioritaria |
 | Aparece en "Envío gratis" | No | Sí |
 | Visibilidad en filtros | Normal | Mayor |
 
-La comisión de categoría es la misma en ambas. La diferencia está únicamente en quién paga el envío y qué nivel de exposición obtenés.
+La comisión de categoría es la misma en ambas. La diferencia está únicamente en quién paga el envío y qué nivel de exposición obtienes.
 
 ## Cuándo Clásica puede ser mejor
 
-**Productos de bajo precio con paquetes pesados.** Si vendés algo a $15.000 CLP con un paquete de 3kg, el envío Premium puede costar $6.990 — casi el 47% del precio de venta. En ese caso, la publicación en Clásica con comprador pagando envío preserva más margen.
+**Productos de bajo precio con paquetes pesados.** Si vendes algo a $15.000 CLP con un paquete de 3kg, el envío Premium puede costar $6.990 — casi el 47% del precio de venta. En ese caso, la publicación en Clásica con comprador pagando envío preserva más margen.
 
 **Categorías con compradores que comparan precio total.** En algunas categorías, los compradores suman precio + envío antes de decidir. Una publicación Clásica a $14.000 con $2.500 de envío compite bien contra una Premium a $18.000 con envío gratis.
 
@@ -37,7 +37,7 @@ La comisión de categoría es la misma en ambas. La diferencia está únicamente
 
 ## El cálculo que debería guiar la decisión
 
-Hacé este ejercicio con tu producto específico:
+Haz este ejercicio con tu producto específico:
 
 **Escenario Clásica:**
 - Precio de publicación: $X

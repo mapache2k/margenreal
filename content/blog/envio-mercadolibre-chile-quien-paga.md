@@ -1,7 +1,7 @@
----
+﻿---
 title: "Quién paga el envío en MercadoLibre Chile (y cómo afecta tu margen)"
 date: "2026-04-15"
-excerpt: "En publicaciones Premium, el envío 'gratis' lo pagás vos. Entre $3.990 y $8.990 por paquete que sale directo de tu margen. Acá están los números exactos."
+excerpt: "En publicaciones Premium, el envío 'gratis' lo pagas vos. Entre $3.990 y $8.990 por paquete que sale directo de tu margen. Acá están los números exactos."
 category: "MercadoLibre Chile"
 ---
 
@@ -13,12 +13,12 @@ MercadoLibre opera con dos tipos de publicación que tienen reglas distintas par
 
 **Publicación Clásica:**
 - El comprador paga el envío
-- Vos no absorbés el costo de logística
+- Vos no absorbes el costo de logística
 - Menor exposición en los resultados de búsqueda
 
 **Publicación Premium:**
 - El envío es "gratis" para el comprador
-- Vos pagás el costo logístico a ML (descontado del depósito)
+- Vos pagas el costo logístico a ML (descontado del depósito)
 - Mayor exposición en resultados y preferencia en el algoritmo
 
 ## Cuánto cuesta el envío en Premium
@@ -38,7 +38,7 @@ El costo que ML descuenta del depósito depende del peso y las dimensiones del p
 
 ## El impacto real en el margen
 
-Si vendés un producto a $25.000 CLP en publicación Premium con paquete de 1kg:
+Si vendes un producto a $25.000 CLP en publicación Premium con paquete de 1kg:
 
 - Precio de venta: $25.000
 - Comisión ejemplo (13% + IVA): −$3.868
@@ -57,12 +57,12 @@ Más de un tercio del precio se va en comisión + IVA + envío. Si el costo del 
 **Clásica conviene cuando:**
 - El precio del producto es bajo (el envío representa un % alto)
 - El paquete es pesado o voluminoso
-- Vendés en nichos donde los compradores están dispuestos a pagar envío
+- Vendes en nichos donde los compradores están dispuestos a pagar envío
 
 ## Cómo calcular el punto de equilibrio
 
-Para saber cuándo Premium empieza a convenirte más que Clásica, calculá el margen en ambos escenarios con el mismo precio de publicación. Si en Clásica vendés menos unidades pero con mejor margen, el análisis depende del volumen que cada tipo genera.
+Para saber cuándo Premium empieza a convenirte más que Clásica, calcula el margen en ambos escenarios con el mismo precio de publicación. Si en Clásica vendes menos unidades pero con mejor margen, el análisis depende del volumen que cada tipo genera.
 
 No existe una respuesta universal — depende de tu categoría, precio y peso del producto.
 
-**[Calculá el impacto del envío en tu margen real →](https://margenreal.io/calculadora-ml)**
+**[Calcula el impacto del envío en tu margen real →](https://margenreal.io/calculadora-ml)**

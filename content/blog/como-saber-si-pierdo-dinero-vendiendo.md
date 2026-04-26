@@ -1,7 +1,7 @@
----
+﻿---
 title: "Cómo saber si estás perdiendo dinero en cada venta (check rápido)"
 date: "2026-04-13"
-excerpt: "Podés estar perdiendo plata en cada venta y que el negocio parezca funcionar porque hay flujo de caja. Tres señales y un check en 30 segundos para saberlo."
+excerpt: "Puedes estar perdiendo plata en cada venta y que el negocio parezca funcionar porque hay flujo de caja. Tres señales y un check en 30 segundos para saberlo."
 category: "MercadoLibre Chile"
 ---
 
@@ -11,32 +11,32 @@ El síntoma más engañoso de un negocio con margen negativo es que parece funci
 
 **1. Más ventas, más problemas de caja**
 
-Si cuando vendés más resulta más difícil pagar al proveedor o cubrir los costos del mes, tu margen es negativo o cercano a cero. Con margen positivo real, más ventas generan más caja disponible, no menos.
+Si cuando vendes más resulta más difícil pagar al proveedor o cubrir los costos del mes, tu margen es negativo o cercano a cero. Con margen positivo real, más ventas generan más caja disponible, no menos.
 
 **2. El depósito de ML siempre es "menos de lo que esperabas"**
 
-Si abrís el resumen de pagos de ML y siempre te sorprende lo bajo que es, no es un error del sistema — es que no estabas calculando el descuento real (comisión + IVA + envío).
+Si abres el resumen de pagos de ML y siempre te sorprende lo bajo que es, no es un error del sistema — es que no estabas calculando el descuento real (comisión + IVA + envío).
 
 **3. Tu precio de venta está por debajo del precio mínimo calculado correctamente**
 
-Calculá el precio mínimo con la fórmula completa (ver abajo) y comparalo con tu precio actual. Si publicás por debajo del mínimo, cada venta te cuesta dinero.
+Calcula el precio mínimo con la fórmula completa (ver abajo) y comparalo con tu precio actual. Si publicas por debajo del mínimo, cada venta te cuesta dinero.
 
 ## El check en 30 segundos
 
-Tomá un producto que tengas publicado ahora mismo y hacé este cálculo:
+Toma un producto que tengas publicado ahora mismo y haz este cálculo:
 
-**1. Identificá:**
+**1. Identifica:**
 - Precio de publicación actual
-- Costo del producto (lo que pagás al proveedor)
+- Costo del producto (lo que pagas al proveedor)
 - Comisión de tu categoría en ML
 - Tipo de publicación (Clásica o Premium)
 
-**2. Calculá el ingreso neto:**
+**2. Calcula el ingreso neto:**
 ```
 Ingreso neto = Precio − (Precio × Comisión × 1,19) − Costo de envío
 ```
 
-**3. Calculá el margen real:**
+**3. Calcula el margen real:**
 ```
 Margen = (Ingreso neto − Costo) ÷ Precio × 100
 ```
@@ -63,7 +63,7 @@ El vendedor creía ganar $8.000 por venta (diferencia precio-costo). Gana $607. 
 
 Tres palancas:
 
-**Subir el precio.** La más directa. Calculá el precio que te deja el margen que necesitás y evaluá si es competitivo en tu categoría.
+**Subir el precio.** La más directa. Calcula el precio que te deja el margen que necesitas y evalúa si es competitivo en tu categoría.
 
 **Cambiar el tipo de publicación.** En algunos casos, pasar de Premium a Clásica (y que el comprador pague el envío) mejora significativamente el margen.
 
@@ -71,4 +71,4 @@ Tres palancas:
 
 No hay cuarta opción que funcione sin tocar una de esas tres.
 
-**[Hacé el check completo de tu margen en ML →](https://margenreal.io/calculadora-ml)**
+**[Haz el check completo de tu margen en ML →](https://margenreal.io/calculadora-ml)**

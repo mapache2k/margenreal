@@ -1,11 +1,11 @@
----
+﻿---
 title: "Cuánto cobra MercadoLibre Chile realmente (comisión + IVA explicado)"
 date: "2026-04-19"
 excerpt: "La comisión que anuncia ML no es lo que te descuentan. Hay un IVA 19% encima que casi nadie calcula. Acá está el número real por categoría."
 category: "MercadoLibre Chile"
 ---
 
-Cuando entrás al panel de vendedor de MercadoLibre y ves que tu categoría tiene 13% de comisión, es razonable pensar que ese es el descuento real. No lo es. MercadoLibre cobra IVA 19% sobre su propia comisión, lo que significa que el descuento efectivo siempre es mayor al anunciado.
+Cuando entras al panel de vendedor de MercadoLibre y ves que tu categoría tiene 13% de comisión, es razonable pensar que ese es el descuento real. No lo es. MercadoLibre cobra IVA 19% sobre su propia comisión, lo que significa que el descuento efectivo siempre es mayor al anunciado.
 
 ## Cómo funciona el cálculo
 
@@ -34,23 +34,23 @@ Comisión efectiva = Comisión de categoría × 1,19
 
 ## El impacto en pesos
 
-Si vendés un producto a $50.000 CLP en una categoría con 15% de comisión:
+Si vendes un producto a $50.000 CLP en una categoría con 15% de comisión:
 
 - Lo que parece que te descuentan: $7.500
 - Lo que realmente te descuentan (con IVA): $8.925
 - Diferencia: **$1.425 por venta**
 
-Si vendés 100 unidades al mes, eso son $142.500 CLP extra que desaparecen solo por no haber considerado el IVA.
+Si vendes 100 unidades al mes, eso son $142.500 CLP extra que desaparecen solo por no haber considerado el IVA.
 
 ## Clásica vs Premium: ¿cambia la comisión?
 
-El tipo de publicación (Clásica o Premium) no cambia la comisión de categoría — cambia el costo de envío. En Premium, el envío es gratuito para el comprador y vos pagás entre $3.990 y $8.990 por envío según el peso. En Clásica, el comprador paga el envío y vos no absorbés ese costo.
+El tipo de publicación (Clásica o Premium) no cambia la comisión de categoría — cambia el costo de envío. En Premium, el envío es gratuito para el comprador y vos pagas entre $3.990 y $8.990 por envío según el peso. En Clásica, el comprador paga el envío y vos no absorbes ese costo.
 
 La elección entre Clásica y Premium depende del precio de tu producto y del peso del paquete — no siempre Premium sale más caro en el total.
 
 ## Por qué esto importa para fijar precios
 
-Si calculás el precio mínimo usando la comisión sin IVA, tu precio mínimo queda por debajo del real. Vendés creyendo que ganás tu margen objetivo y en realidad estás por debajo.
+Si calculas el precio mínimo usando la comisión sin IVA, tu precio mínimo queda por debajo del real. Vendes creyendo que ganas tu margen objetivo y en realidad estás por debajo.
 
 La forma correcta de fijar precios en ML Chile es:
 
@@ -58,4 +58,4 @@ La forma correcta de fijar precios en ML Chile es:
 Precio mínimo = Costo ÷ (1 − Comisión efectiva con IVA − % envío)
 ```
 
-**[Calculá el impacto real de las comisiones en tus productos →](https://margenreal.io/calculadora-ml)**
+**[Calcula el impacto real de las comisiones en tus productos →](https://margenreal.io/calculadora-ml)**

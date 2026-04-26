@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import Layout from '../components/Layout';
@@ -62,7 +62,7 @@ function CambiarPasswordContent() {
         <Link href="/dashboard" className="cp-back">← Volver a mi cuenta</Link>
 
         <h1 className="cp-title">Cambiar contraseña</h1>
-        <p className="cp-sub">Ingresá tu contraseña actual y elegí una nueva de al menos 8 caracteres.</p>
+        <p className="cp-sub">Ingresa tu contraseña actual y elige una nueva de al menos 8 caracteres.</p>
 
         {status === 'ok' ? (
           <div className="cp-success">

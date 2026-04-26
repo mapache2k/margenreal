@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -73,8 +73,8 @@ export default function LoginPage() {
       <div className="login-wrap">
         <div className="login-box">
           <Link href="/" className="login-logo">margen<span>real</span></Link>
-          <h1 className="login-title">Iniciá sesión</h1>
-          <p className="login-sub">Accedé a tu plan con tu email y contraseña.</p>
+          <h1 className="login-title">Inicia sesión</h1>
+          <p className="login-sub">Accede a tu plan con tu email y contraseña.</p>
 
           <form onSubmit={handleSubmit}>
             <div className="login-field">
@@ -92,7 +92,7 @@ export default function LoginPage() {
           </form>
 
           <div className="login-footer">
-            ¿No tenés cuenta? <Link href="/pricing">Ver planes →</Link>
+            ¿No tienes cuenta? <Link href="/pricing">Ver planes →</Link>
           </div>
         </div>
       </div>

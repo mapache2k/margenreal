@@ -1,7 +1,7 @@
----
+﻿---
 title: "Cómo calcular el margen de venta correctamente (con fórmula y ejemplo)"
 date: "2026-04-17"
-excerpt: "Hay dos formas de calcular margen y la mayoría usa la equivocada. La diferencia puede hacer que creas que ganás 33% cuando en realidad ganás 25%. Acá está la fórmula correcta."
+excerpt: "Hay dos formas de calcular margen y la mayoría usa la equivocada. La diferencia puede hacer que creas que ganas 33% cuando en realidad ganas 25%. Acá está la fórmula correcta."
 category: "Pricing"
 ---
 
@@ -19,9 +19,9 @@ Markup = (Precio − Costo) ÷ Costo × 100
 Margen = (Precio − Costo) ÷ Precio × 100
 ```
 
-Son cosas distintas. Un producto que te cuesta $10.000 y vendés a $13.333 tiene un **markup del 33%** pero un **margen del 25%**.
+Son cosas distintas. Un producto que te cuesta $10.000 y vendes a $13.333 tiene un **markup del 33%** pero un **margen del 25%**.
 
-La convención en negocios y finanzas es usar el margen (sobre precio). Si alguien te pregunta cuál es tu margen y vos respondés con el markup, estás comunicando un número más alto del real.
+La convención en negocios y finanzas es usar el margen (sobre precio). Si alguien te pregunta cuál es tu margen y tú respondes con el markup, estás comunicando un número más alto del real.
 
 ## Ejemplo aplicado a MercadoLibre Chile
 
@@ -66,7 +66,7 @@ Un negocio con 22% de margen bruto en ML puede quedar en 10–15% de margen neto
 
 ## Cómo usarlo para fijar precios
 
-Definí el margen neto mínimo que necesitás para que el negocio sea viable. Luego calculá hacia atrás:
+Define el margen neto mínimo que necesitas para que el negocio sea viable. Luego calcula hacia atrás:
 
 ```
 Precio de venta requerido = Costo total ÷ (1 − Margen objetivo − Comisión efectiva − % envío)
@@ -74,4 +74,4 @@ Precio de venta requerido = Costo total ÷ (1 − Margen objetivo − Comisión 
 
 Ese es el precio mínimo de publicación. Cualquier precio por debajo de ese número destruye tu rentabilidad.
 
-**[Calculá el margen real de tu próxima venta en ML →](https://margenreal.io/calculadora-ml)**
+**[Calcula el margen real de tu próxima venta en ML →](https://margenreal.io/calculadora-ml)**

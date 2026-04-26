@@ -1,4 +1,4 @@
-import Head from "next/head";
+﻿import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import Layout from "../components/Layout";
@@ -138,7 +138,7 @@ export default function AboutPage(): React.JSX.Element {
                 </div>
                 <div>
                   <div className="rm-title">Sistema financiero completo</div>
-                  <div className="rm-text">P&L automático. Flujo de caja. Benchmarks sectoriales. Integración bancaria. Score financiero estandarizado para conectar PyMEs con financiamiento.</div>
+                  <div className="rm-text">P&L automatico. Flujo de caja. Benchmarks sectoriales. Integración bancaria. Score financiero estandarizado para conectar PyMEs con financiamiento.</div>
                 </div>
               </div>
             </div>

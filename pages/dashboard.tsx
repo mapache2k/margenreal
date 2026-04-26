@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -278,7 +278,7 @@ function DashboardContent({ session }: { session: ProSession }) {
           <div className="dash-upgrade-banner" style={{ marginBottom: 40 }}>
             <div className="dash-upgrade-text">
               <strong>Estás en el plan gratuito</strong>
-              Comprá un plan para desbloquear productos ilimitados y análisis completo.
+              Compra un plan para desbloquear productos ilimitados y análisis completo.
             </div>
             <Link href="/checkout" className="dash-upgrade-btn">Ver planes →</Link>
           </div>
@@ -291,8 +291,8 @@ function DashboardContent({ session }: { session: ProSession }) {
           <div className="dash-widget-info">
             <div className="dash-widget-title">Calculadora MercadoLibre Chile</div>
             <div className="dash-widget-desc">
-              Calculá tu margen real al instante. Comisión, IVA 19% y envío incluidos.
-              Tus productos se guardan automáticamente acá.
+              Calcula tu margen real al instante. Comisión, IVA 19% y envío incluidos.
+              Tus productos se guardan automaticamente acá.
             </div>
           </div>
           <Link href="/calculadora-ml" className="dash-widget-btn">Ir a la calculadora →</Link>
@@ -428,7 +428,7 @@ function DashboardContent({ session }: { session: ProSession }) {
                         return (
                           <div className="dash-pl-body">
                             <div className="dash-pl-units">
-                              <span>Si vendés</span>
+                              <span>Si vendes</span>
                               <input
                                 type="number"
                                 value={plUnits}
@@ -438,7 +438,7 @@ function DashboardContent({ session }: { session: ProSession }) {
                               <span>unidades al mes:</span>
                             </div>
                             <div style={{ fontWeight: 700, fontSize: '1rem', color: mensual >= 0 ? '#2dd4a0' : '#e85555' }}>
-                              {mensual < 0 ? 'Perdés ' : 'Ganás '}
+                              {mensual < 0 ? 'Pierdes ' : 'Ganas '}
                               {mensual < 0 ? '−' : ''}${fmt(Math.abs(mensual))} al mes después de todos los costos ML.
                             </div>
                           </div>
