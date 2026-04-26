@@ -49,7 +49,8 @@ function DashboardContent({ session }: { session: ProSession }) {
     router.replace('/');
   };
 
-  const planLabel = session.plan === 'pro' ? 'Pro' : 'Starter';
+  const isFree    = session.plan === 'free';
+  const planLabel = session.plan === 'pro' ? 'Pro' : session.plan === 'starter' ? 'Starter' : 'Gratis';
   const initial = session.email.charAt(0).toUpperCase();
 
   const fmt = (n: number) =>
@@ -67,7 +68,14 @@ function DashboardContent({ session }: { session: ProSession }) {
         .dash-avatar { width: 48px; height: 48px; border-radius: 13px; background: var(--accent); color: var(--bg); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; flex-shrink: 0; }
         .dash-user-info {}
         .dash-email { font-size: 0.9375rem; font-weight: 700; color: var(--text); }
-        .dash-plan-badge { display: inline-block; margin-top: 3px; font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; background: rgba(249,215,27,0.14); color: var(--accent); border-radius: 4px; padding: 2px 7px; }
+        .dash-plan-badge { display: inline-block; margin-top: 3px; font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; padding: 2px 7px; }
+        .dash-plan-badge-free { background: rgba(160,160,160,0.12); color: var(--muted); }
+        .dash-plan-badge-paid { background: rgba(249,215,27,0.14); color: var(--accent); }
+        .dash-upgrade-banner { margin-bottom: 40px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .dash-upgrade-text { font-size: 0.875rem; color: var(--muted); line-height: 1.55; }
+        .dash-upgrade-text strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 0.9375rem; }
+        .dash-upgrade-btn { background: var(--accent); color: var(--bg); font-size: 0.875rem; font-weight: 800; padding: 10px 18px; border-radius: 9px; text-decoration: none; white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0; }
+        .dash-upgrade-btn:hover { opacity: 0.85; text-decoration: none; }
         .dash-logout-btn { background: none; border: 1.5px solid var(--border); color: var(--muted); font-size: 0.8125rem; font-weight: 600; padding: 8px 16px; border-radius: 9px; cursor: pointer; font-family: inherit; transition: color 0.15s, border-color 0.15s; }
         .dash-logout-btn:hover { color: #ef4444; border-color: #ef4444; }
 
@@ -133,34 +141,51 @@ function DashboardContent({ session }: { session: ProSession }) {
             <div className="dash-avatar">{initial}</div>
             <div className="dash-user-info">
               <div className="dash-email">{session.email}</div>
-              <span className="dash-plan-badge">Plan {planLabel}</span>
+              <span className={`dash-plan-badge ${isFree ? 'dash-plan-badge-free' : 'dash-plan-badge-paid'}`}>
+                Plan {planLabel}
+              </span>
             </div>
           </div>
           <button className="dash-logout-btn" onClick={handleLogout}>Cerrar sesión</button>
         </div>
 
-        {/* Mis compras */}
-        <div className="dash-section-title">Mis compras</div>
-        <div className="dash-compras">
-          <div className="dash-compra-card">
-            <div className="dash-compra-thumb">📊</div>
-            <div className="dash-compra-body">
-              <div className="dash-compra-type">Herramienta</div>
-              <div className="dash-compra-name">Plan {planLabel}</div>
-              <Link href="/calculadora-ml" className="dash-compra-btn">Acceder →</Link>
-            </div>
-          </div>
-          {session.plan === 'pro' && (
-            <div className="dash-compra-card">
-              <div className="dash-compra-thumb">⚡</div>
-              <div className="dash-compra-body">
-                <div className="dash-compra-type">Herramienta Pro</div>
-                <div className="dash-compra-name">Calculadoras avanzadas</div>
-                <Link href="/pro" className="dash-compra-btn">Acceder →</Link>
+        {/* Mis compras — solo si tiene plan pago */}
+        {!isFree && (
+          <>
+            <div className="dash-section-title">Mis compras</div>
+            <div className="dash-compras">
+              <div className="dash-compra-card">
+                <div className="dash-compra-thumb">📊</div>
+                <div className="dash-compra-body">
+                  <div className="dash-compra-type">Herramienta</div>
+                  <div className="dash-compra-name">Plan {planLabel}</div>
+                  <Link href="/calculadora-ml" className="dash-compra-btn">Acceder →</Link>
+                </div>
               </div>
+              {session.plan === 'pro' && (
+                <div className="dash-compra-card">
+                  <div className="dash-compra-thumb">⚡</div>
+                  <div className="dash-compra-body">
+                    <div className="dash-compra-type">Herramienta Pro</div>
+                    <div className="dash-compra-name">Calculadoras avanzadas</div>
+                    <Link href="/pro" className="dash-compra-btn">Acceder →</Link>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
+
+        {/* Banner upgrade — solo plan free */}
+        {isFree && (
+          <div className="dash-upgrade-banner" style={{ marginBottom: 40 }}>
+            <div className="dash-upgrade-text">
+              <strong>Estás en el plan gratuito</strong>
+              Comprá un plan para desbloquear productos ilimitados y todas las herramientas.
+            </div>
+            <Link href="/pricing" className="dash-upgrade-btn">Ver planes →</Link>
+          </div>
+        )}
 
         {/* Widget calculadora */}
         <div className="dash-section-title">Calculadora rápida</div>
