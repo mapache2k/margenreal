@@ -1,13 +1,46 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import ProGate, { ProSession } from '../components/ProGate';
 
 const SESSION_KEY = 'mr_session';
 
+type SavedProduct = {
+  id: number;
+  nombre: string;
+  categoria: string;
+  precio: number;
+  costo: number;
+  margen_pct: number;
+  created_at: string;
+};
+
 function DashboardContent({ session }: { session: ProSession }) {
   const router = useRouter();
+  const [products, setProducts] = useState<SavedProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem(SESSION_KEY);
+    if (!token) return;
+    fetch('/api/user/products', { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json())
+      .then(data => { if (data.products) setProducts(data.products); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    const token = localStorage.getItem(SESSION_KEY);
+    if (!token) return;
+    await fetch(`/api/user/products?id=${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setProducts(prev => prev.filter(p => p.id !== id));
+  };
 
   const handleLogout = () => {
     localStorage.removeItem(SESSION_KEY);
@@ -19,67 +52,169 @@ function DashboardContent({ session }: { session: ProSession }) {
   const planLabel = session.plan === 'pro' ? 'Pro' : 'Starter';
   const initial = session.email.charAt(0).toUpperCase();
 
+  const fmt = (n: number) =>
+    n.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
   return (
     <>
       <style>{`
-        .dash-wrap { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
-        .dash-header { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
-        .dash-avatar { width: 52px; height: 52px; border-radius: 14px; background: var(--accent); color: var(--bg); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.375rem; font-weight: 800; flex-shrink: 0; }
-        .dash-meta { min-width: 0; }
-        .dash-email { font-size: 0.9375rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .dash-plan-badge { display: inline-block; margin-top: 4px; font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; background: rgba(249,215,27,0.12); color: var(--accent); border-radius: 4px; padding: 2px 8px; }
-        .dash-cards { display: grid; gap: 12px; }
-        .dash-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; text-decoration: none; transition: border-color 0.15s; }
-        .dash-card:hover { border-color: var(--accent); text-decoration: none; }
-        .dash-card-info {}
-        .dash-card-title { font-size: 0.9375rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-        .dash-card-desc { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; }
-        .dash-card-arrow { font-size: 1.125rem; color: var(--muted); flex-shrink: 0; }
-        .dash-logout { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
-        .dash-logout-btn { background: none; border: 1.5px solid var(--border); color: var(--muted); font-size: 0.875rem; font-weight: 600; padding: 10px 18px; border-radius: 9px; cursor: pointer; font-family: inherit; transition: color 0.15s, border-color 0.15s; }
+        .dash-wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 64px; }
+
+        /* Header */
+        .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 12px; }
+        .dash-user { display: flex; align-items: center; gap: 14px; }
+        .dash-avatar { width: 48px; height: 48px; border-radius: 13px; background: var(--accent); color: var(--bg); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; flex-shrink: 0; }
+        .dash-user-info {}
+        .dash-email { font-size: 0.9375rem; font-weight: 700; color: var(--text); }
+        .dash-plan-badge { display: inline-block; margin-top: 3px; font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; background: rgba(249,215,27,0.14); color: var(--accent); border-radius: 4px; padding: 2px 7px; }
+        .dash-logout-btn { background: none; border: 1.5px solid var(--border); color: var(--muted); font-size: 0.8125rem; font-weight: 600; padding: 8px 16px; border-radius: 9px; cursor: pointer; font-family: inherit; transition: color 0.15s, border-color 0.15s; }
         .dash-logout-btn:hover { color: #ef4444; border-color: #ef4444; }
+
+        /* Section title */
+        .dash-section-title { font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted-2); margin-bottom: 16px; }
+
+        /* Compras */
+        .dash-compras { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+        .dash-compra-card { width: 180px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; flex-shrink: 0; }
+        .dash-compra-thumb { height: 100px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+        .dash-compra-body { padding: 12px 14px; }
+        .dash-compra-type { font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-2); margin-bottom: 4px; }
+        .dash-compra-name { font-size: 0.875rem; font-weight: 800; color: var(--text); margin-bottom: 12px; font-family: var(--font-display); }
+        .dash-compra-btn { display: block; width: 100%; text-align: center; background: var(--accent); color: var(--bg); font-size: 0.8125rem; font-weight: 800; padding: 9px; border-radius: 8px; text-decoration: none; transition: opacity 0.15s; }
+        .dash-compra-btn:hover { opacity: 0.85; text-decoration: none; }
+
+        /* Mini calculator widget */
+        .dash-widget { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 22px; margin-bottom: 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .dash-widget-icon { font-size: 2rem; flex-shrink: 0; }
+        .dash-widget-info { flex: 1; min-width: 180px; }
+        .dash-widget-title { font-size: 1rem; font-weight: 800; color: var(--text); font-family: var(--font-display); margin-bottom: 4px; }
+        .dash-widget-desc { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; }
+        .dash-widget-btn { background: var(--accent); color: var(--bg); font-size: 0.875rem; font-weight: 800; padding: 11px 20px; border-radius: 10px; text-decoration: none; white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0; }
+        .dash-widget-btn:hover { opacity: 0.85; text-decoration: none; }
+
+        /* Productos */
+        .dash-products-empty { text-align: center; padding: 32px 20px; color: var(--muted); font-size: 0.875rem; line-height: 1.7; border: 1.5px dashed var(--border); border-radius: 14px; }
+        .dash-products-table { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+        .dash-products-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; padding: 8px 16px; background: var(--bg); font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted-2); gap: 8px; }
+        .dash-products-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; padding: 12px 16px; border-top: 1px solid var(--border); align-items: center; gap: 8px; font-size: 0.875rem; }
+        .dash-products-row:hover { background: var(--surface); }
+        .dash-prod-name { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .dash-prod-cat { font-size: 0.6875rem; color: var(--muted); margin-top: 2px; }
+        .dash-prod-val { color: var(--muted); }
+        .dash-prod-margen-ok { font-weight: 700; color: #2dd4a0; }
+        .dash-prod-margen-warn { font-weight: 700; color: #f0b429; }
+        .dash-prod-margen-bad { font-weight: 700; color: #e85555; }
+        .dash-prod-del { background: none; border: none; cursor: pointer; color: var(--muted-2); font-size: 1rem; padding: 2px 6px; border-radius: 5px; transition: color 0.15s; }
+        .dash-prod-del:hover { color: #e85555; }
+
+        @media (max-width: 600px) {
+          .dash-products-head { grid-template-columns: 2fr 1fr 1fr auto; }
+          .dash-products-row { grid-template-columns: 2fr 1fr 1fr auto; }
+          .dash-products-head span:nth-child(3),
+          .dash-products-row > span:nth-child(3) { display: none; }
+        }
       `}</style>
 
       <div className="dash-wrap">
+
+        {/* Header */}
         <div className="dash-header">
-          <div className="dash-avatar">{initial}</div>
-          <div className="dash-meta">
-            <div className="dash-email">{session.email}</div>
-            <span className="dash-plan-badge">Plan {planLabel}</span>
+          <div className="dash-user">
+            <div className="dash-avatar">{initial}</div>
+            <div className="dash-user-info">
+              <div className="dash-email">{session.email}</div>
+              <span className="dash-plan-badge">Plan {planLabel}</span>
+            </div>
           </div>
+          <button className="dash-logout-btn" onClick={handleLogout}>Cerrar sesión</button>
         </div>
 
-        <div className="dash-cards">
-          <Link href="/calculadora-ml" className="dash-card">
-            <div className="dash-card-info">
-              <div className="dash-card-title">Calculadora MercadoLibre</div>
-              <div className="dash-card-desc">Calculá tu margen real sin límite de productos.</div>
+        {/* Mis compras */}
+        <div className="dash-section-title">Mis compras</div>
+        <div className="dash-compras">
+          <div className="dash-compra-card">
+            <div className="dash-compra-thumb">📊</div>
+            <div className="dash-compra-body">
+              <div className="dash-compra-type">Herramienta</div>
+              <div className="dash-compra-name">Plan {planLabel}</div>
+              <Link href="/calculadora-ml" className="dash-compra-btn">Acceder →</Link>
             </div>
-            <span className="dash-card-arrow">→</span>
-          </Link>
-
-          <Link href="/guias" className="dash-card">
-            <div className="dash-card-info">
-              <div className="dash-card-title">Guías y playbooks</div>
-              <div className="dash-card-desc">Estrategias de pricing para vendedores en ML Chile.</div>
-            </div>
-            <span className="dash-card-arrow">→</span>
-          </Link>
-
+          </div>
           {session.plan === 'pro' && (
-            <Link href="/pro" className="dash-card" style={{ borderColor: 'rgba(249,215,27,0.3)' }}>
-              <div className="dash-card-info">
-                <div className="dash-card-title" style={{ color: 'var(--accent)' }}>Herramientas Pro</div>
-                <div className="dash-card-desc">Acceso completo a todas las calculadoras avanzadas.</div>
+            <div className="dash-compra-card">
+              <div className="dash-compra-thumb">⚡</div>
+              <div className="dash-compra-body">
+                <div className="dash-compra-type">Herramienta Pro</div>
+                <div className="dash-compra-name">Calculadoras avanzadas</div>
+                <Link href="/pro" className="dash-compra-btn">Acceder →</Link>
               </div>
-              <span className="dash-card-arrow">→</span>
-            </Link>
+            </div>
           )}
         </div>
 
-        <div className="dash-logout">
-          <button className="dash-logout-btn" onClick={handleLogout}>Cerrar sesión</button>
+        {/* Widget calculadora */}
+        <div className="dash-section-title">Calculadora rápida</div>
+        <div className="dash-widget">
+          <span className="dash-widget-icon">🧮</span>
+          <div className="dash-widget-info">
+            <div className="dash-widget-title">Calculadora MercadoLibre Chile</div>
+            <div className="dash-widget-desc">
+              Calculá tu margen real al instante. Comisión, IVA 19% y envío incluidos.
+              Tus productos se guardan automáticamente acá.
+            </div>
+          </div>
+          <Link href="/calculadora-ml" className="dash-widget-btn">Ir a la calculadora →</Link>
         </div>
+
+        {/* Mis productos */}
+        <div className="dash-section-title">Mis productos guardados</div>
+
+        {loading ? (
+          <div style={{ color: 'var(--muted)', fontSize: '0.875rem', padding: '20px 0' }}>Cargando…</div>
+        ) : products.length === 0 ? (
+          <div className="dash-products-empty">
+            Todavía no guardaste ningún producto.<br />
+            <Link href="/calculadora-ml" style={{ color: 'var(--accent)', fontWeight: 700, textDecoration: 'none' }}>
+              Ir a la calculadora →
+            </Link>
+          </div>
+        ) : (
+          <div className="dash-products-table">
+            <div className="dash-products-head">
+              <span>Producto</span>
+              <span>Precio</span>
+              <span>Costo</span>
+              <span>Margen</span>
+              <span></span>
+            </div>
+            {products.map(p => {
+              const margenCls = p.margen_pct >= 20
+                ? 'dash-prod-margen-ok'
+                : p.margen_pct >= 0
+                ? 'dash-prod-margen-warn'
+                : 'dash-prod-margen-bad';
+              return (
+                <div key={p.id} className="dash-products-row">
+                  <div>
+                    <div className="dash-prod-name">{p.nombre}</div>
+                    <div className="dash-prod-cat">{p.categoria}</div>
+                  </div>
+                  <span className="dash-prod-val">${fmt(p.precio)}</span>
+                  <span className="dash-prod-val">${fmt(p.costo)}</span>
+                  <span className={margenCls}>
+                    {p.margen_pct.toFixed(1).replace('.', ',')}%
+                  </span>
+                  <button
+                    className="dash-prod-del"
+                    title="Eliminar"
+                    onClick={() => handleDelete(p.id)}
+                  >×</button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
       </div>
     </>
   );

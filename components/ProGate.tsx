@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 const SESSION_KEY = 'mr_session';
 
-export type ProSession = { email: string; plan: string };
+export type ProSession = { email: string; plan: string; userId: number };
 
 interface Props {
   children: (session: ProSession) => ReactNode;
@@ -28,7 +28,7 @@ export default function ProGate({ children, planRequired = 'starter' }: Props) {
       .then(r => r.json())
       .then(data => {
         if (data.valid) {
-          setSession({ email: data.email, plan: data.plan });
+          setSession({ email: data.email, plan: data.plan, userId: data.userId });
           setState('authed');
         } else {
           localStorage.removeItem(SESSION_KEY);

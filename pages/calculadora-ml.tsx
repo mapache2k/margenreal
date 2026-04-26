@@ -130,10 +130,11 @@ export default function CalculadoraML() {
     setSlotsUsados(newSlots);
     if (!isPro) localStorage.setItem('mr_slots', newSlots.toString());
     const catLabel = ML_CATEGORIAS[categoria].label;
+    const nombreFinal = nombre.trim() || `Producto ${_nextId}`;
     setProductos(prev => {
       const nuevo: ProductoGuardado = {
         id: _nextId++,
-        nombre: nombre.trim() || `Producto ${_nextId - 1}`,
+        nombre: nombreFinal,
         costo: costoNum,
         precio: precioNum,
         margenPct: resultado.margenPct,
@@ -143,6 +144,23 @@ export default function CalculadoraML() {
       };
       return [...prev, nuevo].sort((a, b) => a.margenPct - b.margenPct);
     });
+
+    if (isPro) {
+      const token = localStorage.getItem('mr_session');
+      if (token) {
+        fetch('/api/user/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            nombre: nombreFinal, categoria: catLabel,
+            precio: precioNum, costo: costoNum,
+            margen_pct: resultado.margenPct,
+            detalle: { tipo, envioKey, ganancia: resultado.gananciaAbsoluta },
+          }),
+        }).catch(() => {});
+      }
+    }
+
     setNombre('');
     setCosto('');
     setPrecio('');
