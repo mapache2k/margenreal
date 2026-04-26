@@ -114,11 +114,12 @@ export default function Home() {
             Para vendedores de MercadoLibre Chile
           </div>
           <h1 className="page-h1">
-            Tus números,<br />
-            <em>sin adivinar.</em>
+            ¿Estás perdiendo plata<br />
+            en MercadoLibre<br />
+            <em>sin darte cuenta?</em>
           </h1>
           <p className="page-lead">
-            Herramientas gratuitas para calcular tu margen real en MercadoLibre Chile — comisiones, IVA, envío y costos de importación.
+            Comisión + IVA + envío pueden bajar tu margen más de 15 puntos. Revisalo en 30 segundos.
           </p>
           <div className="page-actions">
             <Link
@@ -135,10 +136,32 @@ export default function Home() {
           </div>
           <div className="hero-stats">
             <div><div className="hs-val">12</div><div className="hs-label">Categorías ML Chile con tarifas exactas</div></div>
-            <div><div className="hs-val">19%</div><div className="hs-label">IVA sobre comisión que casi nadie calcula</div></div>
-            <div><div className="hs-val">30 seg</div><div className="hs-label">Para saber tu margen real</div></div>
+            <div><div className="hs-val">+15 pt</div><div className="hs-label">Margen que puede comerse comisión + IVA + envío</div></div>
+            <div><div className="hs-val">30 seg</div><div className="hs-label">Para saber tu margen real sin adivinar</div></div>
           </div>
         </div>
+
+        <hr className="divider" />
+
+        <section className="section">
+          <div className="label">Lo que la mayoría no calcula</div>
+          <h2 className="heading">Tres cosas que descuentan<br />antes de que veas un peso.</h2>
+          <div className="tools-grid" style={{ marginTop: 24 }}>
+            {[
+              { icon: '📊', title: 'La comisión real no es la que anuncian', desc: 'ML cobra comisión + IVA 19% sobre esa comisión. Si la categoría tiene 13%, el descuento real es 15,47%. No 13%.' },
+              { icon: '📦', title: 'El envío gratis lo pagás vos', desc: 'En publicaciones Premium, el costo de envío sale de tu bolsillo. Entre $3.990 y $8.990 por paquete — directo de tu margen.' },
+              { icon: '🔢', title: 'Tu precio mínimo no es costo × 2', desc: 'Esa regla no contempla comisión efectiva, IVA ni envío. El precio mínimo real se calcula con la fórmula que usamos acá.' },
+            ].map(item => (
+              <div key={item.title} className="tool-card" style={{ cursor: 'default' }}>
+                <div className="tool-card-top">
+                  <span className="tool-icon">{item.icon}</span>
+                </div>
+                <div className="tool-title">{item.title}</div>
+                <div className="tool-desc">{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <hr className="divider" />
 

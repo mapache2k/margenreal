@@ -395,21 +395,73 @@ export default function CalculadoraML() {
                   )}
                 </div>
 
-                {/* Pago — Upgrade CTA */}
-                <div className="upgrade-card">
-                  <div className="upgrade-body">
-                    <div className="upgrade-text">
-                      <strong>¿Vendés más de un producto?</strong> El Plan Starter incluye guías avanzadas de pricing para ML Chile, análisis de canales y plantillas de costos listas para usar.
+                {/* Interpretación */}
+                <div style={{ margin: '16px 0', padding: '18px 22px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12 }}>
+                  <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 8 }}>
+                    Lo que esto significa
+                  </div>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+                    {!resultado.esCosteable
+                      ? `Estás vendiendo a pérdida. Por cada unidad que vendés, perdés $${fmt(Math.abs(resultado.gananciaAbsoluta))}. Eso no se compensa con volumen — se multiplica.`
+                      : resultado.margenPct < 15
+                      ? `Tu margen de ${fmtPct(resultado.margenPct)} es frágil. Una devolución, un descuento del 10% o un ajuste de envío puede ponerte en rojo. Se recomienda al menos 20% para operar con seguridad.`
+                      : `Tu margen de ${fmtPct(resultado.margenPct)} es sólido para este producto. Pero revisá todos tus productos — es raro que todos tengan el mismo margen.`
+                    }
+                  </p>
+                </div>
+
+                {/* Impacto mensual */}
+                <div style={{ padding: '14px 20px', background: resultado.esCosteable ? 'rgba(45,212,160,0.07)' : 'rgba(232,85,85,0.07)', borderRadius: 10, marginBottom: 16, fontSize: '0.875rem', color: 'var(--muted)', lineHeight: 1.6 }}>
+                  Si vendés <strong style={{ color: 'var(--text)' }}>10 unidades al mes</strong> a este precio,{' '}
+                  {resultado.esCosteable
+                    ? <><strong style={{ color: '#2dd4a0' }}>ganás ${fmt(resultado.gananciaAbsoluta * 10)}</strong> al mes después de todos los costos ML.</>
+                    : <><strong style={{ color: '#e85555' }}>perdés ${fmt(Math.abs(resultado.gananciaAbsoluta * 10))}</strong> al mes aunque vendas bien.</>
+                  }
+                </div>
+
+                {/* Multi-producto preview CTA */}
+                <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', marginBottom: 16 }}>
+                  <div style={{ padding: '20px 22px 20px' }}>
+                    <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 6 }}>Análisis multi-producto</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>¿Tenés más de un producto en ML?</div>
+                    <div style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginBottom: 14 }}>Probablemente tenés productos perdiendo dinero sin saberlo.</div>
+                    <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', marginBottom: 16, fontSize: '0.8125rem' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', background: 'var(--bg)', padding: '8px 14px', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
+                        <span>Producto</span><span>Precio</span><span>Margen</span><span>Estado</span>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)' }}>
+                        <span style={{ color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{nombre || 'Este producto'}</span>
+                        <span style={{ color: 'var(--muted)' }}>${fmt(precioNum)}</span>
+                        <span style={{ color: resultado.margenPct >= 20 ? '#2dd4a0' : resultado.margenPct >= 0 ? '#f0b429' : '#e85555', fontWeight: 700 }}>{fmtPct(resultado.margenPct)}</span>
+                        <span style={{ fontSize: '0.75rem' }}>{!resultado.esCosteable ? '❌' : resultado.margenPct < 20 ? '⚠️' : '✅'}</span>
+                      </div>
+                      {[2, 3].map(n => (
+                        <div key={n} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)', opacity: 0.35, filter: 'blur(3px)', userSelect: 'none' as const }}>
+                          <span>Producto {n}</span><span>$••.•••</span><span>••%</span><span>🔒</span>
+                        </div>
+                      ))}
                     </div>
-                    <Link href="/importados" className="btn-upgrade">Ver Plan Starter — USD 19 →</Link>
+                    <Link
+                      href="/pricing"
+                      className="btn btn-primary"
+                      style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box' as const }}
+                      onClick={() => posthog.capture('multiproduct_cta_click', { source: 'calculadora' })}
+                    >
+                      Analizar todos mis productos →
+                    </Link>
+                    <div style={{ display: 'flex', gap: 12, marginTop: 10, fontSize: '0.75rem', color: 'var(--muted)', justifyContent: 'center', flexWrap: 'wrap' as const }}>
+                      <span>✓ Comparación multi-producto</span>
+                      <span>✓ Precio mínimo por categoría</span>
+                      <span>✓ Guía táctica completa</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Acción — Lead magnet */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
-                  <div className="lead-title">Llevate el checklist de los 5 errores de pricing</div>
+                  <div className="lead-title">¿Preferís empezar con una guía gratuita?</div>
                   <div className="lead-text">
-                    Gratis. Lo usan más de 3.000 vendedores ML Chile para no vender a pérdida.
+                    Recibí el checklist de los 5 errores de pricing más comunes en ML Chile.
                   </div>
                   {!emailSent ? (
                     <form className="lead-form" onSubmit={handleEmail}>
