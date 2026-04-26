@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /login
+Disallow: /registro
+Disallow: /activar
+Disallow: /cambiar-password
+Disallow: /gratis
+Disallow: /gracias
+
+Sitemap: https://margenreal.io/sitemap.xml

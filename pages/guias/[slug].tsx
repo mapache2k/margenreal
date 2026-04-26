@@ -32,6 +32,30 @@ export default function GuiaPage({ guia }: Props) {
       <Head>
         <title>{guia.title} — Margen Real</title>
         <meta name="description" content={guia.description} />
+        <meta property="og:title" content={guia.title} />
+        <meta property="og:description" content={guia.description} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://margenreal.io/guias/${guia.slug}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href={`https://margenreal.io/guias/${guia.slug}`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': guia.type === 'playbook' ? 'HowTo' : 'Article',
+            name: guia.title,
+            headline: guia.title,
+            description: guia.description,
+            url: `https://margenreal.io/guias/${guia.slug}`,
+            datePublished: guia.date,
+            publisher: {
+              '@type': 'Organization',
+              name: 'Margen Real',
+              url: 'https://margenreal.io',
+            },
+            inLanguage: 'es-CL',
+          }) }}
+        />
       </Head>
 
       <style>{`

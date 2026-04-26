@@ -12,6 +12,27 @@ export default function BlogPost({ post }: { post: Post }) {
         <meta name="description" content={post.excerpt} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://margenreal.io/blog/${post.slug}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href={`https://margenreal.io/blog/${post.slug}`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            description: post.excerpt,
+            url: `https://margenreal.io/blog/${post.slug}`,
+            datePublished: post.date,
+            publisher: {
+              '@type': 'Organization',
+              name: 'Margen Real',
+              url: 'https://margenreal.io',
+            },
+            inLanguage: 'es-CL',
+          }) }}
+        />
       </Head>
 
       <style>{`

@@ -63,6 +63,42 @@ export default function Home() {
         <meta property="og:title" content="Margen Real — Calculadora ML Chile" />
         <meta property="og:description" content="Comisión por categoría + IVA 19% + envío = tu margen real. Gratis, al instante, sin registro." />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://margenreal.io/" />
+        <meta property="og:site_name" content="Margen Real" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href="https://margenreal.io/" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'WebSite',
+                '@id': 'https://margenreal.io/#website',
+                url: 'https://margenreal.io/',
+                name: 'Margen Real',
+                description: 'Herramientas de pricing para vendedores de MercadoLibre Chile.',
+                inLanguage: 'es-CL',
+              },
+              {
+                '@type': 'Organization',
+                '@id': 'https://margenreal.io/#organization',
+                name: 'Margen Real',
+                url: 'https://margenreal.io/',
+                sameAs: [],
+              },
+              {
+                '@type': 'WebPage',
+                '@id': 'https://margenreal.io/#webpage',
+                url: 'https://margenreal.io/',
+                name: 'Margen Real — Calculadora de margen para MercadoLibre Chile',
+                description: 'Calculá exactamente cuánto te queda después de comisiones ML, IVA 19% y envío.',
+                isPartOf: { '@id': 'https://margenreal.io/#website' },
+                about: { '@id': 'https://margenreal.io/#organization' },
+              },
+            ],
+          }) }}
+        />
       </Head>
 
       <style>{`

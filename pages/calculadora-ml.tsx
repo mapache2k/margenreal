@@ -192,6 +192,59 @@ export default function CalculadoraML() {
       <Head>
         <title>Calculadora de Margen para MercadoLibre Chile — Margen Real</title>
         <meta name="description" content="Calculá tu margen real como vendedor en MercadoLibre Chile. Incluye comisiones por categoría, IVA 19% y costos de envío reales." />
+        <meta property="og:title" content="Calculadora de Margen MercadoLibre Chile — Margen Real" />
+        <meta property="og:description" content="Comisión por categoría + IVA 19% + envío = tu margen real. Resultado instantáneo, sin registro." />
+        <meta property="og:url" content="https://margenreal.io/calculadora-ml" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href="https://margenreal.io/calculadora-ml" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'WebApplication',
+                '@id': 'https://margenreal.io/calculadora-ml#app',
+                name: 'Calculadora de Margen MercadoLibre Chile',
+                url: 'https://margenreal.io/calculadora-ml',
+                applicationCategory: 'BusinessApplication',
+                operatingSystem: 'Web',
+                offers: { '@type': 'Offer', price: '0', priceCurrency: 'CLP' },
+                description: 'Calculadora gratuita de margen real para vendedores de MercadoLibre Chile. Incluye comisión por categoría, IVA 19% y costo de envío.',
+                inLanguage: 'es-CL',
+              },
+              {
+                '@type': 'FAQPage',
+                mainEntity: [
+                  {
+                    '@type': 'Question',
+                    name: '¿Cuánto cobra MercadoLibre Chile de comisión?',
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: 'MercadoLibre Chile cobra entre 11% y 17% de comisión según la categoría del producto, más IVA 19% sobre esa comisión. La comisión efectiva real varía entre 13,09% y 20,23%.',
+                    },
+                  },
+                  {
+                    '@type': 'Question',
+                    name: '¿Cómo se calcula el margen real en MercadoLibre?',
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: 'Margen real = (Precio de venta − Comisión ML − IVA sobre comisión − Costo de envío − Costo del producto) ÷ Precio de venta × 100.',
+                    },
+                  },
+                  {
+                    '@type': 'Question',
+                    name: '¿Cuál es el precio mínimo rentable en MercadoLibre Chile?',
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: 'El precio mínimo rentable es el precio al que tu ganancia es exactamente $0, después de comisión ML, IVA y envío. Se calcula como: (Costo del producto + Costo de envío) ÷ (1 − Comisión efectiva).',
+                    },
+                  },
+                ],
+              },
+            ],
+          }) }}
+        />
       </Head>
 
       <div className="page-wrap">
