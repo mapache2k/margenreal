@@ -47,10 +47,11 @@ export default function CalculadoraML() {
   const [slotsUsados, setSlotsUsados] = useState(0);
   const [hydrated, setHydrated] = useState(false);
   const [showComoCalc, setShowComoCalc] = useState(false);
+  const [isPro, setIsPro] = useState(false);
   const capturedOnce = useRef(false);
   const startedOnce = useRef(false);
 
-  // Cargar estado persistido al montar
+  // Cargar estado persistido al montar + verificar sesión pro
   useEffect(() => {
     try {
       const stored = localStorage.getItem('mr_productos');
@@ -59,6 +60,18 @@ export default function CalculadoraML() {
       if (slots) setSlotsUsados(parseInt(slots, 10));
     } catch {}
     setHydrated(true);
+
+    const token = localStorage.getItem('mr_session');
+    if (token) {
+      fetch('/api/auth/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: token }),
+      })
+        .then(r => r.json())
+        .then(data => { if (data.valid && (data.plan === 'starter' || data.plan === 'pro')) setIsPro(true); })
+        .catch(() => {});
+    }
   }, []);
 
   // Persistir productos cuando cambian
@@ -109,13 +122,13 @@ export default function CalculadoraML() {
   };
 
   const FREE_LIMIT = 3;
-  const limitAlcanzado = slotsUsados >= FREE_LIMIT;
+  const limitAlcanzado = !isPro && slotsUsados >= FREE_LIMIT;
 
   const handleAgregarProducto = () => {
     if (!resultado || limitAlcanzado) return;
     const newSlots = slotsUsados + 1;
     setSlotsUsados(newSlots);
-    localStorage.setItem('mr_slots', newSlots.toString());
+    if (!isPro) localStorage.setItem('mr_slots', newSlots.toString());
     const catLabel = ML_CATEGORIAS[categoria].label;
     setProductos(prev => {
       const nuevo: ProductoGuardado = {
@@ -299,13 +312,15 @@ export default function CalculadoraML() {
             ) : resultado ? (
               <button className="btn-agregar" style={{ marginTop: 12 }} onClick={handleAgregarProducto}>
                 {slotsUsados > 0
-                  ? `+ Agregar · ${slotsUsados}/${FREE_LIMIT} usados`
+                  ? isPro ? `+ Agregar · ${slotsUsados} guardados` : `+ Agregar · ${slotsUsados}/${FREE_LIMIT} usados`
                   : '+ Comparar con otros productos'
                 }
               </button>
             ) : (
               <button className="btn-agregar" disabled style={{ marginTop: 12, opacity: 0.4, cursor: 'not-allowed' }}>
-                {slotsUsados > 0 ? `Calculá otro producto para agregar · ${slotsUsados}/${FREE_LIMIT}` : 'Calculá un producto para comparar'}
+                {slotsUsados > 0
+                  ? isPro ? `Calculá otro producto para agregar · ${slotsUsados} guardados` : `Calculá otro producto para agregar · ${slotsUsados}/${FREE_LIMIT}`
+                  : 'Calculá un producto para comparar'}
               </button>
             )}
 
@@ -313,7 +328,11 @@ export default function CalculadoraML() {
             <div style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)' }}>
-                  Comparación <span style={{ color: 'var(--muted)', fontWeight: 400 }}>{slotsUsados}/{FREE_LIMIT}</span>
+                  Comparación{' '}
+                  {isPro
+                    ? <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.6875rem' }}>Pro</span>
+                    : <span style={{ color: 'var(--muted)', fontWeight: 400 }}>{slotsUsados}/{FREE_LIMIT}</span>
+                  }
                 </span>
                 {productos.length > 0 && (
                   <button
