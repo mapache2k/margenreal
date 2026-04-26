@@ -32,14 +32,16 @@ export default function ProLayout({ children }: { children: ReactNode }) {
       <style>{`
         .pro-subnav {
           border-bottom: 1px solid var(--border);
-          padding: 0 40px;
-          display: flex;
-          gap: 4px;
           background: var(--bg);
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
         }
-        @media(max-width:640px){ .pro-subnav { padding: 0 20px; } }
+        .pro-subnav-inner {
+          display: flex; gap: 4px;
+          max-width: 920px; margin: 0 auto;
+          padding: 0 40px;
+        }
+        @media(max-width:640px){ .pro-subnav-inner { padding: 0 20px; } }
 
         .pro-tab {
           display: inline-flex; align-items: center; gap: 7px;
@@ -56,15 +58,18 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-tab-lock { font-size: 0.625rem; opacity: 0.5; }
 
         .pro-metrics-bar {
-          display: flex; align-items: center; gap: 6px;
-          padding: 10px 40px;
           border-bottom: 1px solid var(--border);
           background: var(--bg);
           overflow-x: auto; -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
         }
         .pro-metrics-bar::-webkit-scrollbar { display: none; }
-        @media(max-width:640px){ .pro-metrics-bar { padding: 10px 20px; } }
+        .pro-metrics-inner {
+          display: flex; align-items: center; gap: 6px;
+          max-width: 920px; margin: 0 auto;
+          padding: 10px 40px;
+        }
+        @media(max-width:640px){ .pro-metrics-inner { padding: 10px 20px; } }
 
         .pm-card {
           position: relative; overflow: hidden;
@@ -94,7 +99,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
       `}</style>
 
       {/* Step tabs */}
-      <div className="pro-subnav">
+      <div className="pro-subnav"><div className="pro-subnav-inner">
         {STEPS.map(step => {
           const isActive = step.exact
             ? router.pathname === step.href
@@ -112,7 +117,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
             </Link>
           );
         })}
-      </div>
+      </div></div>
 
       {/* Metrics bar — only when data exists */}
       {calc && (() => {
@@ -124,7 +129,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         const flujoV   = calc.monthlyNetCashFlow >= 0 ? 'c-highlight' : 'c-danger';
         const colVal   = (v: string) => v === 'c-highlight' ? 'var(--accent)' : v === 'c-danger' ? 'var(--danger)' : 'var(--warning)';
         return (
-          <div className="pro-metrics-bar">
+          <div className="pro-metrics-bar"><div className="pro-metrics-inner">
             {/* Score */}
             <div className={`pm-card ${scoreVariant}`} style={{ minWidth: 110 }}>
               <span className="pm-lbl">Score de salud</span>
@@ -161,7 +166,7 @@ export default function ProLayout({ children }: { children: ReactNode }) {
               <span className="pm-val" style={{ color: colVal(flujoV) }}>{fmtCLP(calc.monthlyNetCashFlow)}</span>
               <span className="pm-sub">Después de deuda</span>
             </div>
-          </div>
+          </div></div>
         );
       })()}
 
