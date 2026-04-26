@@ -89,8 +89,10 @@ export default function CalculadoraML() {
     return n.toFixed(1).replace('.', ',') + '%';
   };
 
+  const FREE_LIMIT = 3;
+
   const handleAgregarProducto = () => {
-    if (!resultado) return;
+    if (!resultado || productos.length >= FREE_LIMIT) return;
     const catLabel = ML_CATEGORIAS[categoria].label;
     setProductos(prev => {
       const nuevo: ProductoGuardado = {
@@ -263,12 +265,23 @@ export default function CalculadoraML() {
 
             {/* Control — Agregar a comparación */}
             {resultado && (
-              <button className="btn-agregar" style={{ marginTop: 12 }} onClick={handleAgregarProducto}>
-                {productos.length > 0
-                  ? `+ Agregar · ${productos.length} producto${productos.length > 1 ? 's' : ''} en comparación`
-                  : '+ Comparar con otros productos'
-                }
-              </button>
+              productos.length >= FREE_LIMIT ? (
+                <Link
+                  href="/pricing"
+                  className="btn-agregar"
+                  style={{ marginTop: 12, display: 'block', textAlign: 'center', textDecoration: 'none', opacity: 1, background: 'var(--surface)', border: '1.5px solid var(--border)', color: 'var(--accent)' }}
+                  onClick={() => posthog.capture('free_limit_hit', { source: 'calculadora', limit: FREE_LIMIT })}
+                >
+                  🔒 Límite gratis ({FREE_LIMIT} productos) · Ver plan completo →
+                </Link>
+              ) : (
+                <button className="btn-agregar" style={{ marginTop: 12 }} onClick={handleAgregarProducto}>
+                  {productos.length > 0
+                    ? `+ Agregar · ${productos.length}/${FREE_LIMIT} productos`
+                    : '+ Comparar con otros productos'
+                  }
+                </button>
+              )
             )}
           </div>
 
@@ -550,6 +563,26 @@ export default function CalculadoraML() {
                 </tbody>
               </table>
             </div>
+            {productos.length >= FREE_LIMIT && (
+              <div style={{ padding: '20px 24px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' as const }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--text)', marginBottom: 4 }}>
+                    🔒 Límite del plan gratis ({FREE_LIMIT} productos)
+                  </div>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>
+                    Desbloqueá comparación ilimitada y análisis completo de tu catálogo.
+                  </div>
+                </div>
+                <Link
+                  href="/pricing"
+                  className="btn btn-primary"
+                  style={{ textDecoration: 'none', whiteSpace: 'nowrap' as const, flexShrink: 0 }}
+                  onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion_table', limit: FREE_LIMIT })}
+                >
+                  Ver plan completo →
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
