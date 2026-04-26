@@ -12,16 +12,17 @@ const fmtCLP = (n: number) => {
   return `$${Math.round(n)}`;
 };
 const fmt = (n: number, d = 1) => new Intl.NumberFormat('es-CL', { maximumFractionDigits: d }).format(n);
-const scoreColor = (s: number) => s >= 70 ? '#2dd4a0' : s >= 40 ? '#f0b429' : '#e85555';
+const scoreColor = (s: number) => s >= 70 ? '#f9d71b' : s >= 40 ? '#f0b429' : '#ef4444';
 const scoreLabel = (s: number) => s >= 70 ? 'Negocio sólido' : s >= 40 ? 'Zona de riesgo' : 'Alerta crítica';
 const runwayLabel = (r: number) => !isFinite(r) || r > 999 ? '∞' : `${fmt(r)} m`;
-const sensColor = (v: number) => v > 0 ? '#2dd4a0' : v < 0 ? '#e85555' : '#f0b429';
 
-const cardColor = (variant: 'g' | 'r' | 'y' | 'n') => {
-  if (variant === 'g') return { border: 'rgba(45,212,160,.3)', bg: 'rgba(45,212,160,.05)', val: '#2dd4a0' };
-  if (variant === 'r') return { border: 'rgba(232,85,85,.3)', bg: 'rgba(232,85,85,.05)', val: '#e85555' };
-  if (variant === 'y') return { border: 'rgba(240,180,41,.3)', bg: 'rgba(240,180,41,.05)', val: '#f0b429' };
-  return { border: 'var(--border)', bg: 'var(--surface)', val: 'var(--text)' };
+type KpiVariant = 'highlight' | 'danger' | 'warning' | 'neutral';
+
+const badgeText: Record<KpiVariant, string> = {
+  highlight: '● Saludable',
+  danger:    '● Crítico',
+  warning:   '● Riesgo',
+  neutral:   '— Neutro',
 };
 
 export default function Diagnostico() {
@@ -43,69 +44,124 @@ export default function Diagnostico() {
   const minCash = Math.min(...cashValues, 0);
   const range = maxCash - minCash || 1;
 
-  const baseFinal = projection.months[projection.months.length - 1]?.cash ?? 0;
-  const optFinal = baseFinal + calc.ebitda * 0.1 * 12;
+  const baseFinal   = projection.months[projection.months.length - 1]?.cash ?? 0;
+  const optFinal    = baseFinal + calc.ebitda * 0.1 * 12;
   const stressFinal = baseFinal - Math.abs(calc.ebitda) * 0.1 * 12;
 
   const actionColor = (type: string) => {
-    if (type === 'urgent')    return { bg: 'rgba(232,85,85,.08)', border: 'rgba(232,85,85,.25)', dot: '#e85555', tag: 'URGENTE' };
-    if (type === 'near_term') return { bg: 'rgba(240,180,41,.08)', border: 'rgba(240,180,41,.25)', dot: '#f0b429', tag: 'IMPORTANTE' };
-    return { bg: 'rgba(45,212,160,.08)', border: 'rgba(45,212,160,.25)', dot: '#2dd4a0', tag: 'OPTIMIZAR' };
+    if (type === 'urgent')    return { bg: 'rgba(239,68,68,.07)',  border: 'rgba(239,68,68,.22)',  dot: '#ef4444', tag: 'URGENTE' };
+    if (type === 'near_term') return { bg: 'rgba(245,158,11,.07)', border: 'rgba(245,158,11,.22)', dot: '#f0b429', tag: 'IMPORTANTE' };
+    return                           { bg: 'rgba(249,215,27,.05)', border: 'rgba(249,215,27,.18)', dot: '#f9d71b', tag: 'OPTIMIZAR' };
   };
 
-  const MetricCard = ({ label, value, sub, variant, extra }: { label: string; value: string; sub?: string; variant: 'g'|'r'|'y'|'n'; extra?: React.ReactNode }) => {
-    const c = cardColor(variant);
-    return (
-      <div className="metric-card" style={{ borderColor: c.border, background: c.bg }}>
-        <div className="metric-lbl">{label}</div>
-        <span className="metric-val" style={{ color: c.val }}>{value}</span>
-        {sub && <div className="metric-sub">{sub}</div>}
-        {extra}
+  const MetricCard = ({ label, value, sub, variant, extra }: {
+    label: string; value: string; sub?: string; variant: KpiVariant; extra?: React.ReactNode;
+  }) => (
+    <div className={`pro-kpi kpi-${variant}`}>
+      <div className="kpi-head">
+        <div className="kpi-label">{label}</div>
+        <span className={`kpi-badge kpi-badge-${variant}`}>{badgeText[variant]}</span>
       </div>
-    );
-  };
+      <div className={`kpi-val kpi-val-${variant}`}>{value}</div>
+      {sub && <div className="kpi-sub">{sub}</div>}
+      {extra && <div style={{ marginTop: 10 }}>{extra}</div>}
+    </div>
+  );
 
   return (
     <ProLayout>
       <style>{`
-        .score-hero { display:flex; align-items:center; gap:20px; padding:20px 24px; border-radius:16px; border:1px solid transparent; margin-bottom:20px; }
-        .score-num-big { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,3.5rem); font-weight:900; letter-spacing:-0.04em; line-height:1; }
-        .score-info { flex:1; }
-        .score-lbl { font-family:var(--font-display); font-size:1rem; font-weight:800; margin-bottom:8px; }
-        .score-track { height:4px; background:var(--border); border-radius:999px; overflow:hidden; }
-        .score-fill { height:100%; border-radius:999px; transition:width 1s cubic-bezier(.16,1,.3,1); }
-        .score-sub { font-size:0.6875rem; color:var(--muted-2); margin-top:6px; }
+        /* ── Pro KPI card system ─────────────────────────────── */
+        .pro-kpi {
+          position:relative; overflow:hidden;
+          border-radius:14px; border:1px solid var(--border);
+          background:var(--surface);
+          padding:16px 18px 16px 22px;
+          transition:border-color .2s,box-shadow .2s;
+        }
+        .pro-kpi::before {
+          content:''; position:absolute;
+          left:0; top:14px; bottom:14px;
+          width:3px; border-radius:0 2px 2px 0;
+          background:var(--border);
+        }
+        .kpi-highlight { border-color:rgba(249,215,27,.22); background:linear-gradient(135deg,rgba(249,215,27,.06) 0%,var(--surface) 55%); }
+        .kpi-highlight::before { background:var(--accent); }
+        .kpi-danger    { border-color:rgba(239,68,68,.28); background:linear-gradient(135deg,rgba(239,68,68,.07) 0%,var(--surface) 55%); }
+        .kpi-danger::before    { background:var(--danger); }
+        .kpi-warning   { border-color:rgba(245,158,11,.22); background:linear-gradient(135deg,rgba(245,158,11,.06) 0%,var(--surface) 55%); }
+        .kpi-warning::before   { background:var(--warning); }
+        .kpi-neutral::before   { background:var(--border); }
+
+        .kpi-head  { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
+        .kpi-label { font-size:.5625rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); }
+        .kpi-badge { font-size:.45rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:2px 7px; border-radius:4px; white-space:nowrap; }
+        .kpi-badge-highlight { color:var(--accent);   background:rgba(249,215,27,.08); border:1px solid rgba(249,215,27,.2); }
+        .kpi-badge-danger    { color:var(--danger);   background:rgba(239,68,68,.07);  border:1px solid rgba(239,68,68,.22); }
+        .kpi-badge-warning   { color:var(--warning);  background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.22); }
+        .kpi-badge-neutral   { color:var(--muted-2);  background:rgba(255,255,255,.02);border:1px solid var(--border); }
+
+        .kpi-val { font-family:var(--font-display); font-size:1.75rem; font-weight:900; letter-spacing:-.04em; line-height:1; margin-bottom:5px; }
+        .kpi-val-highlight { color:var(--accent); }
+        .kpi-val-danger    { color:var(--danger); }
+        .kpi-val-warning   { color:var(--warning); }
+        .kpi-val-neutral   { color:var(--text); }
+        .kpi-sub { font-size:.6875rem; color:var(--muted-2); line-height:1.4; }
+
+        /* ── Runway bar ───────────────────────────────────────── */
+        .runway-track { height:3px; background:var(--border); border-radius:999px; overflow:hidden; }
+        .runway-fill  { height:100%; border-radius:999px; transition:width 1s cubic-bezier(.16,1,.3,1); }
+
+        /* ── Score hero ───────────────────────────────────────── */
+        .score-hero    { display:flex; align-items:center; gap:20px; padding:20px 24px; border-radius:16px; border:1px solid transparent; margin-bottom:20px; }
+        .score-num-big { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,3.5rem); font-weight:900; letter-spacing:-.04em; line-height:1; }
+        .score-info    { flex:1; }
+        .score-lbl     { font-family:var(--font-display); font-size:1rem; font-weight:800; margin-bottom:8px; }
+        .score-track   { height:4px; background:var(--border); border-radius:999px; overflow:hidden; }
+        .score-fill    { height:100%; border-radius:999px; transition:width 1s cubic-bezier(.16,1,.3,1); }
+        .score-sub     { font-size:.6875rem; color:var(--muted-2); margin-top:6px; }
+
+        /* ── Projection chart ─────────────────────────────────── */
         .proj-chart { display:flex; align-items:flex-end; gap:3px; height:80px; margin-top:12px; }
-        .proj-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
-        .proj-bar { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
-        .proj-lbl { font-size:0.5rem; color:var(--muted-2); line-height:1; }
+        .proj-col   { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+        .proj-bar   { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
+        .proj-lbl   { font-size:.5rem; color:var(--muted-2); line-height:1; }
+
+        /* ── Scenario cards ───────────────────────────────────── */
         .sc-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px; }
         @media(max-width:480px){ .sc-grid { grid-template-columns:1fr; } }
-        .sc-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px 12px; text-align:center; }
-        .sc-tag { font-size:0.5rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted-2); margin-bottom:8px; }
-        .sc-val { font-family:var(--font-display); font-size:1rem; font-weight:800; letter-spacing:-0.02em; color:var(--text); }
-        .sc-sub { font-size:0.625rem; color:var(--muted-2); margin-top:4px; }
+        .sc-card { border-radius:12px; padding:16px 14px; text-align:center; border:1px solid var(--border); background:var(--bg); }
+        .sc-tag  { font-size:.5rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); margin-bottom:10px; }
+        .sc-val  { font-family:var(--font-display); font-size:1.125rem; font-weight:900; letter-spacing:-.03em; color:var(--text); }
+        .sc-sub  { font-size:.625rem; color:var(--muted-2); margin-top:5px; }
+
+        /* ── Sensitivity grid ─────────────────────────────────── */
         .sens-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
         @media(max-width:480px){ .sens-grid { grid-template-columns:1fr; } }
-        .action-item { display:flex; flex-direction:column; gap:6px; padding:12px; border-radius:8px; border:1px solid transparent; margin-bottom:8px; }
+
+        /* ── Action plan ──────────────────────────────────────── */
+        .action-item  { display:flex; flex-direction:column; gap:6px; padding:14px; border-radius:10px; border:1px solid transparent; margin-bottom:8px; }
         .action-item:last-child { margin-bottom:0; }
-        .action-tag { display:inline-flex; align-items:center; gap:5px; align-self:flex-start; font-size:0.5rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; padding:3px 7px; border-radius:4px; }
-        .action-dot { width:4px; height:4px; border-radius:50%; }
-        .action-title { font-size:0.875rem; font-weight:600; color:var(--text); line-height:1.5; }
-        .action-desc { font-size:0.8125rem; color:var(--muted); line-height:1.65; }
-        .wc-row { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; }
-        .wc-item { text-align:center; flex:1; }
-        .wc-val { font-family:var(--font-display); font-size:1.375rem; font-weight:800; letter-spacing:-0.02em; }
-        .wc-lbl { font-size:0.5625rem; color:var(--muted-2); margin-top:4px; text-transform:uppercase; letter-spacing:0.08em; }
-        .wc-div { color:var(--border); font-size:1rem; }
-        .runway-track { height:3px; background:var(--border); border-radius:999px; overflow:hidden; margin-top:8px; }
-        .runway-fill { height:100%; border-radius:999px; transition:width 1s cubic-bezier(.16,1,.3,1); }
+        .action-tag   { display:inline-flex; align-items:center; gap:5px; align-self:flex-start; font-size:.5rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:3px 8px; border-radius:4px; }
+        .action-dot   { width:4px; height:4px; border-radius:50%; flex-shrink:0; }
+        .action-title { font-size:.875rem; font-weight:700; color:var(--text); line-height:1.5; }
+        .action-desc  { font-size:.8125rem; color:var(--muted); line-height:1.65; }
+
+        /* ── Working capital flow ─────────────────────────────── */
+        .wc-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:8px; margin-top:12px; }
+        @media(max-width:480px){ .wc-flow { grid-template-columns:1fr; gap:4px; } }
+        .wc-flow-arrow { color:var(--muted-2); font-size:.875rem; text-align:center; padding:0 2px; }
+        @media(max-width:480px){ .wc-flow-arrow { display:none; } }
+        .wc-box { text-align:center; padding:14px 12px; border-radius:12px; border:1px solid var(--border); }
+        .wc-box-lbl  { font-size:.5rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+        .wc-box-val  { font-family:var(--font-display); font-size:1.625rem; font-weight:900; letter-spacing:-.04em; line-height:1; }
+        .wc-box-sub  { font-size:.6rem; color:var(--muted-2); margin-top:5px; }
       `}</style>
 
       <div className="home-content">
 
         {/* Score hero */}
-        <div className="score-hero" style={{ background: `${col}10`, borderColor: `${col}25` }}>
+        <div className="score-hero" style={{ background: `${col}12`, borderColor: `${col}28` }}>
           <div className="score-num-big" style={{ color: col }}>{s}</div>
           <div className="score-info">
             <div className="score-lbl" style={{ color: col }}>{scoreLabel(s)}</div>
@@ -117,7 +173,7 @@ export default function Diagnostico() {
         </div>
 
         {/* AI diagnosis */}
-        <div className="diag-card" style={{ position: 'relative', overflow: 'hidden', marginBottom: 16 }}>
+        <div className="diag-card" style={{ position: 'relative', overflow: 'hidden', marginBottom: 20 }}>
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,rgba(249,215,27,.2),transparent)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <div style={{ width: 30, height: 30, borderRadius: 7, background: 'rgba(249,215,27,.08)', border: '1px solid rgba(249,215,27,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontSize: '0.8125rem' }}>✦</div>
@@ -136,46 +192,94 @@ export default function Diagnostico() {
           )}
         </div>
 
-        {/* Metric cards */}
-        <div className="metrics-grid">
-          <MetricCard label="EBITDA mensual" value={fmtCLP(calc.ebitda)} sub={calc.ebitda >= 0 ? 'Operación rentable' : 'Pérdida operacional'} variant={calc.ebitda >= 0 ? 'g' : 'r'} />
+        {/* KPI Metric cards */}
+        <div className="metrics-grid" style={{ marginBottom: 16 }}>
           <MetricCard
-            label="Runway" value={runwayLabel(calc.runway)} sub="Con caja ajustada" variant={calc.runway > 12 || !isFinite(calc.runway) ? 'g' : calc.runway > 3 ? 'y' : 'r'}
+            label="EBITDA mensual"
+            value={fmtCLP(calc.ebitda)}
+            sub={calc.ebitda >= 0 ? 'Operación rentable' : 'Pérdida operacional'}
+            variant={calc.ebitda >= 0 ? 'highlight' : 'danger'}
+          />
+          <MetricCard
+            label="Runway"
+            value={runwayLabel(calc.runway)}
+            sub="Con caja ajustada"
+            variant={calc.runway > 12 || !isFinite(calc.runway) ? 'highlight' : calc.runway > 3 ? 'warning' : 'danger'}
             extra={
               <div className="runway-track">
-                <div className="runway-fill" style={{ width: `${Math.min(100, isFinite(calc.runway) ? (calc.runway/24)*100 : 100)}%`, background: calc.runway > 12 || !isFinite(calc.runway) ? '#2dd4a0' : calc.runway > 3 ? '#f0b429' : '#e85555' }} />
+                <div className="runway-fill" style={{
+                  width: `${Math.min(100, isFinite(calc.runway) ? (calc.runway / 24) * 100 : 100)}%`,
+                  background: calc.runway > 12 || !isFinite(calc.runway) ? 'var(--accent)' : calc.runway > 3 ? 'var(--warning)' : 'var(--danger)',
+                }} />
               </div>
             }
           />
-          <MetricCard label="Margen bruto" value={`${calc.grossMarginPct.toFixed(1)}%`} sub={`${fmtCLP(calc.grossProfit)} / mes`} variant={calc.grossMarginPct >= 30 ? 'g' : calc.grossMarginPct >= 20 ? 'y' : 'r'} />
-          <MetricCard label="Flujo neto mensual" value={fmtCLP(calc.monthlyNetCashFlow)} sub="Después de deuda" variant={calc.monthlyNetCashFlow >= 0 ? 'g' : 'r'} />
-          <MetricCard label="Punto de equilibrio" value={isFinite(calc.breakevenRevenue) ? fmtCLP(calc.breakevenRevenue) : '—'} sub={calc.revenueGap && calc.revenueGap > 0 ? `Faltan ${fmtCLP(calc.revenueGap)}` : 'Ya superaste el umbral'} variant="n" />
-          <MetricCard label="Brecha capital trabajo" value={`${calc.wcGapDays} días`} sub={calc.wcGapDays > 0 ? `${fmtCLP(calc.wcCashTied)} atrapados` : 'Ciclo favorable'} variant={calc.wcGapDays <= 0 ? 'g' : calc.wcGapDays <= 15 ? 'y' : 'r'} />
+          <MetricCard
+            label="Margen bruto"
+            value={`${calc.grossMarginPct.toFixed(1)}%`}
+            sub={`${fmtCLP(calc.grossProfit)} / mes`}
+            variant={calc.grossMarginPct >= 30 ? 'highlight' : calc.grossMarginPct >= 20 ? 'warning' : 'danger'}
+          />
+          <MetricCard
+            label="Flujo neto mensual"
+            value={fmtCLP(calc.monthlyNetCashFlow)}
+            sub="Después de deuda"
+            variant={calc.monthlyNetCashFlow >= 0 ? 'highlight' : 'danger'}
+          />
+          <MetricCard
+            label="Punto de equilibrio"
+            value={isFinite(calc.breakevenRevenue) ? fmtCLP(calc.breakevenRevenue) : '—'}
+            sub={calc.revenueGap && calc.revenueGap > 0 ? `Faltan ${fmtCLP(calc.revenueGap)}` : 'Ya superaste el umbral'}
+            variant="neutral"
+          />
+          <MetricCard
+            label="Brecha capital trabajo"
+            value={`${calc.wcGapDays} días`}
+            sub={calc.wcGapDays > 0 ? `${fmtCLP(calc.wcCashTied)} atrapados` : 'Ciclo favorable'}
+            variant={calc.wcGapDays <= 0 ? 'highlight' : calc.wcGapDays <= 15 ? 'warning' : 'danger'}
+          />
         </div>
 
-        {/* Working capital */}
+        {/* Working capital — flow diagram */}
         <div className="chart-card">
-          <div className="chart-lbl">Capital de trabajo</div>
-          <div className="wc-row">
-            <div className="wc-item">
-              <div className="wc-val" style={{ color: '#e85555' }}>{calc.arDays}d</div>
-              <div className="wc-lbl">Cobrar</div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+            <div className="chart-lbl" style={{ margin: 0 }}>Ciclo de capital de trabajo</div>
+            <span style={{
+              fontSize: '0.5rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase',
+              padding: '3px 9px', borderRadius: 5, whiteSpace: 'nowrap',
+              color: calc.wcGapDays > 0 ? 'var(--warning)' : 'var(--accent)',
+              background: calc.wcGapDays > 0 ? 'rgba(245,158,11,.08)' : 'rgba(249,215,27,.08)',
+              border: `1px solid ${calc.wcGapDays > 0 ? 'rgba(245,158,11,.22)' : 'rgba(249,215,27,.2)'}`,
+            }}>
+              {calc.wcGapDays > 0 ? `${calc.wcGapDays}d financiado` : '✓ Favorable'}
+            </span>
+          </div>
+          <div className="wc-flow">
+            <div className="wc-box" style={{ background: 'rgba(239,68,68,.05)', borderColor: 'rgba(239,68,68,.2)' }}>
+              <div className="wc-box-lbl" style={{ color: 'var(--danger)' }}>DSO — Cobrar</div>
+              <div className="wc-box-val" style={{ color: 'var(--danger)' }}>{calc.arDays}d</div>
+              <div className="wc-box-sub">Días promedio para cobrar</div>
             </div>
-            <div className="wc-div">→</div>
-            <div className="wc-item">
-              <div className="wc-val" style={{ color: '#2dd4a0' }}>{calc.apDays}d</div>
-              <div className="wc-lbl">Pagar</div>
+            <div className="wc-flow-arrow">→</div>
+            <div className="wc-box" style={{ background: 'rgba(249,215,27,.04)', borderColor: 'rgba(249,215,27,.15)' }}>
+              <div className="wc-box-lbl" style={{ color: 'var(--accent)' }}>DPO — Pagar</div>
+              <div className="wc-box-val" style={{ color: 'var(--accent)' }}>{calc.apDays}d</div>
+              <div className="wc-box-sub">Días promedio para pagar</div>
             </div>
-            <div className="wc-div">=</div>
-            <div className="wc-item">
-              <div className="wc-val" style={{ color: calc.wcGapDays > 0 ? '#f0b429' : '#2dd4a0' }}>{calc.wcGapDays}d</div>
-              <div className="wc-lbl">Brecha</div>
+            <div className="wc-flow-arrow">=</div>
+            <div className="wc-box" style={{
+              background: calc.wcGapDays > 0 ? 'rgba(245,158,11,.05)' : 'rgba(249,215,27,.04)',
+              borderColor: calc.wcGapDays > 0 ? 'rgba(245,158,11,.22)' : 'rgba(249,215,27,.15)',
+            }}>
+              <div className="wc-box-lbl" style={{ color: calc.wcGapDays > 0 ? 'var(--warning)' : 'var(--accent)' }}>Brecha neta</div>
+              <div className="wc-box-val" style={{ color: calc.wcGapDays > 0 ? 'var(--warning)' : 'var(--accent)' }}>{calc.wcGapDays}d</div>
+              <div className="wc-box-sub">{calc.wcGapDays > 0 ? 'Días que financias' : 'Ciclo favorable'}</div>
             </div>
           </div>
           {calc.wcGapDays > 0 && (
-            <div style={{ fontSize: '0.8125rem', color: 'var(--muted)', lineHeight: 1.6, marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
-              <strong style={{ color: 'var(--text)' }}>{fmtCLP(calc.wcCashTied)}</strong> atrapados en el ciclo.
-              Tu caja real es <strong style={{ color: 'var(--text)' }}>{fmtCLP(calc.cashAdjustedStart)}</strong>, no {fmtCLP(calc.cashOnHand)}.
+            <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(245,158,11,.04)', border: '1px solid rgba(245,158,11,.14)', borderRadius: 8, fontSize: '0.8125rem', color: 'var(--muted)', lineHeight: 1.65 }}>
+              <strong style={{ color: 'var(--text)' }}>{fmtCLP(calc.wcCashTied)}</strong> atrapados en el ciclo. Tu caja real es{' '}
+              <strong style={{ color: 'var(--text)' }}>{fmtCLP(calc.cashAdjustedStart)}</strong>, no {fmtCLP(calc.cashOnHand)}.
             </div>
           )}
         </div>
@@ -189,7 +293,7 @@ export default function Diagnostico() {
               const h = Math.max(4, norm * 0.85);
               return (
                 <div key={i} className="proj-col" title={`Mes ${m.month}: ${fmtCLP(m.cash)}`}>
-                  <div className="proj-bar" style={{ height: `${h}%`, background: m.cash >= 0 ? '#2dd4a0' : '#e85555', opacity: 0.85 }} />
+                  <div className="proj-bar" style={{ height: `${h}%`, background: m.cash >= 0 ? 'var(--accent)' : 'var(--danger)', opacity: 0.85 }} />
                   {(i === 0 || (i + 1) % 3 === 0) && <div className="proj-lbl">M{m.month}</div>}
                 </div>
               );
@@ -205,9 +309,9 @@ export default function Diagnostico() {
         <div className="chart-card">
           <div className="chart-lbl">Escenarios — caja al mes 12</div>
           <div className="sc-grid">
-            <div className="sc-card" style={{ borderColor: 'rgba(232,85,85,.2)', background: 'rgba(232,85,85,.04)' }}>
-              <div className="sc-tag" style={{ color: '#e85555' }}>↓ Estrés −10%</div>
-              <div className="sc-val" style={{ color: '#e85555' }}>{fmtCLP(stressFinal)}</div>
+            <div className="sc-card" style={{ borderColor: 'rgba(239,68,68,.22)', background: 'rgba(239,68,68,.05)' }}>
+              <div className="sc-tag" style={{ color: 'var(--danger)' }}>↓ Estrés −10%</div>
+              <div className="sc-val" style={{ color: 'var(--danger)' }}>{fmtCLP(stressFinal)}</div>
               <div className="sc-sub">Ventas −10%</div>
             </div>
             <div className="sc-card">
@@ -215,9 +319,9 @@ export default function Diagnostico() {
               <div className="sc-val">{fmtCLP(baseFinal)}</div>
               <div className="sc-sub">Sin cambios</div>
             </div>
-            <div className="sc-card" style={{ borderColor: 'rgba(45,212,160,.2)', background: 'rgba(45,212,160,.04)' }}>
-              <div className="sc-tag" style={{ color: '#2dd4a0' }}>↑ Optimista +10%</div>
-              <div className="sc-val" style={{ color: '#2dd4a0' }}>{fmtCLP(optFinal)}</div>
+            <div className="sc-card" style={{ borderColor: 'rgba(249,215,27,.22)', background: 'rgba(249,215,27,.05)' }}>
+              <div className="sc-tag" style={{ color: 'var(--accent)' }}>↑ Optimista +10%</div>
+              <div className="sc-val" style={{ color: 'var(--accent)' }}>{fmtCLP(optFinal)}</div>
               <div className="sc-sub">Ventas +10%</div>
             </div>
           </div>
@@ -230,20 +334,23 @@ export default function Diagnostico() {
             { lbl: 'Ventas −20%', val: calc.sensitivities.ebitda_minus20 },
             { lbl: 'Ventas −10%', val: calc.sensitivities.ebitda_minus10 },
             { lbl: 'Ventas +10%', val: calc.sensitivities.ebitda_plus10 },
-          ].map((item, i) => (
-            <div key={i} className="metric-card" style={{ textAlign: 'center' }}>
-              <div className="metric-lbl">{item.lbl}</div>
-              <span className="metric-val" style={{ color: sensColor(item.val) }}>{fmtCLP(item.val)}</span>
-              <div className="metric-sub">EBITDA resultante</div>
-            </div>
-          ))}
+          ].map((item, i) => {
+            const sv: KpiVariant = item.val > 0 ? 'highlight' : item.val < 0 ? 'danger' : 'warning';
+            return (
+              <div key={i} className={`pro-kpi kpi-${sv}`} style={{ textAlign: 'center' }}>
+                <div className="kpi-label" style={{ marginBottom: 8, display: 'block' }}>{item.lbl}</div>
+                <div className={`kpi-val kpi-val-${sv}`} style={{ fontSize: '1.25rem' }}>{fmtCLP(item.val)}</div>
+                <div className="kpi-sub" style={{ marginTop: 4 }}>EBITDA resultante</div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Action plan */}
         <div className="form-card">
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--text)', marginBottom: 14, letterSpacing: '-0.02em' }}>Plan de acción</div>
           {actions.length === 0 ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: 'rgba(45,212,160,.06)', border: '1px solid rgba(45,212,160,.2)', borderRadius: 8, fontSize: '0.875rem', color: '#2dd4a0' }}>✓ Sin alertas críticas. Enfócate en crecer.</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: 'rgba(249,215,27,.06)', border: '1px solid rgba(249,215,27,.15)', borderRadius: 8, fontSize: '0.875rem', color: 'var(--accent)' }}>✓ Sin alertas críticas. Enfócate en crecer.</div>
           ) : actions.map((a, i) => {
             const c = actionColor(a.type);
             return (

@@ -119,6 +119,24 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
         .fc-bar { width:100%; border-radius:2px 2px 0 0; min-height:3px; flex-shrink:0; }
         .fc-lbl { font-size:0.5rem; color:var(--muted-2); line-height:1; flex-shrink:0; }
         @keyframes fc-pulse { 0%,100%{opacity:0.15;transform:scale(0.8);}50%{opacity:1;transform:scale(1);} }
+        .pro-kpi { position:relative; overflow:hidden; border-radius:14px; border:1px solid var(--border); background:var(--surface); padding:16px 18px 16px 22px; }
+        .pro-kpi::before { content:''; position:absolute; left:0; top:14px; bottom:14px; width:3px; border-radius:0 2px 2px 0; background:var(--border); }
+        .kpi-highlight { border-color:rgba(249,215,27,.22); background:linear-gradient(135deg,rgba(249,215,27,.06) 0%,var(--surface) 55%); }
+        .kpi-highlight::before { background:var(--accent); }
+        .kpi-danger  { border-color:rgba(239,68,68,.28); background:linear-gradient(135deg,rgba(239,68,68,.07) 0%,var(--surface) 55%); }
+        .kpi-danger::before  { background:var(--danger); }
+        .kpi-neutral::before { background:var(--border); }
+        .kpi-label { font-size:.5625rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); display:block; margin-bottom:8px; }
+        .kpi-badge { font-size:.45rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:2px 7px; border-radius:4px; white-space:nowrap; }
+        .kpi-badge-highlight { color:var(--accent);  background:rgba(249,215,27,.08); border:1px solid rgba(249,215,27,.2); }
+        .kpi-badge-danger    { color:var(--danger);  background:rgba(239,68,68,.07);  border:1px solid rgba(239,68,68,.22); }
+        .kpi-badge-neutral   { color:var(--muted-2); background:rgba(255,255,255,.02);border:1px solid var(--border); }
+        .kpi-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
+        .kpi-val { font-family:var(--font-display); font-size:1.75rem; font-weight:900; letter-spacing:-.04em; line-height:1; margin-bottom:4px; }
+        .kpi-val-highlight { color:var(--accent); }
+        .kpi-val-danger    { color:var(--danger); }
+        .kpi-val-neutral   { color:var(--text); }
+        .kpi-sub { font-size:.6875rem; color:var(--muted-2); line-height:1.4; }
       `}</style>
 
       <div className="home-content">
@@ -163,20 +181,29 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
           <div>
             <div className="chart-lbl" style={{ marginBottom: 10 }}>Proyección a {assumptions.horizon} meses</div>
             <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: 14 }}>
-              <div className="metric-card">
-                <div className="metric-lbl">Ventas mes {assumptions.horizon}</div>
-                <span className="metric-val">{fmtCLP(lastPoint?.revenue??0)}</span>
-                <div className="metric-sub">vs {fmtCLP(calc.revenue)} hoy</div>
+              <div className="pro-kpi kpi-neutral">
+                <div className="kpi-head">
+                  <div className="kpi-label" style={{ margin:0 }}>Ventas mes {assumptions.horizon}</div>
+                  <span className="kpi-badge kpi-badge-neutral">Proyectado</span>
+                </div>
+                <div className="kpi-val kpi-val-neutral">{fmtCLP(lastPoint?.revenue??0)}</div>
+                <div className="kpi-sub">vs {fmtCLP(calc.revenue)} hoy</div>
               </div>
-              <div className="metric-card">
-                <div className="metric-lbl">EBITDA mes {assumptions.horizon}</div>
-                <span className="metric-val" style={{ color: (lastPoint?.ebitda??0)>=0?'#2dd4a0':'#e85555' }}>{fmtCLP(lastPoint?.ebitda??0)}</span>
-                <div className="metric-sub">vs {fmtCLP(calc.ebitda)} hoy</div>
+              <div className={`pro-kpi ${(lastPoint?.ebitda??0)>=0?'kpi-highlight':'kpi-danger'}`}>
+                <div className="kpi-head">
+                  <div className="kpi-label" style={{ margin:0 }}>EBITDA mes {assumptions.horizon}</div>
+                  <span className={`kpi-badge ${(lastPoint?.ebitda??0)>=0?'kpi-badge-highlight':'kpi-badge-danger'}`}>{(lastPoint?.ebitda??0)>=0?'● Positivo':'● Negativo'}</span>
+                </div>
+                <div className={`kpi-val ${(lastPoint?.ebitda??0)>=0?'kpi-val-highlight':'kpi-val-danger'}`}>{fmtCLP(lastPoint?.ebitda??0)}</div>
+                <div className="kpi-sub">vs {fmtCLP(calc.ebitda)} hoy</div>
               </div>
-              <div className="metric-card">
-                <div className="metric-lbl">Caja mes {assumptions.horizon}</div>
-                <span className="metric-val" style={{ color: (lastPoint?.cash??0)>=0?'#2dd4a0':'#e85555' }}>{fmtCLP(lastPoint?.cash??0)}</span>
-                <div className="metric-sub">vs {fmtCLP(calc.cashAdjustedStart)} hoy</div>
+              <div className={`pro-kpi ${(lastPoint?.cash??0)>=0?'kpi-highlight':'kpi-danger'}`}>
+                <div className="kpi-head">
+                  <div className="kpi-label" style={{ margin:0 }}>Caja mes {assumptions.horizon}</div>
+                  <span className={`kpi-badge ${(lastPoint?.cash??0)>=0?'kpi-badge-highlight':'kpi-badge-danger'}`}>{(lastPoint?.cash??0)>=0?'● Positivo':'● Negativo'}</span>
+                </div>
+                <div className={`kpi-val ${(lastPoint?.cash??0)>=0?'kpi-val-highlight':'kpi-val-danger'}`}>{fmtCLP(lastPoint?.cash??0)}</div>
+                <div className="kpi-sub">vs {fmtCLP(calc.cashAdjustedStart)} hoy</div>
               </div>
             </div>
 
@@ -201,7 +228,7 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
                   const showLabel = forecast.length <= 12 || i === 0 || (i+1) % Math.ceil(forecast.length/6) === 0;
                   return (
                     <div key={i} className="fc-col" title={`${p.label} M${p.month}: ${fmtCLP(p.cash)}`}>
-                      <div className="fc-bar" style={{ height: `${h}px`, background: p.cash>=0?'#2dd4a0':'#e85555', opacity: 0.85 }} />
+                      <div className="fc-bar" style={{ height: `${h}px`, background: p.cash>=0?'var(--accent)':'var(--danger)', opacity: 0.85 }} />
                       {showLabel && <div className="fc-lbl">{p.label}</div>}
                     </div>
                   );
@@ -222,7 +249,7 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
                     const showLabel = forecast.length <= 12 || i === 0 || (i+1) % Math.ceil(forecast.length/6) === 0;
                     return (
                       <div key={i} className="fc-col" title={`${p.label} M${p.month}: ${fmtCLP(p.ebitda)}`}>
-                        <div className="fc-bar" style={{ height: `${h}px`, background: p.ebitda>=0?'#7c6fff':'#e85555', opacity: 0.85 }} />
+                        <div className="fc-bar" style={{ height: `${h}px`, background: p.ebitda>=0?'var(--accent)':'var(--danger)', opacity: 0.85 }} />
                         {showLabel && <div className="fc-lbl">{p.label}</div>}
                       </div>
                     );

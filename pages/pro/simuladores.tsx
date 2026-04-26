@@ -85,12 +85,14 @@ function SimField({ label, value, onChange, placeholder, type = 'number' }: {
   );
 }
 
-function MiniMetric({ label, value, color, sub }: { label: string; value: string; color?: string; sub?: string }) {
+type SimVariant = 'highlight' | 'danger' | 'warning' | 'neutral';
+
+function MiniMetric({ label, value, variant = 'neutral', sub }: { label: string; value: string; variant?: SimVariant; sub?: string }) {
   return (
-    <div className="metric-card" style={{ padding: '14px 12px' }}>
-      <div className="metric-lbl">{label}</div>
-      <span className="metric-val" style={color ? { color } : undefined}>{value}</span>
-      {sub && <div className="metric-sub">{sub}</div>}
+    <div className={`pro-kpi kpi-${variant}`}>
+      <div className="kpi-label" style={{ marginBottom: 8, display: 'block' }}>{label}</div>
+      <div className={`kpi-val kpi-val-${variant}`} style={{ fontSize: '1.25rem' }}>{value}</div>
+      {sub && <div className="kpi-sub" style={{ marginTop: 4 }}>{sub}</div>}
     </div>
   );
 }
@@ -132,10 +134,10 @@ IMPACTO: Nuevo EBITDA ${fmtCLP(newEbitda)}, Nuevo flujo neto ${fmtCLP(newNet)}, 
       <SimField label="Tasa de interés anual (%)" value={rate} onChange={setRate} placeholder="12" />
       {p > 0 && (
         <div className="metrics-grid" style={{ marginTop: 8 }}>
-          <MiniMetric label="Nuevo EBITDA" value={fmtCLP(newEbitda)} color={newEbitda>=0?'#2dd4a0':'#e85555'} sub={`vs ${fmtCLP(calc.ebitda)} actual`} />
-          <MiniMetric label="Nuevo flujo neto" value={fmtCLP(newNet)} color={newNet>=0?'#2dd4a0':'#e85555'} sub="Después de deuda" />
-          <MiniMetric label="Si ventas −10%" value={fmtCLP(e10)} color={e10>=0?'#2dd4a0':'#e85555'} sub="EBITDA bajo estrés" />
-          <MiniMetric label="Si ventas −20%" value={fmtCLP(e20)} color={e20>=0?'#2dd4a0':'#e85555'} sub="EBITDA bajo estrés" />
+          <MiniMetric label="Nuevo EBITDA" value={fmtCLP(newEbitda)} variant={newEbitda>=0?'highlight':'danger'} sub={`vs ${fmtCLP(calc.ebitda)} actual`} />
+          <MiniMetric label="Nuevo flujo neto" value={fmtCLP(newNet)} variant={newNet>=0?'highlight':'danger'} sub="Después de deuda" />
+          <MiniMetric label="Si ventas −10%" value={fmtCLP(e10)} variant={e10>=0?'highlight':'danger'} sub="EBITDA bajo estrés" />
+          <MiniMetric label="Si ventas −20%" value={fmtCLP(e20)} variant={e20>=0?'highlight':'danger'} sub="EBITDA bajo estrés" />
         </div>
       )}
       <button className="btn-start" onClick={analyze} disabled={loading || !p} style={{ marginTop: 16 }}>
@@ -181,9 +183,9 @@ Nuevo EBITDA: ${fmtCLP(newEbitda)}, Ventas extra necesarias: ${fmtCLP(extraRev)}
             💡 Costo real para el negocio: <strong style={{ color: 'var(--text)' }}>{fmtCLP(totalCost)}/mes</strong> (incluye cargas ~25%)
           </div>
           <div className="metrics-grid" style={{ marginTop: 10 }}>
-            <MiniMetric label="Nuevo EBITDA" value={fmtCLP(newEbitda)} color={newEbitda>=0?'#2dd4a0':'#e85555'} sub={`vs ${fmtCLP(calc.ebitda)}`} />
+            <MiniMetric label="Nuevo EBITDA" value={fmtCLP(newEbitda)} variant={newEbitda>=0?'highlight':'danger'} sub={`vs ${fmtCLP(calc.ebitda)}`} />
             <MiniMetric label="Ventas extra necesarias" value={fmtCLP(extraRev)} sub="Para cubrir el costo" />
-            <MiniMetric label="Colchón de caja" value={`${cushion.toFixed(1)} meses`} color={cushion>=3?'#2dd4a0':'#f0b429'} sub="Para absorber el costo" />
+            <MiniMetric label="Colchón de caja" value={`${cushion.toFixed(1)} meses`} variant={cushion>=3?'highlight':'warning'} sub="Para absorber el costo" />
             <MiniMetric label="% de ventas actuales" value={`${calc.revenue>0?((totalCost/calc.revenue)*100).toFixed(1):0}%`} sub="Del ingreso mensual" />
           </div>
         </>
@@ -202,12 +204,12 @@ function CrisisModule({ calc }: { calc: CalcResult }) {
   const [loading, setLoading] = useState(false);
 
   const levers = [
-    { icon: '📈', name: 'Subir precios 5%',       impact: fmtCLP(calc.revenue*0.05*calc.contributionMarginPct)+' EBITDA', ease: 'Difícil',  easeColor: '#e85555' },
-    { icon: '⚡', name: 'Cobrar 15 días antes',    impact: fmtCLP((calc.revenue/30)*15)+' en caja',                        ease: 'Moderado', easeColor: '#f0b429' },
-    { icon: '✂️', name: 'Cortar costos fijos 10%', impact: fmtCLP(calc.fixedCosts*0.1)+' EBITDA',                          ease: 'Moderado', easeColor: '#f0b429' },
-    { icon: '🤝', name: 'Extender pagos 30 días',  impact: 'Mejora ciclo de caja',                                         ease: 'Fácil',    easeColor: '#2dd4a0' },
-    { icon: '🚀', name: 'Aumentar ventas 10%',     impact: fmtCLP(calc.revenue*0.1*calc.contributionMarginPct)+' EBITDA',  ease: 'Difícil',  easeColor: '#e85555' },
-    { icon: '💰', name: 'Cobrar cartera vencida',  impact: fmtCLP(calc.wcCashTied*0.5)+' inmediato',                       ease: 'Fácil',    easeColor: '#2dd4a0' },
+    { icon: '📈', name: 'Subir precios 5%',       impact: fmtCLP(calc.revenue*0.05*calc.contributionMarginPct)+' EBITDA', ease: 'Difícil',  easeColor: 'var(--danger)' },
+    { icon: '⚡', name: 'Cobrar 15 días antes',    impact: fmtCLP((calc.revenue/30)*15)+' en caja',                        ease: 'Moderado', easeColor: 'var(--warning)' },
+    { icon: '✂️', name: 'Cortar costos fijos 10%', impact: fmtCLP(calc.fixedCosts*0.1)+' EBITDA',                          ease: 'Moderado', easeColor: 'var(--warning)' },
+    { icon: '🤝', name: 'Extender pagos 30 días',  impact: 'Mejora ciclo de caja',                                         ease: 'Fácil',    easeColor: 'var(--accent)' },
+    { icon: '🚀', name: 'Aumentar ventas 10%',     impact: fmtCLP(calc.revenue*0.1*calc.contributionMarginPct)+' EBITDA',  ease: 'Difícil',  easeColor: 'var(--danger)' },
+    { icon: '💰', name: 'Cobrar cartera vencida',  impact: fmtCLP(calc.wcCashTied*0.5)+' inmediato',                       ease: 'Fácil',    easeColor: 'var(--accent)' },
   ];
 
   const analyze = async () => {
@@ -231,7 +233,7 @@ PALANCAS: Subir precios 5% = +${fmtCLP(calc.revenue*0.05*calc.contributionMargin
               <span style={{ fontSize: '0.9375rem' }}>{l.icon}</span>
               <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{l.name}</span>
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, color: '#2dd4a0', marginBottom: 3 }}>+{l.impact}</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--accent)', marginBottom: 3 }}>+{l.impact}</div>
             <div style={{ fontSize: '0.6875rem', color: l.easeColor }}>{l.ease}</div>
           </div>
         ))}
@@ -282,8 +284,8 @@ LO MÁS IMPORTANTE DEL MES: ${highlight||'No especificado'}
       <SimField label="¿Qué fue lo más importante del mes?" value={highlight} onChange={setHighlight} placeholder="Ej: perdimos un cliente grande..." type="text" />
       {prev > 0 && (
         <div className="metrics-grid" style={{ marginTop: 8 }}>
-          <MiniMetric label="Crecimiento ventas" value={`${revGrowth>=0?'+':''}${revGrowth.toFixed(1)}%`} color={revGrowth>=0?'#2dd4a0':'#e85555'} sub={`${fmtCLP(prev)} → ${fmtCLP(calc.revenue)}`} />
-          <MiniMetric label="Cambio EBITDA" value={`${ebitdaGrowth>=0?'+':''}${ebitdaGrowth.toFixed(1)}%`} color={ebitdaGrowth>=0?'#2dd4a0':'#e85555'} sub={`${fmtCLP(prevE)} → ${fmtCLP(calc.ebitda)}`} />
+          <MiniMetric label="Crecimiento ventas" value={`${revGrowth>=0?'+':''}${revGrowth.toFixed(1)}%`} variant={revGrowth>=0?'highlight':'danger'} sub={`${fmtCLP(prev)} → ${fmtCLP(calc.revenue)}`} />
+          <MiniMetric label="Cambio EBITDA" value={`${ebitdaGrowth>=0?'+':''}${ebitdaGrowth.toFixed(1)}%`} variant={ebitdaGrowth>=0?'highlight':'danger'} sub={`${fmtCLP(prevE)} → ${fmtCLP(calc.ebitda)}`} />
         </div>
       )}
       <button className="btn-start" onClick={analyze} disabled={loading} style={{ marginTop: 16 }}>
@@ -310,6 +312,22 @@ export default function Simuladores() {
       <style>{`
         @keyframes sim-fadeup { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         @keyframes sim-pulse  { 0%,100% { opacity:0.15; transform:scale(0.8); } 50% { opacity:1; transform:scale(1); } }
+        .pro-kpi { position:relative; overflow:hidden; border-radius:14px; border:1px solid var(--border); background:var(--surface); padding:14px 16px 14px 20px; }
+        .pro-kpi::before { content:''; position:absolute; left:0; top:12px; bottom:12px; width:3px; border-radius:0 2px 2px 0; background:var(--border); }
+        .kpi-highlight { border-color:rgba(249,215,27,.22); background:linear-gradient(135deg,rgba(249,215,27,.06) 0%,var(--surface) 55%); }
+        .kpi-highlight::before { background:var(--accent); }
+        .kpi-danger  { border-color:rgba(239,68,68,.28); background:linear-gradient(135deg,rgba(239,68,68,.07) 0%,var(--surface) 55%); }
+        .kpi-danger::before  { background:var(--danger); }
+        .kpi-warning { border-color:rgba(245,158,11,.22); background:linear-gradient(135deg,rgba(245,158,11,.06) 0%,var(--surface) 55%); }
+        .kpi-warning::before { background:var(--warning); }
+        .kpi-neutral::before { background:var(--border); }
+        .kpi-label { font-size:.5625rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); }
+        .kpi-val { font-family:var(--font-display); font-weight:900; letter-spacing:-.04em; line-height:1; }
+        .kpi-val-highlight { color:var(--accent); }
+        .kpi-val-danger    { color:var(--danger); }
+        .kpi-val-warning   { color:var(--warning); }
+        .kpi-val-neutral   { color:var(--text); }
+        .kpi-sub { font-size:.6875rem; color:var(--muted-2); line-height:1.4; }
       `}</style>
 
       <div className="home-content">

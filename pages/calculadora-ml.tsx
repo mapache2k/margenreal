@@ -673,68 +673,6 @@ export default function CalculadoraML() {
                   </Link>
                 </div>
 
-                {/* Preview multi-producto — solo usuarios free */}
-                {!isPro && (
-                  <div style={{ marginTop: 16, border: '1.5px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
-                    <div style={{ padding: '16px 20px', background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.9375rem', color: 'var(--text)', marginBottom: 4 }}>Estás viendo solo un producto</div>
-                      <div style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>Tu margen no depende de un solo producto.</div>
-                    </div>
-                    <div style={{ padding: '10px 20px', background: 'rgba(232,85,85,0.07)', borderBottom: '1px solid var(--border)', fontSize: '0.8125rem', color: '#e85555', fontWeight: 600 }}>
-                      ⚠️ Probablemente tienes productos perdiendo dinero sin darte cuenta
-                    </div>
-                    {(() => {
-                      const getEstado = (m: number) => m < 0 ? '❌ Pérdida' : m < 15 ? '⚠️ Bajo' : '✅ Saludable';
-                      const getPrioridad = (g: number, m: number) => g < 0 || m < 10 ? '🔥 Alta' : m < 20 ? '⚠️ Media' : '—';
-                      const visibleRows = [
-                        { nombre: nombre.trim() || 'Este producto', ganancia: resultado.gananciaAbsoluta, margenPct: resultado.margenPct, current: true },
-                        { nombre: 'Mochila Outdoor 45L', ganancia: -1430, margenPct: -8.4, current: false },
-                        { nombre: 'Auriculares Inalámbricos', ganancia: 5900, margenPct: 23.6, current: false },
-                      ];
-                      return (
-                        <>
-                          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '7px 16px', background: 'var(--bg)', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)', borderBottom: '1px solid var(--border)' }}>
-                            <span>Producto</span><span>Ganancia/u.</span><span>Estado</span><span>Prioridad</span>
-                          </div>
-                          {visibleRows.map((row, i) => (
-                            <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 16px', borderBottom: '1px solid var(--border)', alignItems: 'center', background: row.current ? 'rgba(249,215,27,0.04)' : 'transparent' }}>
-                              <span style={{ fontWeight: row.current ? 700 : 500, color: 'var(--text)', fontSize: '0.8125rem' }}>
-                                {row.nombre}
-                                {row.current && <span style={{ marginLeft: 6, fontSize: '0.5625rem', background: 'rgba(249,215,27,0.18)', color: 'var(--accent)', fontWeight: 800, padding: '1px 5px', borderRadius: 4 }}>tú</span>}
-                              </span>
-                              <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: row.ganancia >= 0 ? '#2dd4a0' : '#e85555' }}>
-                                {row.ganancia < 0 ? '−' : ''}${fmt(Math.abs(row.ganancia))}
-                              </span>
-                              <span style={{ fontSize: '0.75rem' }}>{getEstado(row.margenPct)}</span>
-                              <span style={{ fontSize: '0.75rem' }}>{getPrioridad(row.ganancia, row.margenPct)}</span>
-                            </div>
-                          ))}
-                          {[0, 1].map(i => (
-                            <div key={`locked-${i}`} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 16px', borderBottom: i === 0 ? '1px solid var(--border)' : undefined, alignItems: 'center', filter: 'blur(3px)', opacity: 0.45, userSelect: 'none', pointerEvents: 'none' as const }}>
-                              <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>🔒 Producto {i + 4}</span>
-                              <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>$—</span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>—</span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>—</span>
-                            </div>
-                          ))}
-                          <div style={{ padding: '16px 20px', background: 'var(--surface)', textAlign: 'center' }}>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: 12 }}>
-                              Aquí solo puedes analizar un producto a la vez.
-                            </div>
-                            <Link
-                              href="/checkout"
-                              style={{ display: 'inline-block', background: 'var(--accent)', color: 'var(--bg)', fontWeight: 800, fontSize: '0.875rem', padding: '11px 24px', borderRadius: 10, textDecoration: 'none' }}
-                              onClick={() => posthog.capture('cta_analizar_todos', { source: 'preview_table' })}
-                            >
-                              Analizar todos mis productos →
-                            </Link>
-                          </div>
-                        </>
-                      );
-                    })()}
-                  </div>
-                )}
-
                 {/* Acción — Lead magnet (secundario) */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
                   <div className="lead-title">¿Preferís empezar con una guía gratuita?</div>
