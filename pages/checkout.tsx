@@ -2,10 +2,14 @@
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import posthog from 'posthog-js';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 
 const STARTER_URL = 'https://margenreal.lemonsqueezy.com/checkout/buy/be78bcd3-c734-4b95-b164-d4996478b598';
 const PRO_URL = 'https://margenreal.lemonsqueezy.com/checkout/buy/535e6adb-a287-4c6c-9f58-d72457f17044';
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => ({
+  props: { paid: query.paid === 'true' },
+});
 
 function PaidConfirmation() {
   return (
@@ -37,10 +41,7 @@ function PaidConfirmation() {
   );
 }
 
-export default function CheckoutPage() {
-  const router = useRouter();
-  const paid = router.query.paid === 'true';
-
+export default function CheckoutPage({ paid }: { paid: boolean }) {
   return (
     <Layout>
       <Head>
