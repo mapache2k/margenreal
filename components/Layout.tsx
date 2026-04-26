@@ -50,6 +50,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [mobile, setMobile] = useState(false);
   const [userInitial, setUserInitial] = useState<string | null>(null);
   const [userEmail, setUserEmail]     = useState<string | null>(null);
+  const [userPlan, setUserPlan]       = useState<string | null>(null);
   const [dropOpen, setDropOpen]       = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
 
@@ -65,12 +66,15 @@ export default function Layout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const email = localStorage.getItem('mr_user_email');
     const token = localStorage.getItem('mr_session');
+    const plan  = localStorage.getItem('mr_user_plan');
     if (email && token) {
       setUserEmail(email);
       setUserInitial(email.charAt(0).toUpperCase());
+      setUserPlan(plan);
     } else {
       setUserEmail(null);
       setUserInitial(null);
+      setUserPlan(null);
     }
   }, [pathname]);
 
@@ -280,7 +284,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   </div>
                 </div>
                 {[
-                  { href: '/dashboard', label: 'Mi cuenta' },
+                  { href: userPlan === 'admin' ? '/admin' : '/dashboard', label: 'Mi cuenta' },
                   { href: '/cambiar-password', label: 'Cambiar contraseña' },
                 ].map(item => (
                   <Link key={item.href} href={item.href} onClick={() => setDropOpen(false)}
@@ -327,7 +331,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         {userInitial && (
           <>
             <div className="sb-tooltip-wrap">
-              <Link href="/dashboard" className={`sb-item${isActive('/dashboard') ? ' active' : ''}`}>
+              <Link href={userPlan === 'admin' ? '/admin' : '/dashboard'} className={`sb-item${isActive('/dashboard') || isActive('/admin') ? ' active' : ''}`}>
                 <span className="sb-icon"><Ico d={ICONS.user} /></span>
                 <span className="sb-label" style={{ color: 'var(--accent)', fontWeight: 700 }}>Mi cuenta</span>
               </Link>
