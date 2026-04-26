@@ -17,4 +17,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(201).json(result);
 }
 
-export default withRateLimit({ max: 5, windowMs: 15 * 60 * 1000 })(handler);
+export default withRateLimit(handler, { maxRequests: 5, windowMs: 15 * 60 * 1000 });
