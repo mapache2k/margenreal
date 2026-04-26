@@ -9,6 +9,7 @@ export interface User {
   passwordHash: string;
   plan: Plan;
   orderId: string;
+  schemaName: string | null;   // tenant_{id} — se crea al activar
   activatedAt: string | null;
   createdAt: string;
 }
@@ -20,6 +21,7 @@ function mapRow(row: Record<string, unknown>): User {
     passwordHash: String(row.password_hash),
     plan:         row.plan as Plan,
     orderId:      String(row.order_id),
+    schemaName:   row.schema_name ? String(row.schema_name) : null,
     activatedAt:  row.activated_at ? String(row.activated_at) : null,
     createdAt:    String(row.created_at),
   };
@@ -46,6 +48,8 @@ export async function upsertPending(email: string, plan: Plan, orderId: string):
 
 export async function activate(email: string, password: string): Promise<User | null> {
   const hash = hashPassword(password);
+
+  // 1. Actualizar contraseña y marcar como activado
   const { rows } = await pool.query(
     `UPDATE users
      SET password_hash = $1, activated_at = NOW()
@@ -53,7 +57,16 @@ export async function activate(email: string, password: string): Promise<User | 
      RETURNING *`,
     [hash, email.toLowerCase()]
   );
-  return rows.length ? mapRow(rows[0]) : null;
+  if (!rows.length) return null;
+
+  const user = mapRow(rows[0]);
+
+  // 2. Crear schema del tenant: tenant_{id}
+  await pool.query('SELECT create_tenant_schema($1)', [user.id]);
+
+  // 3. Releer con schema_name actualizado
+  const { rows: updated } = await pool.query('SELECT * FROM users WHERE id = $1', [user.id]);
+  return updated.length ? mapRow(updated[0]) : user;
 }
 
 export function verifyPassword(user: User, password: string): boolean {
