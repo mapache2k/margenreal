@@ -369,7 +369,7 @@ export default function CalculadoraML() {
                 ) : (
                   <>
                     <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '7px 14px', background: 'var(--bg)', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
-                      <span>Producto</span><span>Precio</span><span>Margen</span><span></span>
+                      <span>Producto</span><span>Ganancia</span><span>Margen</span><span></span>
                     </div>
                     {productos.map(p => (
                       <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '10px 14px', borderTop: '1px solid var(--border)', alignItems: 'center', gap: 4 }}>
@@ -377,13 +377,30 @@ export default function CalculadoraML() {
                           <div style={{ color: 'var(--text)', fontWeight: 500 }}>{p.nombre}</div>
                           <div style={{ fontSize: '0.6875rem', color: 'var(--muted)' }}>{p.categoria}</div>
                         </div>
-                        <span style={{ color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
-                        <span style={{ fontWeight: 700, color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555' }}>
+                        <span style={{ fontWeight: 700, color: p.ganancia >= 0 ? '#2dd4a0' : '#e85555' }}>
+                          {p.ganancia < 0 ? '−' : ''}${fmt(Math.abs(p.ganancia))}
+                        </span>
+                        <span style={{ color: 'var(--muted)', fontSize: '0.75rem' }}>
                           {p.margenPct.toFixed(1).replace('.', ',')}%
                         </span>
                         <button onClick={() => handleEliminarProducto(p.id)} style={{ color: 'var(--muted-2)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: '0 2px' }} title="Eliminar">×</button>
                       </div>
                     ))}
+                    {(() => {
+                      const perdidos = productos.filter(p => p.ganancia < 0);
+                      const totalPerdido = perdidos.reduce((s, p) => s + Math.abs(p.ganancia), 0);
+                      if (perdidos.length === 0) return null;
+                      return (
+                        <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', background: 'rgba(232,85,85,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                          <span style={{ fontSize: '0.75rem', color: '#e85555', fontWeight: 600 }}>
+                            {perdidos.length === 1 ? '1 producto en pérdida' : `${perdidos.length} productos en pérdida`}
+                          </span>
+                          <span style={{ fontSize: '0.875rem', fontWeight: 800, color: '#e85555' }}>
+                            −${fmt(totalPerdido)} / unidad
+                          </span>
+                        </div>
+                      );
+                    })()}
                     {limitAlcanzado && (
                       <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'rgba(249,215,27,0.04)' }}>
                         <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>🔒 Límite del plan gratis</span>

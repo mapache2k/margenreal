@@ -103,8 +103,8 @@ function DashboardContent({ session }: { session: ProSession }) {
         /* Productos */
         .dash-products-empty { text-align: center; padding: 32px 20px; color: var(--muted); font-size: 0.875rem; line-height: 1.7; border: 1.5px dashed var(--border); border-radius: 14px; }
         .dash-products-table { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
-        .dash-products-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; padding: 8px 16px; background: var(--bg); font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted-2); gap: 8px; }
-        .dash-products-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; padding: 12px 16px; border-top: 1px solid var(--border); align-items: center; gap: 8px; font-size: 0.875rem; }
+        .dash-products-head { display: grid; grid-template-columns: 2fr 1fr 1fr auto; padding: 8px 16px; background: var(--bg); font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted-2); gap: 8px; }
+        .dash-products-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; padding: 12px 16px; border-top: 1px solid var(--border); align-items: center; gap: 8px; font-size: 0.875rem; }
         .dash-products-row:hover { background: var(--surface); }
         .dash-prod-name { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .dash-prod-cat { font-size: 0.6875rem; color: var(--muted); margin-top: 2px; }
@@ -115,17 +115,15 @@ function DashboardContent({ session }: { session: ProSession }) {
         .dash-prod-del { background: none; border: none; cursor: pointer; color: var(--muted-2); font-size: 1rem; padding: 2px 6px; border-radius: 5px; transition: color 0.15s; }
         .dash-prod-del:hover { color: #e85555; }
 
-        /* Tabla responsive — oculta costo en mobile, precio en muy pequeño */
-        @media (max-width: 600px) {
-          .dash-products-head { grid-template-columns: 2fr 1fr 1fr auto; }
-          .dash-products-row { grid-template-columns: 2fr 1fr 1fr auto; }
-          .dash-col-costo { display: none; }
-        }
+        /* Tabla responsive — oculta margen en muy pequeño */
         @media (max-width: 380px) {
           .dash-products-head { grid-template-columns: 2fr 1fr auto; }
           .dash-products-row { grid-template-columns: 2fr 1fr auto; }
-          .dash-col-precio { display: none; }
+          .dash-col-margen { display: none; }
         }
+        .dash-products-total { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(232,85,85,0.06); }
+        .dash-total-label { font-size: 0.75rem; color: #e85555; font-weight: 600; }
+        .dash-total-val { font-size: 0.875rem; font-weight: 800; color: #e85555; }
 
         /* Widget responsive */
         .dash-widget { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -217,12 +215,13 @@ function DashboardContent({ session }: { session: ProSession }) {
           <div className="dash-products-table">
             <div className="dash-products-head">
               <span>Producto</span>
-              <span className="dash-col-precio">Precio</span>
-              <span className="dash-col-costo">Costo</span>
-              <span>Margen</span>
+              <span>Ganancia/u.</span>
+              <span className="dash-col-margen">Margen</span>
               <span></span>
             </div>
             {products.map(p => {
+              const ganancia = p.precio * (p.margen_pct / 100);
+              const gananciaOk = ganancia >= 0;
               const margenCls = p.margen_pct >= 20
                 ? 'dash-prod-margen-ok'
                 : p.margen_pct >= 0
@@ -234,15 +233,29 @@ function DashboardContent({ session }: { session: ProSession }) {
                     <div className="dash-prod-name">{p.nombre}</div>
                     <div className="dash-prod-cat">{p.categoria}</div>
                   </div>
-                  <span className="dash-prod-val dash-col-precio">${fmt(p.precio)}</span>
-                  <span className="dash-prod-val dash-col-costo">${fmt(p.costo)}</span>
-                  <span className={margenCls}>
+                  <span style={{ fontWeight: 700, color: gananciaOk ? '#2dd4a0' : '#e85555' }}>
+                    {!gananciaOk && '−'}${fmt(Math.abs(ganancia))}
+                  </span>
+                  <span className={`${margenCls} dash-col-margen`}>
                     {p.margen_pct.toFixed(1).replace('.', ',')}%
                   </span>
                   <button className="dash-prod-del" title="Eliminar" onClick={() => handleDelete(p.id)}>×</button>
                 </div>
               );
             })}
+            {(() => {
+              const perdidos = products.filter(p => p.margen_pct < 0);
+              if (perdidos.length === 0) return null;
+              const totalPerdido = perdidos.reduce((s, p) => s + Math.abs(p.precio * (p.margen_pct / 100)), 0);
+              return (
+                <div className="dash-products-total">
+                  <span className="dash-total-label">
+                    {perdidos.length === 1 ? '1 producto en pérdida' : `${perdidos.length} productos en pérdida`}
+                  </span>
+                  <span className="dash-total-val">−${fmt(totalPerdido)} / unidad</span>
+                </div>
+              );
+            })()}
           </div>
         )}
 
