@@ -13,6 +13,7 @@ export type GuiaFrontmatter = {
   date: string;
   draft: boolean;
   tags: string[];
+  type?: 'article' | 'playbook';
 };
 
 export type GuiaItem = GuiaFrontmatter & { contentHtml: string };

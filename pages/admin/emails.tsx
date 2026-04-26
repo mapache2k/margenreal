@@ -1,5 +1,6 @@
 ﻿import Head from 'next/head';
 import { useState } from 'react';
+import AdminGate from '../../components/AdminGate';
 
 const E2_SUBJECT = 'El error que destruye tu margen en MercadoLibre';
 const E3_SUBJECT = 'Tu precio minimo: el numero que te protege de vender a perdida';
@@ -97,6 +98,7 @@ export default function EmailTemplatesPage() {
   ];
 
   return (
+    <AdminGate>
     <>
       <Head>
         <title>Email Templates — Margen Real Admin</title>
@@ -165,5 +167,6 @@ export default function EmailTemplatesPage() {
         ))}
       </div>
     </>
+    </AdminGate>
   );
 }

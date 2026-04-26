@@ -286,7 +286,7 @@ export default function CalculadoraML() {
               )}
             </div>
 
-            {/* Botón agregar */}
+            {/* Botón agregar — siempre visible */}
             {limitAlcanzado ? (
               <Link
                 href="/pricing"
@@ -303,55 +303,63 @@ export default function CalculadoraML() {
                   : '+ Comparar con otros productos'
                 }
               </button>
-            ) : slotsUsados > 0 ? (
-              <button className="btn-agregar" disabled style={{ marginTop: 12, opacity: 0.45, cursor: 'not-allowed' }}>
-                Calculá otro producto para agregar
+            ) : (
+              <button className="btn-agregar" disabled style={{ marginTop: 12, opacity: 0.4, cursor: 'not-allowed' }}>
+                {slotsUsados > 0 ? `Calculá otro producto para agregar · ${slotsUsados}/${FREE_LIMIT}` : 'Calculá un producto para comparar'}
               </button>
-            ) : null}
+            )}
 
-            {/* Tabla de comparación — independiente de resultado */}
-            {productos.length > 0 && (
-              <div style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)' }}>
-                    Comparación <span style={{ color: 'var(--muted)', fontWeight: 400 }}>{slotsUsados}/{FREE_LIMIT}</span>
-                  </span>
+            {/* Tabla de comparación — siempre visible */}
+            <div style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)' }}>
+                  Comparación <span style={{ color: 'var(--muted)', fontWeight: 400 }}>{slotsUsados}/{FREE_LIMIT}</span>
+                </span>
+                {productos.length > 0 && (
                   <button
-                    onClick={() => { setProductos([]); setSlotsUsados(0); localStorage.removeItem('mr_productos'); localStorage.removeItem('mr_slots'); }}
+                    onClick={() => { setProductos([]); localStorage.removeItem('mr_productos'); }}
                     style={{ fontSize: '0.75rem', color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}
                   >
                     Limpiar
                   </button>
-                </div>
-                <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', fontSize: '0.8125rem' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '7px 14px', background: 'var(--bg)', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
-                    <span>Producto</span><span>Precio</span><span>Margen</span><span></span>
-                  </div>
-                  {productos.map(p => (
-                    <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '10px 14px', borderTop: '1px solid var(--border)', alignItems: 'center', gap: 4 }}>
-                      <div>
-                        <div style={{ color: 'var(--text)', fontWeight: 500 }}>{p.nombre}</div>
-                        <div style={{ fontSize: '0.6875rem', color: 'var(--muted)' }}>{p.categoria}</div>
-                      </div>
-                      <span style={{ color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
-                      <span style={{ fontWeight: 700, color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555' }}>
-                        {p.margenPct.toFixed(1).replace('.', ',')}%
-                      </span>
-                      <button onClick={() => handleEliminarProducto(p.id)} style={{ color: 'var(--muted-2)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: '0 2px' }} title="Eliminar">×</button>
-                    </div>
-                  ))}
-                  {limitAlcanzado && (
-                    <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'rgba(249,215,27,0.04)' }}>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>🔒 Límite del plan gratis</span>
-                      <Link href="/pricing" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}
-                        onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion' })}>
-                        Ver plan →
-                      </Link>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
-            )}
+              <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', fontSize: '0.8125rem' }}>
+                {productos.length === 0 ? (
+                  <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.6 }}>
+                    Calculá un producto y hacé clic en<br /><em>Comparar</em> para verlo aquí.
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '7px 14px', background: 'var(--bg)', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
+                      <span>Producto</span><span>Precio</span><span>Margen</span><span></span>
+                    </div>
+                    {productos.map(p => (
+                      <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '10px 14px', borderTop: '1px solid var(--border)', alignItems: 'center', gap: 4 }}>
+                        <div>
+                          <div style={{ color: 'var(--text)', fontWeight: 500 }}>{p.nombre}</div>
+                          <div style={{ fontSize: '0.6875rem', color: 'var(--muted)' }}>{p.categoria}</div>
+                        </div>
+                        <span style={{ color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
+                        <span style={{ fontWeight: 700, color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555' }}>
+                          {p.margenPct.toFixed(1).replace('.', ',')}%
+                        </span>
+                        <button onClick={() => handleEliminarProducto(p.id)} style={{ color: 'var(--muted-2)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: '0 2px' }} title="Eliminar">×</button>
+                      </div>
+                    ))}
+                    {limitAlcanzado && (
+                      <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, background: 'rgba(249,215,27,0.04)' }}>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>🔒 Límite del plan gratis</span>
+                        <Link href="/pricing" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}
+                          onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion' })}>
+                          Ver plan →
+                        </Link>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
 
           </div>
 

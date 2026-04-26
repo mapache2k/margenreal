@@ -192,6 +192,11 @@ export default function Layout({ children }: { children: ReactNode }) {
             margen<span>real</span>
           </Link>
         </div>
+        <Link href="/login" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--muted)', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, transition: 'color var(--transition)' }}
+          onMouseOver={e => (e.currentTarget.style.color = 'var(--text)')}
+          onMouseOut={e  => (e.currentTarget.style.color = 'var(--muted)')}>
+          Iniciar sesión
+        </Link>
       </header>
 
       {/* Mobile overlay */}
