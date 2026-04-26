@@ -44,9 +44,28 @@ export default function CalculadoraML() {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
   const [productos, setProductos] = useState<ProductoGuardado[]>([]);
+  const [slotsUsados, setSlotsUsados] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
   const [showComoCalc, setShowComoCalc] = useState(false);
   const capturedOnce = useRef(false);
   const startedOnce = useRef(false);
+
+  // Cargar estado persistido al montar
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('mr_productos');
+      if (stored) setProductos(JSON.parse(stored));
+      const slots = localStorage.getItem('mr_slots');
+      if (slots) setSlotsUsados(parseInt(slots, 10));
+    } catch {}
+    setHydrated(true);
+  }, []);
+
+  // Persistir productos cuando cambian
+  useEffect(() => {
+    if (!hydrated) return;
+    localStorage.setItem('mr_productos', JSON.stringify(productos));
+  }, [productos, hydrated]);
 
   const trackStart = () => {
     if (!startedOnce.current) {
@@ -90,9 +109,13 @@ export default function CalculadoraML() {
   };
 
   const FREE_LIMIT = 3;
+  const limitAlcanzado = slotsUsados >= FREE_LIMIT;
 
   const handleAgregarProducto = () => {
-    if (!resultado || productos.length >= FREE_LIMIT) return;
+    if (!resultado || limitAlcanzado) return;
+    const newSlots = slotsUsados + 1;
+    setSlotsUsados(newSlots);
+    localStorage.setItem('mr_slots', newSlots.toString());
     const catLabel = ML_CATEGORIAS[categoria].label;
     setProductos(prev => {
       const nuevo: ProductoGuardado = {
@@ -265,7 +288,7 @@ export default function CalculadoraML() {
 
             {/* Control — Agregar a comparación */}
             {resultado && (
-              productos.length >= FREE_LIMIT ? (
+              limitAlcanzado ? (
                 <Link
                   href="/pricing"
                   className="btn-agregar"
@@ -276,8 +299,8 @@ export default function CalculadoraML() {
                 </Link>
               ) : (
                 <button className="btn-agregar" style={{ marginTop: 12 }} onClick={handleAgregarProducto}>
-                  {productos.length > 0
-                    ? `+ Agregar · ${productos.length}/${FREE_LIMIT} productos`
+                  {slotsUsados > 0
+                    ? `+ Agregar · ${slotsUsados}/${FREE_LIMIT} usados`
                     : '+ Comparar con otros productos'
                   }
                 </button>
@@ -470,7 +493,7 @@ export default function CalculadoraML() {
                       </div>
                     ))}
                     {/* Gate upgrade */}
-                    {productos.length >= FREE_LIMIT && (
+                    {limitAlcanzado && (
                       <div style={{ padding: '14px 18px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' as const, background: 'rgba(249,215,27,0.04)' }}>
                         <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>🔒 Límite gratis · {FREE_LIMIT} productos</span>
                         <Link href="/pricing" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}
