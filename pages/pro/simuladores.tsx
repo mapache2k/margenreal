@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { usePro } from '../../lib/ProContext';
 import { CalcResult } from '../../lib/ProContext';
 
-// carga dinámica del layout que usa hooks/objetos del cliente
 const ProLayout = dynamic(() => import('../../lib/ProLayout'), { ssr: false });
 
 const fmtCLP = (n: number) => {
@@ -26,10 +25,10 @@ async function askClaude(prompt: string): Promise<string> {
 
 function AIResult({ text, loading }: { text: string; loading: boolean }) {
   if (loading) return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#444', fontSize: '0.875rem', padding: '12px 0' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--muted-2)', fontSize: '0.875rem', padding: '12px 0' }}>
       {[0,1,2].map(i => (
         <div key={i} style={{
-          width: '5px', height: '5px', borderRadius: '50%', background: '#f0ebe0',
+          width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent)',
           animation: 'pulse 1.2s ease-in-out infinite',
           animationDelay: `${i * 0.2}s`,
         }} />
@@ -41,13 +40,13 @@ function AIResult({ text, loading }: { text: string; loading: boolean }) {
   return (
     <div style={{
       marginTop: '16px', padding: '18px',
-      background: 'rgba(240,235,224,.03)', border: '1px solid rgba(240,235,224,.1)',
+      background: 'rgba(249,215,27,.04)', border: '1px solid rgba(249,215,27,.12)',
       borderRadius: '10px',
     }}>
-      <div style={{ fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(240,235,224,.5)', marginBottom: '12px' }}>
+      <div style={{ fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '12px' }}>
         ✦ Análisis de Claude
       </div>
-      <div style={{ fontSize: '0.9375rem', color: '#bbb', lineHeight: 1.85 }}>
+      <div style={{ fontSize: '0.9375rem', color: 'var(--muted)', lineHeight: 1.85 }}>
         {text.split('\n\n').map((p, i) => <p key={i} style={{ marginBottom: '12px' }}>{p}</p>)}
       </div>
     </div>
@@ -60,8 +59,8 @@ function ModuleShell({ icon, title, subtitle, children }: {
   const [open, setOpen] = useState(false);
   return (
     <div style={{
-      background: '#1e1e1c',
-      border: `1px solid ${open ? 'rgba(240,235,224,.15)' : '#2a2a28'}`,
+      background: 'var(--surface)',
+      border: `1px solid ${open ? 'rgba(249,215,27,.2)' : 'var(--border)'}`,
       borderRadius: '14px', marginBottom: '10px', overflow: 'hidden',
       transition: 'border-color 0.2s',
     }}>
@@ -70,20 +69,20 @@ function ModuleShell({ icon, title, subtitle, children }: {
         padding: '18px 20px', background: 'none', border: 'none', cursor: 'pointer',
         textAlign: 'left', transition: 'background 0.18s',
       }}
-        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(240,235,224,.03)')}
+        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(249,215,27,.03)')}
         onMouseLeave={e => (e.currentTarget.style.background = 'none')}
       >
         <span style={{ fontSize: '1.25rem', flexShrink: 0 }}>{icon}</span>
         <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: '0.9375rem', fontWeight: 800, color: '#f0f0f0', marginBottom: '3px', letterSpacing: '-0.02em' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.9375rem', fontWeight: 800, color: 'var(--text)', marginBottom: '3px', letterSpacing: '-0.02em' }}>
             {title}
           </div>
-          <div style={{ fontSize: '0.8125rem', color: '#555', lineHeight: 1.4 }}>{subtitle}</div>
+          <div style={{ fontSize: '0.8125rem', color: 'var(--muted)', lineHeight: 1.4 }}>{subtitle}</div>
         </div>
-        <div style={{ color: '#444', fontSize: '0.75rem', flexShrink: 0, transition: 'transform 0.25s', transform: open ? 'rotate(180deg)' : 'rotate(0)' }}>↓</div>
+        <div style={{ color: 'var(--muted-2)', fontSize: '0.75rem', flexShrink: 0, transition: 'transform 0.25s', transform: open ? 'rotate(180deg)' : 'rotate(0)' }}>↓</div>
       </button>
       {open && (
-        <div style={{ padding: '0 20px 20px', borderTop: '1px solid #222', animation: 'fadeUp 0.25s ease both' }}>
+        <div style={{ padding: '0 20px 20px', borderTop: '1px solid var(--border)', animation: 'fadeUp 0.25s ease both' }}>
           {children}
         </div>
       )}
@@ -96,7 +95,7 @@ function Field({ label, value, onChange, placeholder, type = 'number' }: {
 }) {
   return (
     <div style={{ marginBottom: '12px', marginTop: '14px' }}>
-      <label style={{ display: 'block', fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555', marginBottom: '6px' }}>
+      <label style={{ display: 'block', fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted-2)', marginBottom: '6px' }}>
         {label}
       </label>
       <input
@@ -105,13 +104,13 @@ function Field({ label, value, onChange, placeholder, type = 'number' }: {
         placeholder={placeholder || '0'}
         onChange={e => onChange(e.target.value)}
         style={{
-          width: '100%', background: '#161614', border: '1.5px solid #2a2a28', color: '#f0f0f0',
-          fontFamily: "'Epilogue', sans-serif", fontSize: '0.9375rem', fontWeight: 600,
+          width: '100%', background: 'var(--bg)', border: '1.5px solid var(--border)', color: 'var(--text)',
+          fontFamily: 'var(--font-display)', fontSize: '0.9375rem', fontWeight: 700,
           padding: '10px 12px', borderRadius: '8px', outline: 'none',
-          MozAppearance: 'textfield' as any,
+          MozAppearance: 'textfield' as any, boxSizing: 'border-box',
         }}
-        onFocus={e => e.target.style.borderColor = '#f0ebe0'}
-        onBlur={e => e.target.style.borderColor = '#2a2a28'}
+        onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+        onBlur={e => e.target.style.borderColor = 'var(--border)'}
       />
     </div>
   );
@@ -119,10 +118,10 @@ function Field({ label, value, onChange, placeholder, type = 'number' }: {
 
 function MiniMetric({ label, value, color, sub }: { label: string; value: string; color?: string; sub?: string }) {
   return (
-    <div style={{ background: '#161614', border: '1px solid #222', borderRadius: '10px', padding: '14px 12px' }}>
-      <div style={{ fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#444', marginBottom: '6px' }}>{label}</div>
-      <div style={{ fontFamily: "'Syne', sans-serif", fontSize: '1.0625rem', fontWeight: 800, letterSpacing: '-0.02em', color: color || '#f0ebe0' }}>{value}</div>
-      {sub && <div style={{ fontSize: '0.625rem', color: '#444', marginTop: '4px' }}>{sub}</div>}
+    <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 12px' }}>
+      <div style={{ fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted-2)', marginBottom: '6px' }}>{label}</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.0625rem', fontWeight: 800, letterSpacing: '-0.02em', color: color || 'var(--text)' }}>{value}</div>
+      {sub && <div style={{ fontSize: '0.625rem', color: 'var(--muted-2)', marginTop: '4px' }}>{sub}</div>}
     </div>
   );
 }
@@ -131,11 +130,11 @@ function BtnAnalyze({ onClick, loading, disabled }: { onClick: () => void; loadi
   return (
     <button onClick={onClick} disabled={loading || disabled} style={{
       width: '100%', marginTop: '16px',
-      background: '#f0ebe0', color: '#0a0a0a',
-      fontFamily: "'Syne', sans-serif", fontWeight: 800,
+      background: 'var(--accent)', color: 'var(--bg)',
+      fontFamily: 'var(--font-display)', fontWeight: 900,
       fontSize: '0.875rem', padding: '13px', borderRadius: '9px', border: 'none',
       cursor: loading || disabled ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.5 : 1,
+      opacity: disabled ? 0.4 : 1,
       transition: 'all 0.18s',
     }}>
       {loading ? 'Analizando...' : 'Analizar con IA →'}
@@ -227,8 +226,8 @@ Nuevo EBITDA: ${fmtCLP(newEbitda)}, Ventas extra necesarias: ${fmtCLP(extraRev)}
 
       {parseFloat(salary) > 0 && (
         <>
-          <div style={{ marginTop: '12px', padding: '10px 14px', background: 'rgba(240,235,224,.04)', border: '1px solid rgba(240,235,224,.08)', borderRadius: '8px', fontSize: '0.8125rem', color: '#888', lineHeight: 1.6 }}>
-            💡 Costo real para el negocio: <strong style={{ color: '#f0ebe0' }}>{fmtCLP(totalCost)}/mes</strong> (incluye cargas ~25%)
+          <div style={{ marginTop: '12px', padding: '10px 14px', background: 'rgba(249,215,27,.04)', border: '1px solid rgba(249,215,27,.1)', borderRadius: '8px', fontSize: '0.8125rem', color: 'var(--muted)', lineHeight: 1.6 }}>
+            💡 Costo real para el negocio: <strong style={{ color: 'var(--text)' }}>{fmtCLP(totalCost)}/mes</strong> (incluye cargas ~25%)
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '10px' }}>
             <MiniMetric label="Nuevo EBITDA" value={fmtCLP(newEbitda)} color={newEbitda >= 0 ? '#2dd4a0' : '#e85555'} sub={`vs ${fmtCLP(calc.ebitda)}`} />
@@ -275,12 +274,12 @@ PALANCAS: Subir precios 5% = +${fmtCLP(calc.revenue*0.05*calc.contributionMargin
     <ModuleShell icon="🚨" title="Modo crisis — caja apretada" subtitle="¿Qué palancas debo activar y en qué orden?">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '14px' }}>
         {levers.map((l, i) => (
-          <div key={i} style={{ background: '#161614', border: '1px solid #222', borderRadius: '10px', padding: '12px' }}>
+          <div key={i} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '6px' }}>
               <span style={{ fontSize: '0.9375rem' }}>{l.icon}</span>
-              <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#f0f0f0', lineHeight: 1.3 }}>{l.name}</span>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{l.name}</span>
             </div>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: '0.875rem', fontWeight: 800, color: '#2dd4a0', marginBottom: '3px' }}>+{l.impact}</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, color: '#2dd4a0', marginBottom: '3px' }}>+{l.impact}</div>
             <div style={{ fontSize: '0.6875rem', color: l.easeColor }}>{l.ease}</div>
           </div>
         ))}
@@ -355,17 +354,12 @@ export default function Simuladores() {
   return (
     <ProLayout>
       <style>{`
-        .page-topbar { height: 56px; border-bottom: 1px solid #2a2a28; display: flex; align-items: center; padding: 0 40px; background: #161614; position: sticky; top: 0; z-index: 40; }
-        .page-title { font-family: 'Syne', sans-serif; font-size: 0.9375rem; font-weight: 800; color: #f0f0f0; letter-spacing: -0.02em; }
         .page-content { padding: 32px 40px 80px; max-width: 720px; }
-        .page-sub { font-size: 0.875rem; color: #555; line-height: 1.6; margin-bottom: 24px; }
+        @media(max-width:640px){ .page-content { padding: 24px 20px 60px; } }
+        .page-sub { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%,100% { opacity: 0.15; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
       `}</style>
-
-      <div className="page-topbar">
-        <span className="page-title">Simuladores de decisión</span>
-      </div>
 
       <div className="page-content">
         <p className="page-sub">

@@ -47,132 +47,135 @@ export default function Diagnostico() {
   return (
     <ProLayout>
       <style>{`
-        .page-topbar {
-          height: 56px; border-bottom: 1px solid #2a2a28;
-          display: flex; align-items: center; padding: 0 40px;
-          background: #161614; position: sticky; top: 0; z-index: 40;
-        }
-        .page-title {
-          font-family: 'Syne', sans-serif; font-size: 0.9375rem;
-          font-weight: 800; color: #f0f0f0; letter-spacing: -0.02em;
-        }
         .page-content { padding: 32px 40px 80px; max-width: 860px; }
+        @media(max-width:640px){ .page-content { padding: 24px 20px 60px; } }
 
-        .score-bar {
-          display: flex; align-items: center; gap: 12px;
-          padding: 14px 18px; border-radius: 12px;
+        .score-hero {
+          display: flex; align-items: center; gap: 20px;
+          padding: 20px 24px; border-radius: 16px;
           border: 1px solid transparent; margin-bottom: 20px;
         }
-        .score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .score-text { font-family: 'Syne', sans-serif; font-size: 0.9375rem; font-weight: 800; }
-        .score-num { margin-left: auto; font-size: 0.8125rem; color: #555; }
+        .score-num-big {
+          font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.5rem);
+          font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+        }
+        .score-info { flex: 1; }
+        .score-label-big { font-family: var(--font-display); font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+        .score-track { height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 999px; transition: width 1s cubic-bezier(.16,1,.3,1); }
+        .score-sub { font-size: 0.6875rem; color: var(--muted-2); margin-top: 6px; }
 
         .ai-card {
-          background: #1e1e1c;
-          border: 1px solid rgba(240,235,224,.15);
+          background: var(--surface);
+          border: 1px solid var(--border);
           border-radius: 14px; padding: 22px; margin-bottom: 16px;
           position: relative; overflow: hidden;
         }
         .ai-card::before {
           content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(240,235,224,.25), transparent);
+          background: linear-gradient(90deg, transparent, rgba(249,215,27,.15), transparent);
         }
         .ai-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
         .ai-icon {
           width: 30px; height: 30px; border-radius: 7px;
-          background: rgba(240,235,224,.07); border: 1px solid rgba(240,235,224,.12);
+          background: rgba(249,215,27,.08); border: 1px solid rgba(249,215,27,.15);
           display: flex; align-items: center; justify-content: center; font-size: 0.8125rem;
+          color: var(--accent);
         }
-        .ai-title { font-family: 'Syne', sans-serif; font-size: 0.875rem; font-weight: 800; color: #f0f0f0; }
-        .ai-sub { font-size: 0.6875rem; color: #555; }
+        .ai-title { font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; color: var(--text); }
+        .ai-sub { font-size: 0.6875rem; color: var(--muted-2); }
         .ai-badge {
           margin-left: auto; font-size: 0.5rem; font-weight: 700;
           letter-spacing: 0.12em; text-transform: uppercase;
-          background: rgba(240,235,224,.05); border: 1px solid rgba(240,235,224,.1);
-          color: #666; padding: 3px 7px; border-radius: 4px;
+          background: rgba(249,215,27,.06); border: 1px solid rgba(249,215,27,.12);
+          color: var(--muted); padding: 3px 7px; border-radius: 4px;
         }
-        .ai-body { font-size: 0.9375rem; color: #bbb; line-height: 1.85; }
+        .ai-body { font-size: 0.9375rem; color: var(--muted); line-height: 1.85; }
         .ai-body p { margin-bottom: 14px; }
         .ai-body p:last-child { margin-bottom: 0; }
 
         .metrics-grid {
           display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
         }
+        @media(max-width:480px){ .metrics-grid { grid-template-columns: 1fr; } }
         .m-card {
-          background: #1e1e1c; border: 1px solid #2a2a28;
+          background: var(--surface); border: 1px solid var(--border);
           border-radius: 12px; padding: 16px;
         }
         .m-card.g { border-color: rgba(45,212,160,.25); background: rgba(45,212,160,.05); }
         .m-card.r { border-color: rgba(232,85,85,.25); background: rgba(232,85,85,.05); }
         .m-card.y { border-color: rgba(240,180,41,.25); background: rgba(240,180,41,.05); }
-        .m-card.h { border-color: rgba(240,235,224,.15); background: rgba(240,235,224,.03); }
-        .m-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 8px; }
-        .m-val { font-family: 'Syne', sans-serif; font-size: clamp(1.25rem,2vw,1.625rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+        .m-card.h { border-color: var(--border); background: var(--surface); }
+        .m-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 8px; }
+        .m-val { font-family: var(--font-display); font-size: clamp(1.25rem,2vw,1.625rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
         .m-card.g .m-val { color: #2dd4a0; }
         .m-card.r .m-val { color: #e85555; }
         .m-card.y .m-val { color: #f0b429; }
-        .m-card.h .m-val { color: #f0ebe0; }
-        .m-sub { font-size: 0.75rem; color: #555; margin-top: 6px; line-height: 1.5; }
-        .runway-track { height: 3px; background: #222; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+        .m-card.h .m-val { color: var(--text); }
+        .m-sub { font-size: 0.75rem; color: var(--muted-2); margin-top: 6px; line-height: 1.5; }
+        .runway-track { height: 3px; background: var(--border); border-radius: 999px; overflow: hidden; margin-top: 8px; }
         .runway-fill { height: 100%; border-radius: 999px; transition: width 1s cubic-bezier(.16,1,.3,1); }
 
-        .section-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #444; margin-bottom: 10px; }
+        .section-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 10px; }
 
         .chart-card {
-          background: #1e1e1c; border: 1px solid #2a2a28;
+          background: var(--surface); border: 1px solid var(--border);
           border-radius: 12px; padding: 18px; margin-bottom: 12px;
         }
-        .proj-chart { display: flex; align-items: flex-end; gap: 3px; height: 72px; margin-top: 12px; }
+        .proj-chart { display: flex; align-items: flex-end; gap: 3px; height: 80px; margin-top: 12px; }
         .proj-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .proj-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 3px; }
-        .proj-bar-l { font-size: 0.5rem; color: #444; line-height: 1; }
+        .proj-bar-l { font-size: 0.5rem; color: var(--muted-2); line-height: 1; }
 
         .scenario-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .sc-card { background: #161614; border: 1px solid #222; border-radius: 10px; padding: 14px 12px; text-align: center; }
+        @media(max-width:480px){ .scenario-grid { grid-template-columns: 1fr; } }
+        .sc-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; text-align: center; }
         .sc-card.up { border-color: rgba(45,212,160,.2); background: rgba(45,212,160,.04); }
         .sc-card.down { border-color: rgba(232,85,85,.2); background: rgba(232,85,85,.04); }
-        .sc-tag { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #444; margin-bottom: 8px; }
+        .sc-tag { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 8px; }
         .sc-card.up .sc-tag { color: #2dd4a0; }
         .sc-card.down .sc-tag { color: #e85555; }
-        .sc-val { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; color: #f0ebe0; }
+        .sc-val { font-family: var(--font-display); font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
         .sc-card.up .sc-val { color: #2dd4a0; }
         .sc-card.down .sc-val { color: #e85555; }
-        .sc-sub { font-size: 0.625rem; color: #444; margin-top: 4px; }
+        .sc-sub { font-size: 0.625rem; color: var(--muted-2); margin-top: 4px; }
 
         .sens-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .sens-card { background: #1e1e1c; border: 1px solid #2a2a28; border-radius: 10px; padding: 14px 12px; text-align: center; }
-        .sens-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 8px; }
-        .sens-val { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
-        .sens-sub { font-size: 0.625rem; color: #444; margin-top: 4px; }
+        @media(max-width:480px){ .sens-grid { grid-template-columns: 1fr; } }
+        .sens-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; text-align: center; }
+        .sens-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 8px; }
+        .sens-val { font-family: var(--font-display); font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
+        .sens-sub { font-size: 0.625rem; color: var(--muted-2); margin-top: 4px; }
 
-        .actions-card { background: #1e1e1c; border: 1px solid #2a2a28; border-radius: 12px; padding: 18px; margin-bottom: 12px; }
-        .actions-title { font-family: 'Syne', sans-serif; font-size: 0.875rem; font-weight: 800; color: #f0f0f0; margin-bottom: 14px; letter-spacing: -0.02em; }
+        .actions-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 12px; }
+        .actions-title { font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; color: var(--text); margin-bottom: 14px; letter-spacing: -0.02em; }
         .action-item { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 8px; border: 1px solid transparent; margin-bottom: 8px; }
         .action-item:last-child { margin-bottom: 0; }
         .action-tag { display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; }
         .action-tag-dot { width: 4px; height: 4px; border-radius: 50%; }
-        .action-title-text { font-size: 0.875rem; font-weight: 600; color: #f0f0f0; line-height: 1.5; }
-        .action-desc { font-size: 0.8125rem; color: #777; line-height: 1.65; }
+        .action-title-text { font-size: 0.875rem; font-weight: 600; color: var(--text); line-height: 1.5; }
+        .action-desc { font-size: 0.8125rem; color: var(--muted); line-height: 1.65; }
         .no-actions { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: rgba(45,212,160,.06); border: 1px solid rgba(45,212,160,.2); border-radius: 8px; font-size: 0.875rem; color: #2dd4a0; }
 
-        .wc-card { background: #1e1e1c; border: 1px solid #2a2a28; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .wc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
         .wc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .wc-item { text-align: center; flex: 1; }
-        .wc-val { font-family: 'Syne', sans-serif; font-size: 1.375rem; font-weight: 800; letter-spacing: -0.02em; }
-        .wc-lbl { font-size: 0.5625rem; color: #444; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
-        .wc-div { color: #2a2a28; font-size: 1rem; }
-        .wc-note { font-size: 0.8125rem; color: #555; line-height: 1.6; margin-top: 12px; padding-top: 10px; border-top: 1px solid #222; }
+        .wc-val { font-family: var(--font-display); font-size: 1.375rem; font-weight: 800; letter-spacing: -0.02em; }
+        .wc-lbl { font-size: 0.5625rem; color: var(--muted-2); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .wc-div { color: var(--border); font-size: 1rem; }
+        .wc-note { font-size: 0.8125rem; color: var(--muted); line-height: 1.6; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
       `}</style>
 
-      <div className="page-topbar">
-        <span className="page-title">Diagnóstico</span>
-      </div>
-
       <div className="page-content">
-        <div className="score-bar" style={{ background: `${color}10`, borderColor: `${color}25` }}>
-          <div className="score-dot" style={{ background: color }} />
-          <div className="score-text" style={{ color }}>{scoreLabel(s)}</div>
-          <div className="score-num">Score {s}/100</div>
+        <div className="score-hero" style={{ background: `${color}10`, borderColor: `${color}25` }}>
+          <div className="score-num-big" style={{ color }}>{s}</div>
+          <div className="score-info">
+            <div className="score-label-big" style={{ color }}>{scoreLabel(s)}</div>
+            <div className="score-track">
+              <div className="score-fill" style={{ width: `${s}%`, background: color }} />
+            </div>
+            <div className="score-sub">Score de salud financiera · {s}/100</div>
+          </div>
         </div>
 
         <div className="ai-card">
@@ -189,7 +192,7 @@ export default function Diagnostico() {
               {diagnosis.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
             </div>
           ) : (
-            <div style={{ color: '#444', fontSize: '0.875rem' }}>Cargando análisis...</div>
+            <div style={{ color: 'var(--muted-2)', fontSize: '0.875rem' }}>Cargando análisis...</div>
           )}
         </div>
 
@@ -252,8 +255,8 @@ export default function Diagnostico() {
           </div>
           {calc.wcGapDays > 0 && (
             <div className="wc-note">
-              <strong style={{ color: '#f0f0f0' }}>{fmtCLP(calc.wcCashTied)}</strong> atrapados en el ciclo.
-              Tu caja real es <strong style={{ color: '#f0f0f0' }}>{fmtCLP(calc.cashAdjustedStart)}</strong>, no {fmtCLP(calc.cashOnHand)}.
+              <strong style={{ color: 'var(--text)' }}>{fmtCLP(calc.wcCashTied)}</strong> atrapados en el ciclo.
+              Tu caja real es <strong style={{ color: 'var(--text)' }}>{fmtCLP(calc.cashAdjustedStart)}</strong>, no {fmtCLP(calc.cashOnHand)}.
             </div>
           )}
         </div>
@@ -263,18 +266,18 @@ export default function Diagnostico() {
           <div className="proj-chart">
             {projection.months.map((m, i) => {
               const norm = ((m.cash - minCash) / range) * 100;
-              const h = Math.max(4, norm * 0.8);
+              const h = Math.max(4, norm * 0.85);
               return (
                 <div key={i} className="proj-bar-wrap" title={`Mes ${m.month}: ${fmtCLP(m.cash)}`}>
-                  <div className="proj-bar" style={{ height: `${h}%`, background: m.cash >= 0 ? '#2dd4a0' : '#e85555', opacity: 0.8 }} />
+                  <div className="proj-bar" style={{ height: `${h}%`, background: m.cash >= 0 ? '#2dd4a0' : '#e85555', opacity: 0.85 }} />
                   {(i === 0 || (i + 1) % 3 === 0) && <div className="proj-bar-l">M{m.month}</div>}
                 </div>
               );
             })}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
-            <span style={{ fontSize: '0.625rem', color: '#444' }}>Mes 1: {fmtCLP(projection.months[0]?.cash ?? 0)}</span>
-            <span style={{ fontSize: '0.625rem', color: '#444' }}>Mes 12: {fmtCLP(baseFinal)}</span>
+            <span style={{ fontSize: '0.625rem', color: 'var(--muted-2)' }}>Mes 1: {fmtCLP(projection.months[0]?.cash ?? 0)}</span>
+            <span style={{ fontSize: '0.625rem', color: 'var(--muted-2)' }}>Mes 12: {fmtCLP(baseFinal)}</span>
           </div>
         </div>
 

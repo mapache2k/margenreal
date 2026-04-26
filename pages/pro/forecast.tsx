@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { usePro } from '../../lib/ProContext';
 
-// carga dinámica del layout que usa hooks del cliente
 const ProLayout = dynamic(() => import('../../lib/ProLayout'), { ssr: false });
 
 const fmtCLP = (n: number) => {
@@ -151,66 +150,61 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
   return (
     <ProLayout>
       <style>{`
-        .page-topbar {
-          height: 56px; border-bottom: 1px solid #2a2a28;
-          display: flex; align-items: center; padding: 0 40px;
-          background: #161614; position: sticky; top: 0; z-index: 40;
-        }
-        .page-title { font-family: 'Syne', sans-serif; font-size: 0.9375rem; font-weight: 800; color: #f0f0f0; letter-spacing: -0.02em; }
         .page-content { padding: 32px 40px 80px; max-width: 860px; }
+        @media(max-width:640px){ .page-content { padding: 24px 20px 60px; } }
 
         .forecast-grid { display: grid; grid-template-columns: 260px 1fr; gap: 20px; align-items: start; }
         @media (max-width: 700px) { .forecast-grid { grid-template-columns: 1fr; } }
 
         .assumptions-card {
-          background: #1e1e1c; border: 1px solid #2a2a28;
+          background: var(--surface); border: 1px solid var(--border);
           border-radius: 14px; padding: 20px;
           position: sticky; top: 72px;
         }
-        .assumptions-title { font-family: 'Syne', sans-serif; font-size: 0.875rem; font-weight: 800; color: #f0f0f0; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .assumptions-title { font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; color: var(--text); margin-bottom: 16px; letter-spacing: -0.02em; }
 
         .field { margin-bottom: 12px; }
-        .field label { display: block; font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+        .field label { display: block; font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 6px; }
         .field input, .field select {
-          width: 100%; background: #161614; border: 1.5px solid #2a2a28; color: #f0f0f0;
-          font-family: 'Epilogue', sans-serif; font-size: 0.9375rem; font-weight: 600;
-          padding: 9px 12px; border-radius: 8px; outline: none;
+          width: 100%; background: var(--bg); border: 1.5px solid var(--border); color: var(--text);
+          font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700;
+          padding: 9px 12px; border-radius: 8px; outline: none; box-sizing: border-box;
           transition: border-color 0.18s; -moz-appearance: textfield;
         }
         .field input::-webkit-outer-spin-button, .field input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .field input:focus, .field select:focus { border-color: #f0ebe0; }
-        .field input::placeholder { color: #2a2a28; font-weight: 400; }
+        .field input:focus, .field select:focus { border-color: var(--accent); }
+        .field input::placeholder { color: var(--border); font-weight: 400; }
         .field select { cursor: pointer; }
 
         .horizon-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
         .horizon-tab {
           flex: 1; padding: 8px 4px; border-radius: 7px;
-          border: 1px solid #2a2a28; background: transparent;
-          color: #555; font-family: 'Epilogue', sans-serif;
-          font-size: 0.75rem; font-weight: 600; cursor: pointer;
+          border: 1px solid var(--border); background: transparent;
+          color: var(--muted-2); font-family: var(--font-display);
+          font-size: 0.75rem; font-weight: 700; cursor: pointer;
           transition: all 0.18s; text-align: center;
         }
-        .horizon-tab.active { background: rgba(240,235,224,.08); border-color: rgba(240,235,224,.2); color: #f0ebe0; }
+        .horizon-tab.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+        .horizon-tab:not(.active):hover { border-color: var(--accent); color: var(--accent); }
 
         .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .field-hint { font-size: 0.6875rem; color: #444; margin-top: 4px; line-height: 1.4; }
+        .field-hint { font-size: 0.6875rem; color: var(--muted-2); margin-top: 4px; line-height: 1.4; }
 
-        .results-col {}
-
-        .section-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #444; margin-bottom: 10px; }
+        .section-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 10px; }
 
         .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-        .s-card { background: #1e1e1c; border: 1px solid #2a2a28; border-radius: 10px; padding: 14px 12px; }
-        .s-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 6px; }
-        .s-val { font-family: 'Syne', sans-serif; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; }
-        .s-sub { font-size: 0.625rem; color: #444; margin-top: 4px; }
+        @media(max-width:480px){ .summary-grid { grid-template-columns: 1fr; } }
+        .s-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; }
+        .s-lbl { font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 6px; }
+        .s-val { font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; }
+        .s-sub { font-size: 0.625rem; color: var(--muted-2); margin-top: 4px; }
 
-        .chart-card { background: #1e1e1c; border: 1px solid #2a2a28; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+        .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
 
         .forecast-chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; margin-top: 12px; overflow: hidden; }
         .fc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; }
         .fc-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 3px; flex-shrink: 0; }
-        .fc-lbl { font-size: 0.5rem; color: #444; line-height: 1; flex-shrink: 0; }
+        .fc-lbl { font-size: 0.5rem; color: var(--muted-2); line-height: 1; flex-shrink: 0; }
 
         .warning-card {
           background: rgba(232,85,85,.07); border: 1px solid rgba(232,85,85,.2);
@@ -224,42 +218,38 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
         }
 
         .btn-ai {
-          width: 100%; background: rgba(240,235,224,.06);
-          border: 1px solid rgba(240,235,224,.15); color: #f0ebe0;
-          font-family: 'Syne', sans-serif; font-weight: 800;
-          font-size: 0.875rem; padding: 13px; border-radius: 10px;
-          cursor: pointer; transition: all 0.18s; letter-spacing: 0.02em;
+          width: 100%; background: var(--accent);
+          border: none; color: var(--bg);
+          font-family: var(--font-display); font-weight: 900;
+          font-size: 0.875rem; padding: 14px; border-radius: 10px;
+          cursor: pointer; transition: all 0.18s; letter-spacing: -0.01em;
           margin-bottom: 12px;
         }
-        .btn-ai:hover:not(:disabled) { background: rgba(240,235,224,.1); border-color: rgba(240,235,224,.25); }
-        .btn-ai:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-ai:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+        .btn-ai:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
         .ai-card {
-          background: #1e1e1c; border: 1px solid rgba(240,235,224,.12);
+          background: var(--surface); border: 1px solid var(--border);
           border-radius: 12px; padding: 20px; margin-bottom: 12px;
           position: relative; overflow: hidden;
         }
         .ai-card::before {
           content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(240,235,224,.2), transparent);
+          background: linear-gradient(90deg, transparent, rgba(249,215,27,.2), transparent);
         }
         .ai-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-        .ai-icon { width: 28px; height: 28px; border-radius: 6px; background: rgba(240,235,224,.07); border: 1px solid rgba(240,235,224,.1); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
-        .ai-title { font-family: 'Syne', sans-serif; font-size: 0.875rem; font-weight: 800; color: #f0f0f0; }
-        .ai-body { font-size: 0.9375rem; color: #bbb; line-height: 1.85; }
+        .ai-icon { width: 28px; height: 28px; border-radius: 6px; background: rgba(249,215,27,.08); border: 1px solid rgba(249,215,27,.15); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--accent); }
+        .ai-title { font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; color: var(--text); }
+        .ai-body { font-size: 0.9375rem; color: var(--muted); line-height: 1.85; }
         .ai-body p { margin-bottom: 12px; }
         .ai-body p:last-child { margin-bottom: 0; }
 
-        .loading-dots { display: flex; align-items: center; gap: 8px; color: #444; font-size: 0.875rem; padding: 6px 0; }
-        .loading-dot { width: 5px; height: 5px; border-radius: 50%; background: #f0ebe0; animation: pulse 1.2s ease-in-out infinite; }
+        .loading-dots { display: flex; align-items: center; gap: 8px; color: var(--muted-2); font-size: 0.875rem; padding: 6px 0; }
+        .loading-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
         .loading-dot:nth-child(2) { animation-delay: 0.2s; }
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes pulse { 0%,100% { opacity: 0.15; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
       `}</style>
-
-      <div className="page-topbar">
-        <span className="page-title">Forecast</span>
-      </div>
 
       <div className="page-content">
         <div className="forecast-grid">
@@ -310,13 +300,12 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
           </div>
 
           {/* Right: results */}
-          <div className="results-col">
-            {/* Summary cards */}
+          <div>
             <div className="section-lbl">Proyección a {assumptions.horizon} meses</div>
             <div className="summary-grid">
               <div className="s-card">
                 <div className="s-lbl">Ventas mes {assumptions.horizon}</div>
-                <div className="s-val" style={{ color: '#f0ebe0' }}>{fmtCLP(lastPoint?.revenue ?? 0)}</div>
+                <div className="s-val" style={{ color: 'var(--text)' }}>{fmtCLP(lastPoint?.revenue ?? 0)}</div>
                 <div className="s-sub">vs {fmtCLP(calc.revenue)} hoy</div>
               </div>
               <div className="s-card">
@@ -335,7 +324,6 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
               </div>
             </div>
 
-            {/* Warning or good */}
             {firstNegative ? (
               <div className="warning-card">
                 ⚠️ Con estos supuestos, tu caja cae a negativo en el <strong>mes {firstNegative.month}</strong>.
@@ -347,7 +335,6 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
               </div>
             )}
 
-            {/* Chart */}
             <div className="chart-card">
               <div className="section-lbl">Evolución de caja</div>
               <div className="forecast-chart">
@@ -365,7 +352,6 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
               </div>
             </div>
 
-            {/* EBITDA chart */}
             <div className="chart-card">
               <div className="section-lbl">Evolución de EBITDA</div>
               <div className="forecast-chart">
@@ -388,7 +374,6 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
               </div>
             </div>
 
-            {/* AI analysis */}
             <button className="btn-ai" onClick={analyzeWithClaude} disabled={aiLoading}>
               {aiLoading ? 'Analizando forecast...' : '✦ Analizar este forecast con IA →'}
             </button>
