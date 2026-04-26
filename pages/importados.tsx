@@ -1,3 +1,4 @@
+'use client';
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import Link from 'next/link';
@@ -8,24 +9,24 @@ export default function Importados() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    posthog.capture('shop_page_view');
+    posthog.capture('importados_page_view');
   }, []);
 
   const faqs = [
-    { q: '¿Las comisiones son exactas?', a: 'Sí. Usamos las tarifas vigentes de MercadoLibre Chile por categoría, incluyendo el IVA 19% que ML cobra sobre su comisión. Te recomendamos verificar siempre en el portal oficial de ML ante cambios de tarifas.' },
-    { q: '¿Para qué sirve la diferencia entre Clásica y Premium?', a: 'Clásica tiene menor comisión pero el comprador paga el envío. Premium tiene mayor comisión pero el envío es gratis para el comprador — ese costo lo absorbes tú. La calculadora muestra cuál te conviene más según tu margen.' },
-    { q: '¿Mis datos son privados?', a: 'Todo se calcula en tu navegador. No guardamos ningún número tuyo en ningún servidor.' },
-    { q: '¿Puedo probar antes de pagar?', a: 'Sí. La calculadora de margen ML es completamente gratis. Pagás solo si querés los frameworks y spreadsheets completos.' },
-    { q: '¿Se puede comprar una sola vez?', a: 'Exacto. Es un pago único — no hay suscripción. Comprás una vez y el material es tuyo para siempre.' },
+    { q: '¿El tipo de cambio afecta tanto el margen?', a: 'Mucho más de lo que parece. Un dólar que sube $50 CLP en un producto de US$30 son $1.500 CLP menos de margen por unidad. Si vendés 50 unidades al mes, son $75.000 CLP que desaparecen sin que cambies nada.' },
+    { q: '¿Cómo calculo el arancel correcto para mi producto?', a: 'El arancel depende del código arancelario (partida). En Chile el arancel general es 6%, pero hay excepciones por tratados comerciales (TLC con China, EE.UU., etc.). La calculadora usa el 6% base — verificá la partida exacta en el Servicio Nacional de Aduanas.' },
+    { q: '¿Qué pasa si compro en cantidad y baja el costo unitario?', a: 'Es el escenario ideal. La calculadora te permite simular distintos costos de compra para ver desde qué volumen el margen es rentable en ML después de todos los costos de importación.' },
+    { q: '¿Las comisiones ML aplican igual que en productos nacionales?', a: 'Exactamente igual. ML cobra por categoría más IVA 19% sobre esa comisión, independientemente de dónde venga el producto. La diferencia está en que el costo real del producto importado incluye flete, arancel y bodegaje.' },
+    { q: '¿Puedo probar la calculadora antes de comprar?', a: 'Sí. La calculadora base es gratis. Los frameworks de importación, planillas de escenarios y playbook de implementación están en los planes pagados.' },
   ];
 
   return (
     <Layout>
       <Head>
-        <title>Margen Real para MercadoLibre Chile — Calculá tu margen real</title>
-        <meta name="description" content="Calculá exactamente cuánto te queda después de comisiones ML, IVA 19% y envío. La herramienta para vendedores de MercadoLibre Chile." />
-        <meta property="og:title" content="Margen Real para MercadoLibre Chile" />
-        <meta property="og:description" content="Calculadora de margen real para vendedores ML Chile. Comisiones por categoría, IVA 19%, costo de envío. Sin sorpresas." />
+        <title>Calculadora de margen para importados en MercadoLibre Chile — Margen Real</title>
+        <meta name="description" content="Calculá el margen real de tus productos importados en ML Chile: flete, arancel, bodegaje, tipo de cambio y comisiones ML en un solo número." />
+        <meta property="og:title" content="Calculadora margen importados MercadoLibre Chile" />
+        <meta property="og:description" content="Flete + arancel + bodegaje + tipo de cambio + comisión ML = tu margen real. Calculalo antes de importar." />
         <meta property="og:type" content="website" />
       </Head>
 
@@ -39,6 +40,7 @@ export default function Importados() {
 
         .tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
         @media(max-width:860px){ .tiers-grid { grid-template-columns: 1fr; } }
+        .pricing-note { text-align: center; margin-top: 12px; font-size: 13px; color: var(--muted); }
 
         .steps-list { margin-top: 32px; display: grid; gap: 1px; }
         .step { display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; background: var(--surface); padding: 24px 28px; transition: background var(--transition); }
@@ -48,6 +50,22 @@ export default function Importados() {
         .step-num { font-size: 0.8125rem; font-weight: 700; color: var(--muted); letter-spacing: 0.05em; padding-top: 3px; }
         .step-title { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 700; margin-bottom: 6px; color: var(--text); line-height: 1.3; }
         .step-text { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+        .cost-breakdown {
+          display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+          background: var(--border); border-radius: 16px; overflow: hidden; margin-top: 32px;
+        }
+        @media(max-width:700px){ .cost-breakdown { grid-template-columns: repeat(2, 1fr); } }
+        @media(max-width:400px){ .cost-breakdown { grid-template-columns: 1fr; } }
+        .cost-item { background: var(--surface); padding: 24px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .cost-item-icon { font-size: 22px; }
+        .cost-item-label { font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-2); }
+        .cost-item-name { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+        .cost-item-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.55; }
+        .cost-arrow {
+          display: flex; align-items: center; justify-content: center;
+          font-size: 1.25rem; color: var(--muted-2); padding: 8px 0;
+        }
       `}</style>
 
       <div className="page-wrap">
@@ -55,22 +73,22 @@ export default function Importados() {
         <div className="page-hero">
           <div className="page-eyebrow">
             <span className="dot" />
-            Para vendedores de MercadoLibre Chile
+            Para importadores que venden en MercadoLibre Chile
           </div>
           <h1 className="page-h1">
-            ¿Cuánto te queda<br />
-            después de que<br />
-            <em>ML se cobra todo?</em>
+            Importar barato<br />
+            no garantiza<br />
+            <em>vender con margen.</em>
           </h1>
           <p className="page-lead">
-            Comisión por categoría, IVA 19% sobre esa comisión, costo de envío — y recién ahí sabés si ganaste o perdiste. Calculalo en 30 segundos.
+            Flete, arancel, bodegaje, tipo de cambio — y recién después las comisiones ML. Calculá todos los costos en un número antes de hacer el pedido.
           </p>
           <div className="page-actions">
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
-              Calcular mi margen gratis →
+              Calcular mi margen →
             </Link>
-            <Link href="/gratis" className="btn btn-outline" style={{ textDecoration: 'none' }}>
-              Ver guía gratuita
+            <Link href="/pricing" className="btn btn-outline" style={{ textDecoration: 'none' }}>
+              Ver frameworks completos
             </Link>
           </div>
         </div>
@@ -79,16 +97,35 @@ export default function Importados() {
 
         <section className="section">
           <div className="label">El problema</div>
-          <h2 className="heading">Lo que ML te cobra<br />y casi nadie calcula bien.</h2>
+          <h2 className="heading">Cuatro costos que destruyen<br />el margen antes de llegar a ML.</h2>
+          <div className="cost-breakdown">
+            {[
+              { icon: '🚢', label: 'Costo 1', name: 'Flete internacional', desc: 'Marítimo o aéreo. El precio por kilo varía brutalmente según temporada y ruta. Muchos lo subestiman un 30%.' },
+              { icon: '🏛️', label: 'Costo 2', name: 'Arancel aduanero', desc: 'En Chile el arancel base es 6% sobre el valor CIF. Varía según partida arancelaria y tratado de libre comercio aplicable.' },
+              { icon: '🏭', label: 'Costo 3', name: 'Bodegaje y preparación', desc: 'Recepción, control de calidad, etiquetado y fulfillment. Entre $300 y $800 CLP por unidad según el servicio.' },
+              { icon: '💱', label: 'Costo 4', name: 'Tipo de cambio', desc: 'Comprás en USD, vendés en CLP. Una variación de $50 en el dólar sobre un producto de US$30 son $1.500 menos por unidad.' },
+            ].map(c => (
+              <div className="cost-item" key={c.name}>
+                <span className="cost-item-icon">{c.icon}</span>
+                <span className="cost-item-label">{c.label}</span>
+                <span className="cost-item-name">{c.name}</span>
+                <span className="cost-item-desc">{c.desc}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr className="divider" />
+
+        <section className="section">
+          <div className="label">Y encima de eso</div>
+          <h2 className="heading">Lo que ML te descuenta<br />sobre el precio ya ajustado.</h2>
           <div className="pain-grid">
             {[
-              { icon: '📊', title: 'Comisión por categoría', text: 'No es lo mismo vender ropa (17%) que electrónica (13%). La categoría define cuánto te descuenta ML antes de pagarte.' },
-              { icon: '🧾', title: 'IVA 19% sobre la comisión', text: 'ML cobra IVA sobre su propia comisión. Si vendés a $20.000 con 15% de comisión, el descuento real es 17,85% — no 15%.' },
-              { icon: '📦', title: 'Costo de envío que absorbes', text: 'En publicaciones Premium el envío gratis lo pagas tú. $3.990 a $8.990 por paquete que sale directo de tu margen.' },
-              { icon: '🏷️', title: 'Precio copiado de la competencia', text: 'Si el competidor calculó mal, tú también quedas mal. El único precio que importa es el que cubre tus costos reales.' },
-              { icon: '📉', title: 'Margen calculado sobre el precio de venta', text: 'El error clásico. El margen real se calcula sobre el costo, no sobre lo que publicás. La diferencia puede ser brutal.' },
-              { icon: '🔢', title: 'Precio de lista vs. precio neto', text: 'Lo que ves en tu dashboard de ML no es lo que entra a tu bolsillo. El neto es lo que importa para decidir.' },
-            ].map((p) => (
+              { icon: '📊', title: 'Comisión por categoría', text: 'Entre 8% y 17% según la categoría ML. Sobre el precio de publicación, no sobre tu costo. Y la cobran antes de IVA.' },
+              { icon: '🧾', title: 'IVA 19% sobre la comisión', text: 'ML cobra IVA sobre su propia comisión. Si la comisión es 15%, el descuento real es 17,85%. No 15%.' },
+              { icon: '📦', title: 'Envío gratis que pagas tú', text: 'En publicaciones Premium el envío lo absorbes tú. Entre $3.990 y $8.990 por paquete que sale de tu margen final.' },
+            ].map(p => (
               <div className="pain-card" key={p.title}>
                 <div className="pain-icon">{p.icon}</div>
                 <div className="pain-title">{p.title}</div>
@@ -100,80 +137,16 @@ export default function Importados() {
 
         <hr className="divider" />
 
-        <section className="section" id="planes">
-          <div className="label">Lo que incluye</div>
-          <h2 className="heading">Elegí tu nivel<br />de claridad en ML Chile.</h2>
-          <div className="tiers-grid">
-
-            <div className="plan">
-              <div className="plan-name">Gratis</div>
-              <div className="plan-price">$<span>0</span></div>
-              <div className="plan-desc">Para empezar a calcular bien, sin excusas.</div>
-              <ul className="plan-features">
-                <li>Calculadora de precio mínimo</li>
-                <li>Checklist: 5 errores de pricing</li>
-                <li>Fórmula base explicada en español</li>
-                <li className="off">Frameworks completos</li>
-                <li className="off">Ejemplos por rubro</li>
-                <li className="off">Spreadsheets descargables</li>
-              </ul>
-              <Link href="/calculadora-ml" className="btn btn-plan btn-plan-outline" style={{ textDecoration: 'none' }}>
-                Empezar gratis →
-              </Link>
-            </div>
-
-            <div className="plan featured">
-              <div className="plan-tag">Más popular</div>
-              <div className="plan-name">Starter</div>
-              <div className="plan-price"><sup>US$</sup>19</div>
-              <div className="plan-desc">Para el vendedor que quiere dejar de improvisar.</div>
-              <ul className="plan-features">
-                <li>Todo lo del plan gratis</li>
-                <li>Guía táctica completa de pricing</li>
-                <li>Framework paso a paso para importados</li>
-                <li>Spreadsheet de cálculo básico</li>
-                <li>Ejemplos reales: ropa, cosméticos, accesorios</li>
-                <li className="off">Modelos de escenarios</li>
-              </ul>
-              <a href="https://margenreal.lemonsqueezy.com/checkout/buy/be78bcd3-c734-4b95-b164-d4996478b598" target="_blank" rel="noopener noreferrer" className="btn btn-plan btn-plan-accent" onClick={() => posthog.capture('checkout_started', { plan: 'starter' })}>
-                Comprar Starter →
-              </a>
-              <div className="pricing-note" style={{ marginTop: 12 }}>Pago único · Sin suscripción</div>
-            </div>
-
-            <div className="plan">
-              <div className="plan-name">Pro</div>
-              <div className="plan-price"><sup>US$</sup>49</div>
-              <div className="plan-desc">Para el vendedor que quiere el sistema completo.</div>
-              <ul className="plan-features">
-                <li>Todo lo de Starter</li>
-                <li>Spreadsheet pack completo</li>
-                <li>Modelos de escenarios (3 rubros)</li>
-                <li>Playbook de implementación</li>
-                <li>Ejemplos con márgenes reales por categoría</li>
-                <li>Cálculo de precio por volumen de compra</li>
-              </ul>
-              <a href="https://margenreal.lemonsqueezy.com/checkout/buy/535e6adb-a287-4c6c-9f58-d72457f17044" target="_blank" rel="noopener noreferrer" className="btn btn-plan btn-plan-outline" onClick={() => posthog.capture('checkout_started', { plan: 'pro' })}>
-                Comprar Pro →
-              </a>
-              <div className="pricing-note" style={{ marginTop: 12 }}>Pago único · Sin suscripción</div>
-            </div>
-
-          </div>
-        </section>
-
-        <hr className="divider" />
-
         <section className="section">
           <div className="label">Cómo funciona</div>
-          <h2 className="heading">Del caos al número<br />en cuatro pasos.</h2>
+          <h2 className="heading">Del precio FOB al margen real<br />en cuatro pasos.</h2>
           <div className="steps-list">
             {[
-              { n: '01', title: 'Ingresas tu producto y categoría ML', text: 'Costo del producto, precio de publicación, categoría de MercadoLibre y tipo de publicación (Clásica o Premium).' },
-              { n: '02', title: 'Ves tu margen real al instante', text: 'Comisión ML, IVA 19% sobre esa comisión, costo de envío — todo desglosado. Lo que realmente entra a tu bolsillo.' },
-              { n: '03', title: 'Calculas el precio para tu margen objetivo', text: '¿Quieres 30% de margen? La calculadora te dice exactamente a qué precio publicar para lograrlo después de todos los descuentos ML.' },
-              { n: '04', title: 'Publicas con números, no de ojo', text: 'Sabes exactamente cuánto ganas en cada venta. Puedes ajustar el precio o cambiar de Clásica a Premium con datos reales.' },
-            ].map((s) => (
+              { n: '01', title: 'Ingresás el costo FOB y los costos de importación', text: 'Precio de compra en origen, tipo de cambio, flete estimado, arancel y bodegaje. Todo en CLP para tener el costo real del producto en Chile.' },
+              { n: '02', title: 'Definís el precio de publicación en ML', text: 'Ingresás la categoría, tipo de publicación (Clásica o Premium) y el precio al que querés publicar.' },
+              { n: '03', title: 'Ves el margen real después de todo', text: 'Costo total importado + comisión ML + IVA + envío = lo que realmente te queda. En pesos, en porcentaje, sin sorpresas.' },
+              { n: '04', title: 'Simulás el precio mínimo para tu margen objetivo', text: '¿Querés 25%? La calculadora te dice el precio exacto de publicación para lograrlo después de importación y comisiones ML.' },
+            ].map(s => (
               <div className="step" key={s.n}>
                 <div className="step-num">{s.n}</div>
                 <div>
@@ -187,9 +160,85 @@ export default function Importados() {
 
         <hr className="divider" />
 
+        <section className="section" id="planes">
+          <div className="label">Planes</div>
+          <h2 className="heading">Elegí tu nivel<br />de claridad.</h2>
+          <div className="tiers-grid">
+
+            <div className="plan">
+              <div className="plan-name">Gratis</div>
+              <div className="plan-price">$<span>0</span></div>
+              <div className="plan-desc">Para empezar a calcular bien, sin excusas.</div>
+              <ul className="plan-features">
+                <li>Calculadora de precio mínimo</li>
+                <li>Checklist: 5 errores de pricing</li>
+                <li>Fórmula base explicada en español</li>
+                <li className="off">Frameworks de importación</li>
+                <li className="off">Planillas por rubro</li>
+                <li className="off">Modelos de escenarios</li>
+              </ul>
+              <Link href="/calculadora-ml" className="btn-plan btn-plan-outline" style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+                Empezar gratis →
+              </Link>
+            </div>
+
+            <div className="plan featured">
+              <div className="plan-tag">Más popular</div>
+              <div className="plan-name">Starter</div>
+              <div className="plan-price"><sup>US$</sup>19</div>
+              <div className="plan-desc">Para el importador que quiere dejar de adivinar.</div>
+              <ul className="plan-features">
+                <li>Todo lo del plan gratis</li>
+                <li>Framework paso a paso para importados</li>
+                <li>Guía táctica completa de pricing</li>
+                <li>Spreadsheet de cálculo básico</li>
+                <li>Ejemplos reales: ropa, cosméticos, accesorios</li>
+                <li className="off">Modelos de escenarios</li>
+              </ul>
+              <a
+                href="https://margenreal.lemonsqueezy.com/checkout/buy/be78bcd3-c734-4b95-b164-d4996478b598"
+                target="_blank" rel="noopener noreferrer"
+                className="btn-plan btn-plan-accent"
+                style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+                onClick={() => posthog.capture('checkout_started', { plan: 'starter', source: 'importados' })}
+              >
+                Comprar Starter →
+              </a>
+              <div className="pricing-note">Pago único · Sin suscripción</div>
+            </div>
+
+            <div className="plan">
+              <div className="plan-name">Pro</div>
+              <div className="plan-price"><sup>US$</sup>49</div>
+              <div className="plan-desc">Para el importador que quiere el sistema completo.</div>
+              <ul className="plan-features">
+                <li>Todo lo de Starter</li>
+                <li>Spreadsheet pack completo</li>
+                <li>Modelos de escenarios (3 rubros)</li>
+                <li>Playbook de implementación</li>
+                <li>Márgenes reales por categoría ML</li>
+                <li>Cálculo de precio por volumen de compra</li>
+              </ul>
+              <a
+                href="https://margenreal.lemonsqueezy.com/checkout/buy/535e6adb-a287-4c6c-9f58-d72457f17044"
+                target="_blank" rel="noopener noreferrer"
+                className="btn-plan btn-plan-outline"
+                style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+                onClick={() => posthog.capture('checkout_started', { plan: 'pro', source: 'importados' })}
+              >
+                Comprar Pro →
+              </a>
+              <div className="pricing-note">Pago único · Sin suscripción</div>
+            </div>
+
+          </div>
+        </section>
+
+        <hr className="divider" />
+
         <section className="section">
           <div className="label">Preguntas frecuentes</div>
-          <h2 className="heading">Lo que suelen preguntar.</h2>
+          <h2 className="heading">Lo que suelen preguntar<br />los importadores.</h2>
           <div className="faq-list">
             {faqs.map((faq, i) => (
               <div className="faq-item" key={i} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
@@ -205,12 +254,12 @@ export default function Importados() {
 
         <section className="section">
           <div className="cta-banner">
-            <div className="label" style={{ textAlign: 'center' }}>Empieza ahora</div>
+            <div className="label" style={{ textAlign: 'center' }}>Calculá antes de importar</div>
             <h2 className="heading" style={{ margin: '0 auto 16px', maxWidth: 600, textAlign: 'center' }}>
-              ¿Cuánto te queda realmente<br />después de ML?
+              ¿El precio que estás pagando<br />deja margen después de ML?
             </h2>
             <p style={{ color: 'var(--muted)', margin: '0 auto 32px', maxWidth: 440, fontSize: 15, lineHeight: 1.7, textAlign: 'center' }}>
-              Calcúlalo en 30 segundos. Gratis. Sin registro.
+              Calculalo en 30 segundos. Gratis. Sin registro.
             </p>
             <Link href="/calculadora-ml" className="btn btn-primary btn-lg" style={{ textDecoration: 'none' }}>
               Calcular mi margen →
@@ -219,7 +268,6 @@ export default function Importados() {
         </section>
 
       </div>
-
     </Layout>
   );
 }
