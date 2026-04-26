@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem(SESSION_KEY)) {
-      router.replace(typeof next === 'string' ? next : '/calculadora-ml');
+      router.replace(typeof next === 'string' ? next : '/dashboard');
     }
   }, [router, next]);
 
@@ -37,7 +37,7 @@ export default function LoginPage() {
       localStorage.setItem(SESSION_KEY, data.accessToken);
       localStorage.setItem('mr_user_email', data.email);
       localStorage.setItem('mr_user_plan', data.plan);
-      router.replace(typeof next === 'string' ? next : '/calculadora-ml');
+      router.replace(typeof next === 'string' ? next : '/dashboard');
     } else {
       setErrorMsg(data.error ?? 'Error al iniciar sesión');
       setStatus('error');

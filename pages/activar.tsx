@@ -17,7 +17,7 @@ export default function ActivarPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem(SESSION_KEY)) {
-      router.replace('/pro');
+      router.replace('/dashboard');
     }
   }, [router]);
 
@@ -85,7 +85,7 @@ export default function ActivarPage() {
               <div className="act-success-icon">✅</div>
               <div className="act-success-title">¡Cuenta activada!</div>
               <div className="act-success-sub">Ya tenés acceso completo a tu plan. Empezá a calcular sin límites.</div>
-              <Link href="/calculadora-ml" className="act-cta">Ir a la calculadora →</Link>
+              <Link href="/dashboard" className="act-cta">Ir a mi cuenta →</Link>
             </div>
           ) : (
             <>
