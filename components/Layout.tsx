@@ -47,6 +47,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [expanded, setExpanded] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [userInitial, setUserInitial] = useState<string | null>(null);
 
   useEffect(() => {
     const check = () => setMobile(window.innerWidth <= 768);
@@ -56,6 +57,13 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => { setExpanded(false); }, [pathname]);
+
+  useEffect(() => {
+    const email = localStorage.getItem('mr_user_email');
+    const token = localStorage.getItem('mr_session');
+    if (email && token) setUserInitial(email.charAt(0).toUpperCase());
+    else setUserInitial(null);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = (expanded && mobile) ? 'hidden' : '';
@@ -192,11 +200,17 @@ export default function Layout({ children }: { children: ReactNode }) {
             margen<span>real</span>
           </Link>
         </div>
-        <Link href="/login" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--muted)', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, transition: 'color var(--transition)' }}
-          onMouseOver={e => (e.currentTarget.style.color = 'var(--text)')}
-          onMouseOut={e  => (e.currentTarget.style.color = 'var(--muted)')}>
-          Iniciar sesión
-        </Link>
+        {userInitial ? (
+          <Link href="/dashboard" style={{ width: 32, height: 32, borderRadius: 9, background: 'var(--accent)', color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, textDecoration: 'none', flexShrink: 0 }}>
+            {userInitial}
+          </Link>
+        ) : (
+          <Link href="/login" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--muted)', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, transition: 'color var(--transition)' }}
+            onMouseOver={e => (e.currentTarget.style.color = 'var(--text)')}
+            onMouseOut={e  => (e.currentTarget.style.color = 'var(--muted)')}>
+            Iniciar sesión
+          </Link>
+        )}
       </header>
 
       {/* Mobile overlay */}
