@@ -438,34 +438,65 @@ export default function CalculadoraML() {
 
                 {/* Multi-producto preview CTA */}
                 <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', marginBottom: 16 }}>
-                  <div style={{ padding: '20px 22px 20px' }}>
+                  <div style={{ padding: '20px 22px' }}>
                     <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 6 }}>Análisis multi-producto</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>¿Tenés más de un producto en ML?</div>
-                    <div style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginBottom: 14 }}>Probablemente tenés productos perdiendo dinero sin saberlo.</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
+                      {productos.length === 0 ? '¿Tenés más de un producto en ML?' : `${productos.length + 1} productos calculados`}
+                    </div>
+                    <div style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginBottom: 14 }}>
+                      {productos.length === 0
+                        ? 'Agregá productos a la comparación para ver cuáles te dan más margen.'
+                        : productos.length >= FREE_LIMIT
+                        ? 'Alcanzaste el límite del plan gratis. Desbloqueá comparación ilimitada.'
+                        : `Podés agregar ${FREE_LIMIT - productos.length} producto${FREE_LIMIT - productos.length > 1 ? 's' : ''} más en el plan gratis.`
+                      }
+                    </div>
                     <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', marginBottom: 16, fontSize: '0.8125rem' }}>
                       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', background: 'var(--bg)', padding: '8px 14px', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
                         <span>Producto</span><span>Precio</span><span>Margen</span><span>Estado</span>
                       </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)' }}>
-                        <span style={{ color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{nombre || 'Este producto'}</span>
+                      {/* Productos ya guardados */}
+                      {productos.map(p => (
+                        <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)' }}>
+                          <span style={{ color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{p.nombre}</span>
+                          <span style={{ color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
+                          <span style={{ color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555', fontWeight: 700 }}>{p.margenPct.toFixed(1).replace('.', ',')}%</span>
+                          <span style={{ fontSize: '0.75rem' }}>{!p.esCosteable ? '❌' : p.margenPct < 20 ? '⚠️' : '✅'}</span>
+                        </div>
+                      ))}
+                      {/* Producto actual (aún no guardado) */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)', background: 'rgba(249,215,27,0.04)' }}>
+                        <span style={{ color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{nombre || 'Este producto'} <span style={{ fontSize: '0.625rem', color: 'var(--muted-2)', fontWeight: 400 }}>← actual</span></span>
                         <span style={{ color: 'var(--muted)' }}>${fmt(precioNum)}</span>
                         <span style={{ color: resultado.margenPct >= 20 ? '#2dd4a0' : resultado.margenPct >= 0 ? '#f0b429' : '#e85555', fontWeight: 700 }}>{fmtPct(resultado.margenPct)}</span>
                         <span style={{ fontSize: '0.75rem' }}>{!resultado.esCosteable ? '❌' : resultado.margenPct < 20 ? '⚠️' : '✅'}</span>
                       </div>
-                      {[2, 3].map(n => (
-                        <div key={n} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)', opacity: 0.35, filter: 'blur(3px)', userSelect: 'none' as const }}>
-                          <span>Producto {n}</span><span>$••.•••</span><span>••%</span><span>🔒</span>
+                      {/* Filas bloqueadas si no llegó al límite */}
+                      {productos.length < FREE_LIMIT - 1 && Array.from({ length: FREE_LIMIT - 1 - productos.length }).map((_, i) => (
+                        <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)', opacity: 0.3, filter: 'blur(3px)', userSelect: 'none' as const }}>
+                          <span>Producto {productos.length + i + 2}</span><span>$••.•••</span><span>••%</span><span>🔒</span>
                         </div>
                       ))}
                     </div>
-                    <Link
-                      href="/pricing"
-                      className="btn btn-primary"
-                      style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box' as const }}
-                      onClick={() => posthog.capture('multiproduct_cta_click', { source: 'calculadora' })}
-                    >
-                      Analizar todos mis productos →
-                    </Link>
+                    {productos.length >= FREE_LIMIT ? (
+                      <Link
+                        href="/pricing"
+                        className="btn btn-primary"
+                        style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box' as const }}
+                        onClick={() => posthog.capture('multiproduct_cta_click', { source: 'calculadora', trigger: 'limit' })}
+                      >
+                        🔒 Desbloqueá comparación ilimitada →
+                      </Link>
+                    ) : (
+                      <Link
+                        href="/pricing"
+                        className="btn btn-primary"
+                        style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box' as const }}
+                        onClick={() => posthog.capture('multiproduct_cta_click', { source: 'calculadora', trigger: 'teaser' })}
+                      >
+                        Analizar todos mis productos →
+                      </Link>
+                    )}
                     <div style={{ display: 'flex', gap: 12, marginTop: 10, fontSize: '0.75rem', color: 'var(--muted)', justifyContent: 'center', flexWrap: 'wrap' as const }}>
                       <span>✓ Comparación multi-producto</span>
                       <span>✓ Precio mínimo por categoría</span>
