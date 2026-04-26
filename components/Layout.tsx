@@ -209,8 +209,24 @@ export default function Layout({ children }: { children: ReactNode }) {
         /* Topbar actions responsive */
         .topbar-actions { display: flex; align-items: center; gap: 6px; }
         .topbar-btn-secondary { display: inline-block; }
-        @media (max-width: 360px) {
+        .topbar-btn-login {
+          font-size: 0.75rem; font-weight: 700; color: var(--accent);
+          text-decoration: none; padding: 7px 10px; border-radius: 8px;
+          border: 1.5px solid var(--accent); transition: opacity 0.15s; white-space: nowrap;
+        }
+        .topbar-btn-login:hover { opacity: 0.75; text-decoration: none; }
+        .topbar-btn-signup {
+          font-size: 0.75rem; font-weight: 800; color: var(--bg);
+          text-decoration: none; padding: 7px 10px; border-radius: 8px;
+          background: var(--accent); transition: opacity 0.15s; white-space: nowrap;
+        }
+        .topbar-btn-signup:hover { opacity: 0.85; text-decoration: none; }
+        .topbar-btn-short { display: none; }
+        @media (max-width: 480px) {
           .topbar-actions { gap: 4px; }
+          .topbar-btn-login, .topbar-btn-signup { font-size: 0.6875rem; padding: 5px 9px; }
+          .topbar-btn-long { display: none; }
+          .topbar-btn-short { display: inline; }
         }
         .topbar-user-pill { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px 5px 6px; cursor: pointer; font-family: inherit; }
         .topbar-user-name { font-size: 0.8125rem; font-weight: 700; color: var(--text); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -287,17 +303,13 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
         ) : (
           <div className="topbar-actions">
-            <Link href="/login" className="topbar-btn-secondary"
-              style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', padding: '7px 10px', borderRadius: 8, border: '1.5px solid var(--accent)', transition: 'opacity 0.15s', whiteSpace: 'nowrap' }}
-              onMouseOver={e => (e.currentTarget.style.opacity = '0.75')}
-              onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
-              Iniciar sesión
+            <Link href="/login" className="topbar-btn-login">
+              <span className="topbar-btn-long">Iniciar sesión</span>
+              <span className="topbar-btn-short">Ingresar</span>
             </Link>
-            <Link href="/registro"
-              style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 10px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s', whiteSpace: 'nowrap' }}
-              onMouseOver={e => (e.currentTarget.style.opacity = '0.85')}
-              onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
-              Crear cuenta
+            <Link href="/registro" className="topbar-btn-signup">
+              <span className="topbar-btn-long">Crear cuenta</span>
+              <span className="topbar-btn-short">Registro</span>
             </Link>
           </div>
         )}
