@@ -48,6 +48,14 @@ export class PostgresUserRepository implements IUserRepository {
     return rows.length ? this.mapRow(rows[0]) : null;
   }
 
+  async resetPassword(email: string, passwordHash: string): Promise<boolean> {
+    const { rowCount } = await pool.query(
+      'UPDATE users SET password_hash = $1 WHERE email = $2',
+      [passwordHash, email.toLowerCase()]
+    );
+    return (rowCount ?? 0) > 0;
+  }
+
   async createTenantSchema(userId: number): Promise<string> {
     const { rows } = await pool.query(
       'SELECT create_tenant_schema($1) AS schema_name',

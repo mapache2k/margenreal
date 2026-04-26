@@ -8,6 +8,8 @@ const ACCESS_TTL  = 15 * 60 * 1000;
 const REFRESH_TTL = 7 * 24 * 60 * 60 * 1000;
 // Activation token: 7 días
 const ACTIVATION_TTL = 7 * 24 * 60 * 60 * 1000;
+// Password reset token: 1 hora
+const RESET_TTL = 60 * 60 * 1000;
 
 function sign(payload: object): string {
   const data = Buffer.from(JSON.stringify(payload)).toString('base64url');
@@ -26,9 +28,10 @@ function verify<T>(token: string): T | null {
   } catch { return null; }
 }
 
-export type ActivationPayload = { type: 'activation'; email: string; plan: string; orderId: string; exp: number };
-export type AccessPayload     = { type: 'access';     email: string; plan: string; userId: number; exp: number };
-export type RefreshPayload    = { type: 'refresh';    email: string; userId: number; jti: string; exp: number };
+export type ActivationPayload  = { type: 'activation';  email: string; plan: string; orderId: string; exp: number };
+export type AccessPayload      = { type: 'access';      email: string; plan: string; userId: number; exp: number };
+export type RefreshPayload     = { type: 'refresh';     email: string; userId: number; jti: string; exp: number };
+export type PasswordResetPayload = { type: 'password_reset'; email: string; exp: number };
 
 export class TokenService {
   createActivationToken(email: string, plan: string, orderId: string): string {
@@ -57,5 +60,14 @@ export class TokenService {
   verifyRefreshToken(token: string): RefreshPayload | null {
     const p = verify<RefreshPayload>(token);
     return p?.type === 'refresh' ? p : null;
+  }
+
+  createPasswordResetToken(email: string): string {
+    return sign({ type: 'password_reset', email, exp: Date.now() + RESET_TTL });
+  }
+
+  verifyPasswordResetToken(token: string): PasswordResetPayload | null {
+    const p = verify<PasswordResetPayload>(token);
+    return p?.type === 'password_reset' ? p : null;
   }
 }

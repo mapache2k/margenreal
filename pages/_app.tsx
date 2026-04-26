@@ -26,12 +26,18 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ProProvider>
       <Head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Epilogue:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta property="og:image" content="https://margenreal.io/api/og" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://margenreal.io/api/og" />
       </Head>
 
       <Component {...pageProps} />

@@ -92,6 +92,9 @@ export default function LoginPage() {
           </form>
 
           <div className="login-footer">
+            <Link href="/olvide-contrasena" style={{ color: 'var(--muted)' }}>¿Olvidaste tu contraseña?</Link>
+          </div>
+          <div className="login-footer">
             ¿No tienes cuenta? <Link href="/pricing">Ver planes →</Link>
           </div>
         </div>
