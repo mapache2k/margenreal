@@ -43,7 +43,8 @@ const NAV = [
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
-  const { pathname } = useRouter();
+  const router = useRouter();
+  const { pathname } = router;
   const [expanded, setExpanded] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
