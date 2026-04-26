@@ -823,8 +823,8 @@ footer {
 .lead-success { font-size: 0.875rem; color: var(--success); font-weight: 600; margin-top: 8px; }
 
 /* ── Add to comparison button ── */
-.btn-agregar { width: 100%; margin-top: 16px; padding: 12px; background: var(--surface); border: 1.5px solid var(--border); color: var(--text); font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; border-radius: 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
-.btn-agregar:hover { border-color: var(--accent); background: rgba(249,215,27,0.04); }
+.btn-agregar { width: 100%; margin-top: 16px; padding: 12px; background: var(--accent); border: 1.5px solid var(--accent); color: #000; font-family: var(--font-display); font-weight: 700; font-size: 0.875rem; border-radius: 10px; cursor: pointer; transition: opacity 0.15s; }
+.btn-agregar:hover { opacity: 0.85; }
 
 /* ── Multi-product comparison table ── */
 .comparacion-wrap { margin-top: 40px; }
