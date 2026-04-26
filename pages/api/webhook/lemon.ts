@@ -83,10 +83,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const plan = Plan.create(planStr);
   const user = await repo.upsertPending(email, plan, orderId);
 
-  const tokenService = new TokenService();
-  const token = tokenService.createActivationToken(email, planStr, orderId);
-  await sendActivationEmail(email, token, planStr);
+  if (user.isActivated()) {
+    // Ya tiene cuenta activa — solo actualizamos el plan, sin reenviar email
+    console.info(`[webhook/lemon] plan upgradeado a ${planStr} para ${email} (userId=${user.id})`);
+  } else {
+    const tokenService = new TokenService();
+    const token = tokenService.createActivationToken(email, planStr, orderId);
+    await sendActivationEmail(email, token, planStr);
+    console.info(`[webhook/lemon] activación enviada a ${email} (${planStr}), userId=${user.id}`);
+  }
 
-  console.info(`[webhook/lemon] activación enviada a ${email} (${planStr}), userId=${user.id}`);
   return res.status(200).json({ ok: true });
 }

@@ -282,7 +282,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
               Iniciar sesión
             </Link>
-            <Link href="/pricing"
+            <Link href="/registro"
               style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s' }}
               onMouseOver={e => (e.currentTarget.style.opacity = '0.85')}
               onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
