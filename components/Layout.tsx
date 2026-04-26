@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Footer from './Footer';
@@ -48,6 +48,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [calcOpen, setCalcOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [userInitial, setUserInitial] = useState<string | null>(null);
+  const [userEmail, setUserEmail]     = useState<string | null>(null);
+  const [dropOpen, setDropOpen]       = useState(false);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const check = () => setMobile(window.innerWidth <= 768);
@@ -61,9 +64,32 @@ export default function Layout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const email = localStorage.getItem('mr_user_email');
     const token = localStorage.getItem('mr_session');
-    if (email && token) setUserInitial(email.charAt(0).toUpperCase());
-    else setUserInitial(null);
+    if (email && token) {
+      setUserEmail(email);
+      setUserInitial(email.charAt(0).toUpperCase());
+    } else {
+      setUserEmail(null);
+      setUserInitial(null);
+    }
   }, [pathname]);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('mr_session');
+    localStorage.removeItem('mr_user_email');
+    localStorage.removeItem('mr_user_plan');
+    setUserInitial(null);
+    setUserEmail(null);
+    setDropOpen(false);
+    router.replace('/');
+  };
 
   useEffect(() => {
     document.body.style.overflow = (expanded && mobile) ? 'hidden' : '';
@@ -200,14 +226,57 @@ export default function Layout({ children }: { children: ReactNode }) {
             margen<span>real</span>
           </Link>
         </div>
-        {userInitial ? (
-          <Link href="/dashboard" style={{ width: 32, height: 32, borderRadius: 9, background: 'var(--accent)', color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, textDecoration: 'none', flexShrink: 0 }}>
-            {userInitial}
-          </Link>
+        {userInitial && userEmail ? (
+          <div ref={dropRef} style={{ position: 'relative' }}>
+            <button
+              onClick={() => setDropOpen(o => !o)}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 20, padding: '5px 12px 5px 6px', cursor: 'pointer', fontFamily: 'inherit', transition: 'border-color 0.15s' }}
+            >
+              <span style={{ width: 26, height: 26, borderRadius: 8, background: 'var(--accent)', color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem', flexShrink: 0 }}>
+                {userInitial}
+              </span>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {userEmail.split('@')[0]}
+              </span>
+            </button>
+
+            {dropOpen && (
+              <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 14, minWidth: 220, zIndex: 500, overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+                <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--accent)', color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem', flexShrink: 0 }}>
+                    {userInitial}
+                  </span>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userEmail.split('@')[0]}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>@{userEmail.split('@')[1]}</div>
+                  </div>
+                </div>
+                {[
+                  { href: '/dashboard', label: 'Mi cuenta' },
+                  { href: '/cambiar-password', label: 'Cambiar contraseña' },
+                ].map(item => (
+                  <Link key={item.href} href={item.href} onClick={() => setDropOpen(false)}
+                    style={{ display: 'block', padding: '11px 16px', fontSize: '0.875rem', color: 'var(--text)', textDecoration: 'none', transition: 'background 0.12s' }}
+                    onMouseOver={e => (e.currentTarget.style.background = 'var(--bg)')}
+                    onMouseOut={e  => (e.currentTarget.style.background = 'transparent')}>
+                    {item.label}
+                  </Link>
+                ))}
+                <div style={{ borderTop: '1px solid var(--border)' }}>
+                  <button onClick={handleLogout}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: '0.875rem', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.12s' }}
+                    onMouseOver={e => (e.currentTarget.style.background = 'var(--bg)')}
+                    onMouseOut={e  => (e.currentTarget.style.background = 'transparent')}>
+                    Cerrar sesión
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
-          <Link href="/login" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--muted)', textDecoration: 'none', padding: '6px 12px', borderRadius: 8, transition: 'color var(--transition)' }}
-            onMouseOver={e => (e.currentTarget.style.color = 'var(--text)')}
-            onMouseOut={e  => (e.currentTarget.style.color = 'var(--muted)')}>
+          <Link href="/login" style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '8px 16px', borderRadius: 9, background: 'var(--accent)', transition: 'opacity 0.15s' }}
+            onMouseOver={e => (e.currentTarget.style.opacity = '0.85')}
+            onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
             Iniciar sesión
           </Link>
         )}
