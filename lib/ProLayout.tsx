@@ -39,9 +39,9 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-subnav-inner {
           display: flex; gap: 4px;
           max-width: 920px;
-          padding: 0 24px;
+          padding: 0 40px;
         }
-        @media(max-width:640px){ .pro-subnav-inner { padding: 0 4px; } }
+        @media(max-width:640px){ .pro-subnav-inner { padding: 0 20px; } }
 
         .pro-tab {
           display: inline-flex; align-items: center; gap: 7px;
