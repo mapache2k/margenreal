@@ -56,37 +56,39 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-tab-lock { font-size: 0.625rem; opacity: 0.5; }
 
         .pro-metrics-bar {
-          display: flex; align-items: center; gap: 0;
-          height: 52px; padding: 0 40px;
+          display: flex; align-items: center; gap: 6px;
+          padding: 10px 40px;
           border-bottom: 1px solid var(--border);
-          background: var(--surface);
+          background: var(--bg);
           overflow-x: auto; -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
         }
         .pro-metrics-bar::-webkit-scrollbar { display: none; }
-        @media(max-width:640px){ .pro-metrics-bar { padding: 0 20px; } }
+        @media(max-width:640px){ .pro-metrics-bar { padding: 10px 20px; } }
 
-        .pm-score {
-          display: flex; align-items: center; gap: 10px;
-          padding-right: 24px; margin-right: 24px;
-          border-right: 1px solid var(--border);
-          flex-shrink: 0;
+        .pm-card {
+          position: relative; overflow: hidden;
+          border-radius: 10px; border: 1px solid var(--border);
+          background: var(--surface);
+          padding: 9px 14px 9px 18px;
+          flex-shrink: 0; min-width: 80px;
         }
-        .pm-score-ring {
-          width: 36px; height: 36px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          font-family: var(--font-display); font-size: 0.6875rem; font-weight: 900;
-          flex-shrink: 0; border: 2px solid;
+        .pm-card::before {
+          content: ''; position: absolute;
+          left: 0; top: 8px; bottom: 8px;
+          width: 3px; border-radius: 0 2px 2px 0;
+          background: var(--border);
         }
-        .pm-score-text {}
-        .pm-score-label { font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
-        .pm-score-sub { font-size: 0.5625rem; color: var(--muted-2); margin-top: 1px; letter-spacing: 0.04em; }
+        .pm-card.c-highlight { border-color: rgba(249,215,27,.22); background: linear-gradient(135deg,rgba(249,215,27,.06) 0%,var(--surface) 60%); }
+        .pm-card.c-highlight::before { background: var(--accent); }
+        .pm-card.c-danger { border-color: rgba(239,68,68,.28); background: linear-gradient(135deg,rgba(239,68,68,.07) 0%,var(--surface) 60%); }
+        .pm-card.c-danger::before { background: var(--danger); }
+        .pm-card.c-warning { border-color: rgba(245,158,11,.22); background: linear-gradient(135deg,rgba(245,158,11,.06) 0%,var(--surface) 60%); }
+        .pm-card.c-warning::before { background: var(--warning); }
 
-        .pm-divider { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; margin: 0 20px; }
-
-        .pm-stat { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; min-width: 54px; }
-        .pm-stat-lbl { font-size: 0.4375rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted-2); }
-        .pm-stat-val { font-family: var(--font-display); font-size: 1rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; }
+        .pm-lbl { font-size: 0.4375rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.13em; color: var(--muted-2); margin-bottom: 4px; display: block; }
+        .pm-val { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1; display: block; }
+        .pm-sub { font-size: 0.5rem; color: var(--muted-2); margin-top: 3px; display: block; }
 
         .pro-content { padding: 0; }
       `}</style>
@@ -115,45 +117,49 @@ export default function ProLayout({ children }: { children: ReactNode }) {
       {/* Metrics bar — only when data exists */}
       {calc && (() => {
         const col = scoreColor(calc.score);
-        const ebitdaCol = calc.ebitda >= 0 ? 'var(--accent)' : 'var(--danger)';
-        const runwayCol = !isFinite(calc.runway) || calc.runway > 12 ? 'var(--accent)' : calc.runway > 3 ? 'var(--warning)' : 'var(--danger)';
-        const margenCol = calc.grossMarginPct >= 30 ? 'var(--accent)' : calc.grossMarginPct >= 20 ? 'var(--warning)' : 'var(--danger)';
+        const scoreVariant = calc.score >= 70 ? 'c-highlight' : calc.score >= 40 ? 'c-warning' : 'c-danger';
+        const ebitdaV  = calc.ebitda >= 0 ? 'c-highlight' : 'c-danger';
+        const runwayV  = !isFinite(calc.runway) || calc.runway > 12 ? 'c-highlight' : calc.runway > 3 ? 'c-warning' : 'c-danger';
+        const margenV  = calc.grossMarginPct >= 30 ? 'c-highlight' : calc.grossMarginPct >= 20 ? 'c-warning' : 'c-danger';
+        const flujoV   = calc.monthlyNetCashFlow >= 0 ? 'c-highlight' : 'c-danger';
+        const colVal   = (v: string) => v === 'c-highlight' ? 'var(--accent)' : v === 'c-danger' ? 'var(--danger)' : 'var(--warning)';
         return (
           <div className="pro-metrics-bar">
-            {/* Score — ring + label */}
-            <div className="pm-score">
-              <div className="pm-score-ring" style={{ color: col, borderColor: `${col}40`, background: `${col}10` }}>
-                {calc.score}
-              </div>
-              <div className="pm-score-text">
-                <div className="pm-score-label" style={{ color: col }}>{scoreLabel(calc.score)}</div>
-                <div className="pm-score-sub">Salud financiera</div>
-              </div>
+            {/* Score */}
+            <div className={`pm-card ${scoreVariant}`} style={{ minWidth: 110 }}>
+              <span className="pm-lbl">Score de salud</span>
+              <span className="pm-val" style={{ color: col }}>{scoreLabel(calc.score)}</span>
+              <span className="pm-sub">{calc.score}/100</span>
             </div>
-
-            <div className="pm-stat">
-              <span className="pm-stat-lbl">EBITDA</span>
-              <span className="pm-stat-val" style={{ color: ebitdaCol }}>{fmtCLP(calc.ebitda)}</span>
+            {/* EBITDA */}
+            <div className={`pm-card ${ebitdaV}`}>
+              <span className="pm-lbl">EBITDA</span>
+              <span className="pm-val" style={{ color: colVal(ebitdaV) }}>{fmtCLP(calc.ebitda)}</span>
+              <span className="pm-sub">{calc.ebitda >= 0 ? 'Rentable' : 'Pérdida'}</span>
             </div>
-            <div className="pm-divider" />
-            <div className="pm-stat">
-              <span className="pm-stat-lbl">Runway</span>
-              <span className="pm-stat-val" style={{ color: runwayCol }}>{isFinite(calc.runway) ? `${calc.runway.toFixed(1)}m` : '∞'}</span>
+            {/* Runway */}
+            <div className={`pm-card ${runwayV}`}>
+              <span className="pm-lbl">Runway</span>
+              <span className="pm-val" style={{ color: colVal(runwayV) }}>{isFinite(calc.runway) ? `${calc.runway.toFixed(1)}m` : '∞'}</span>
+              <span className="pm-sub">Meses de caja</span>
             </div>
-            <div className="pm-divider" />
-            <div className="pm-stat">
-              <span className="pm-stat-lbl">Margen</span>
-              <span className="pm-stat-val" style={{ color: margenCol }}>{calc.grossMarginPct.toFixed(1)}%</span>
+            {/* Margen */}
+            <div className={`pm-card ${margenV}`}>
+              <span className="pm-lbl">Margen bruto</span>
+              <span className="pm-val" style={{ color: colVal(margenV) }}>{calc.grossMarginPct.toFixed(1)}%</span>
+              <span className="pm-sub">{fmtCLP(calc.grossProfit)}/mes</span>
             </div>
-            <div className="pm-divider" />
-            <div className="pm-stat">
-              <span className="pm-stat-lbl">Caja</span>
-              <span className="pm-stat-val" style={{ color: 'var(--text)' }}>{fmtCLP(calc.cashAdjustedStart)}</span>
+            {/* Caja */}
+            <div className="pm-card">
+              <span className="pm-lbl">Caja</span>
+              <span className="pm-val" style={{ color: 'var(--text)' }}>{fmtCLP(calc.cashAdjustedStart)}</span>
+              <span className="pm-sub">Ajustada por ciclo</span>
             </div>
-            <div className="pm-divider" />
-            <div className="pm-stat">
-              <span className="pm-stat-lbl">Flujo neto</span>
-              <span className="pm-stat-val" style={{ color: calc.monthlyNetCashFlow >= 0 ? 'var(--accent)' : 'var(--danger)' }}>{fmtCLP(calc.monthlyNetCashFlow)}</span>
+            {/* Flujo neto */}
+            <div className={`pm-card ${flujoV}`}>
+              <span className="pm-lbl">Flujo neto</span>
+              <span className="pm-val" style={{ color: colVal(flujoV) }}>{fmtCLP(calc.monthlyNetCashFlow)}</span>
+              <span className="pm-sub">Después de deuda</span>
             </div>
           </div>
         );
