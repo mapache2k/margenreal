@@ -578,7 +578,7 @@ footer {
 .tool-header .sub { font-size: 1rem; color: var(--muted); line-height: 1.6; }
 .single-wrap { max-width: 1060px; margin: 0 auto; padding: 16px 40px 80px; }
 @media (max-width: 640px) { .single-wrap { padding: 16px 20px 60px; } }
-.tool-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 @media (max-width: 900px) { .tool-grid { grid-template-columns: 1fr; } }
 .inputs-card {
   background: var(--surface);
