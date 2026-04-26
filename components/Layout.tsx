@@ -275,11 +275,20 @@ export default function Layout({ children }: { children: ReactNode }) {
             )}
           </div>
         ) : (
-          <Link href="/login" style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--accent)', textDecoration: 'none', padding: '8px 14px', borderRadius: 9, border: '1.5px solid var(--accent)', transition: 'opacity 0.15s', letterSpacing: '-0.01em' }}
-            onMouseOver={e => (e.currentTarget.style.opacity = '0.75')}
-            onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
-            Iniciar sesión
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Link href="/login"
+              style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, border: '1.5px solid var(--accent)', transition: 'opacity 0.15s' }}
+              onMouseOver={e => (e.currentTarget.style.opacity = '0.75')}
+              onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
+              Iniciar sesión
+            </Link>
+            <Link href="/pricing"
+              style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s' }}
+              onMouseOver={e => (e.currentTarget.style.opacity = '0.85')}
+              onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
+              Crear cuenta
+            </Link>
+          </div>
         )}
       </header>
 
