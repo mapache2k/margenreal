@@ -87,12 +87,26 @@ export default function GuiaPage({ guia }: Props) {
 
         <div className="guia-body" dangerouslySetInnerHTML={{ __html: guia.contentHtml }} />
 
-        <div className="guia-cta">
-          <p>¿Querés ver estos números para tu producto específico?</p>
-          <Link href="/calculadora-ml" className="btn btn-primary" style={{ textDecoration: 'none' }}>
-            Calcular mi margen en ML Chile →
-          </Link>
-        </div>
+        {guia.type === 'playbook' ? (
+          <div className="guia-cta">
+            <p>Calculá el margen de cada producto de tu catálogo y encontrá cuáles están en pérdida.</p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/calculadora-ml" className="btn btn-outline" style={{ textDecoration: 'none' }}>
+                Calculadora gratuita →
+              </Link>
+              <Link href="/checkout" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                Analizar todos mis productos →
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="guia-cta">
+            <p>¿Querés ver estos números para tu producto específico?</p>
+            <Link href="/calculadora-ml" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+              Calcular mi margen en ML Chile →
+            </Link>
+          </div>
+        )}
       </div>
 
     </Layout>

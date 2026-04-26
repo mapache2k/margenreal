@@ -612,7 +612,7 @@ export default function CalculadoraML() {
                     Si tenés varios productos, es muy probable que estés perdiendo margen en más de uno. La mayoría lo descubre demasiado tarde.
                   </p>
                   <Link
-                    href="/pricing"
+                    href="/checkout"
                     style={{ display: 'inline-block', background: 'var(--accent)', color: 'var(--bg)', fontWeight: 800, fontSize: '0.9375rem', padding: '13px 28px', borderRadius: 12, textDecoration: 'none' }}
                     onClick={() => posthog.capture('cta_analizar_todos', { source: 'calculadora_resultado' })}
                   >
@@ -669,7 +669,7 @@ export default function CalculadoraML() {
                               Aquí solo podés analizar un producto a la vez.
                             </div>
                             <Link
-                              href="/pricing"
+                              href="/checkout"
                               style={{ display: 'inline-block', background: 'var(--accent)', color: 'var(--bg)', fontWeight: 800, fontSize: '0.875rem', padding: '11px 24px', borderRadius: 10, textDecoration: 'none' }}
                               onClick={() => posthog.capture('cta_analizar_todos', { source: 'preview_table' })}
                             >
