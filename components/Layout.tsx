@@ -290,7 +290,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   </div>
                 </div>
                 {[
-                  { href: userPlan === 'admin' ? '/admin' : '/dashboard', label: 'Mi cuenta' },
+                  { href: userPlan === 'admin' ? '/admin/pipeline' : '/dashboard', label: 'Mi cuenta' },
                   { href: '/cambiar-password', label: 'Cambiar contraseña' },
                 ].map(item => (
                   <Link key={item.href} href={item.href} onClick={() => setDropOpen(false)}
@@ -337,7 +337,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         {userInitial && (
           <>
             <div className="sb-tooltip-wrap">
-              <Link href={userPlan === 'admin' ? '/admin' : '/dashboard'} className={`sb-item${isActive('/dashboard') || isActive('/admin') ? ' active' : ''}`}>
+              <Link href={userPlan === 'admin' ? '/admin/pipeline' : '/dashboard'} className={`sb-item${isActive('/dashboard') || isActive('/admin') ? ' active' : ''}`}>
                 <span className="sb-icon"><Ico d={ICONS.user} /></span>
                 <span className="sb-label" style={{ color: 'var(--accent)', fontWeight: 700 }}>Mi cuenta</span>
               </Link>

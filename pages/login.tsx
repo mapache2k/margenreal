@@ -37,7 +37,7 @@ export default function LoginPage() {
       localStorage.setItem(SESSION_KEY, data.accessToken);
       localStorage.setItem('mr_user_email', data.email);
       localStorage.setItem('mr_user_plan', data.plan);
-      const destination = typeof next === 'string' ? next : data.plan === 'admin' ? '/admin' : '/dashboard';
+      const destination = typeof next === 'string' ? next : data.plan === 'admin' ? '/admin/pipeline' : '/dashboard';
       router.replace(destination);
     } else {
       setErrorMsg(data.error ?? 'Error al iniciar sesión');
