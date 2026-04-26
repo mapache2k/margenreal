@@ -105,6 +105,10 @@ export default function CalculadoraML() {
       };
       return [...prev, nuevo].sort((a, b) => a.margenPct - b.margenPct);
     });
+    setNombre('');
+    setCosto('');
+    setPrecio('');
+    capturedOnce.current = false;
   };
 
   const handleEliminarProducto = (id: number) => {
