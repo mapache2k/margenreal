@@ -42,11 +42,7 @@ const NAV = [
   { href: '/about',   icon: 'user', label: 'Nosotros' },
 ];
 
-const NAV_ADMIN = [
-  { href: '/admin/pipeline', icon: 'edit', label: 'Pipeline' },
-  { href: '/admin/emails',   icon: 'gift', label: 'Emails' },
-  { href: '/review',         icon: 'book', label: 'Review guías' },
-];
+const NAV_ADMIN: { href: string; icon: string; label: string }[] = [];
 
 export default function Layout({ children }: { children: ReactNode }) {
   const router = useRouter();
