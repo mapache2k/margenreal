@@ -42,6 +42,12 @@ const NAV = [
   { href: '/about',   icon: 'user', label: 'Nosotros' },
 ];
 
+const NAV_ADMIN = [
+  { href: '/admin/pipeline', icon: 'edit', label: 'Pipeline' },
+  { href: '/admin/emails',   icon: 'gift', label: 'Emails' },
+  { href: '/review',         icon: 'book', label: 'Review guías' },
+];
+
 export default function Layout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { pathname } = router;
@@ -341,39 +347,55 @@ export default function Layout({ children }: { children: ReactNode }) {
           </>
         )}
 
-        {/* Calculadoras */}
-        <div className="sb-tooltip-wrap">
-          <button
-            className={`sb-item${isCalcActive ? ' active' : ''}`}
-            onClick={() => { if (!expanded) { setExpanded(true); setCalcOpen(true); } else setCalcOpen(o => !o); }}
-          >
-            <span className="sb-icon"><Ico d={ICONS.calc} /></span>
-            <span className="sb-label">Calculadoras</span>
-            <span className={`sb-chev${calcOpen ? ' open' : ''}`}><Ico d={ICONS.chev} size={14} /></span>
-          </button>
-          <div className="sb-tooltip">Calculadoras</div>
-        </div>
+        {userPlan === 'admin' ? (
+          /* Nav admin */
+          <>
+            {NAV_ADMIN.map(({ href, icon, label }) => (
+              <div key={href} className="sb-tooltip-wrap">
+                <Link href={href} className={`sb-item${isActive(href) ? ' active' : ''}`}>
+                  <span className="sb-icon"><Ico d={ICONS[icon as keyof typeof ICONS]} /></span>
+                  <span className="sb-label">{label}</span>
+                </Link>
+                <div className="sb-tooltip">{label}</div>
+              </div>
+            ))}
+          </>
+        ) : (
+          /* Nav regular */
+          <>
+            <div className="sb-tooltip-wrap">
+              <button
+                className={`sb-item${isCalcActive ? ' active' : ''}`}
+                onClick={() => { if (!expanded) { setExpanded(true); setCalcOpen(true); } else setCalcOpen(o => !o); }}
+              >
+                <span className="sb-icon"><Ico d={ICONS.calc} /></span>
+                <span className="sb-label">Calculadoras</span>
+                <span className={`sb-chev${calcOpen ? ' open' : ''}`}><Ico d={ICONS.chev} size={14} /></span>
+              </button>
+              <div className="sb-tooltip">Calculadoras</div>
+            </div>
 
-        <div className={`sb-sub${calcOpen && expanded ? ' open' : ''}`}>
-          {CALC_FREE.map(item => (
-            <Link key={item.href} href={item.href} className={`sb-sub-item${isActive(item.href) ? ' active' : ''}`}>
-              {item.label}
-            </Link>
-          ))}
-        </div>
+            <div className={`sb-sub${calcOpen && expanded ? ' open' : ''}`}>
+              {CALC_FREE.map(item => (
+                <Link key={item.href} href={item.href} className={`sb-sub-item${isActive(item.href) ? ' active' : ''}`}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
 
-        <hr className="sb-divider" />
+            <hr className="sb-divider" />
 
-        {/* Regular nav items */}
-        {NAV.map(({ href, icon, label, exact }) => (
-          <div key={href} className="sb-tooltip-wrap">
-            <Link href={href} className={`sb-item${isActive(href, exact) ? ' active' : ''}${href === '/pro' ? ' pro' : ''}`}>
-              <span className="sb-icon" style={href === '/pro' ? { color: 'var(--accent)' } : undefined}><Ico d={ICONS[icon as keyof typeof ICONS]} /></span>
-              <span className="sb-label" style={href === '/pro' ? { color: 'var(--accent)', fontWeight: 700 } : undefined}>{label}</span>
-            </Link>
-            <div className="sb-tooltip">{label}</div>
-          </div>
-        ))}
+            {NAV.map(({ href, icon, label, exact }) => (
+              <div key={href} className="sb-tooltip-wrap">
+                <Link href={href} className={`sb-item${isActive(href, exact) ? ' active' : ''}${href === '/pro' ? ' pro' : ''}`}>
+                  <span className="sb-icon" style={href === '/pro' ? { color: 'var(--accent)' } : undefined}><Ico d={ICONS[icon as keyof typeof ICONS]} /></span>
+                  <span className="sb-label" style={href === '/pro' ? { color: 'var(--accent)', fontWeight: 700 } : undefined}>{label}</span>
+                </Link>
+                <div className="sb-tooltip">{label}</div>
+              </div>
+            ))}
+          </>
+        )}
       </aside>
 
       {/* Main */}
