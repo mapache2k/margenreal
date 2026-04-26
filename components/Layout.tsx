@@ -207,10 +207,10 @@ export default function Layout({ children }: { children: ReactNode }) {
         .sb-divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
 
         /* Topbar actions responsive */
-        .topbar-actions { display: flex; align-items: center; gap: 8px; }
+        .topbar-actions { display: flex; align-items: center; gap: 6px; }
         .topbar-btn-secondary { display: inline-block; }
-        @media (max-width: 420px) {
-          .topbar-btn-secondary { display: none; }
+        @media (max-width: 360px) {
+          .topbar-actions { gap: 4px; }
         }
         .topbar-user-pill { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px 5px 6px; cursor: pointer; font-family: inherit; }
         .topbar-user-name { font-size: 0.8125rem; font-weight: 700; color: var(--text); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -288,13 +288,13 @@ export default function Layout({ children }: { children: ReactNode }) {
         ) : (
           <div className="topbar-actions">
             <Link href="/login" className="topbar-btn-secondary"
-              style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, border: '1.5px solid var(--accent)', transition: 'opacity 0.15s' }}
+              style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', padding: '7px 10px', borderRadius: 8, border: '1.5px solid var(--accent)', transition: 'opacity 0.15s', whiteSpace: 'nowrap' }}
               onMouseOver={e => (e.currentTarget.style.opacity = '0.75')}
               onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
               Iniciar sesión
             </Link>
             <Link href="/registro"
-              style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s', whiteSpace: 'nowrap' }}
+              style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 10px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s', whiteSpace: 'nowrap' }}
               onMouseOver={e => (e.currentTarget.style.opacity = '0.85')}
               onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
               Crear cuenta
