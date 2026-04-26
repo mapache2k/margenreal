@@ -43,7 +43,7 @@ export class RegisterUserCommand {
       schemaName = await repo.createTenantSchema(userId);
     }
 
-    await audit.log({ userId, email, event: 'activated', ip });
+    await audit.log(userId, email, 'activated', ip);
 
     const accessToken  = tokens.createAccessToken(email, existing?.plan.toString() ?? 'free', userId);
     const refreshToken = tokens.createRefreshToken(email, userId);
