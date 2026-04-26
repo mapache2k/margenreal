@@ -436,74 +436,51 @@ export default function CalculadoraML() {
                   }
                 </div>
 
-                {/* Multi-producto preview CTA */}
-                <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', marginBottom: 16 }}>
-                  <div style={{ padding: '20px 22px' }}>
-                    <div style={{ fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--muted-2)', marginBottom: 6 }}>Análisis multi-producto</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-                      {productos.length === 0 ? '¿Tenés más de un producto en ML?' : `${productos.length + 1} productos calculados`}
-                    </div>
-                    <div style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginBottom: 14 }}>
-                      {productos.length === 0
-                        ? 'Agregá productos a la comparación para ver cuáles te dan más margen.'
-                        : productos.length >= FREE_LIMIT
-                        ? 'Alcanzaste el límite del plan gratis. Desbloqueá comparación ilimitada.'
-                        : `Podés agregar ${FREE_LIMIT - productos.length} producto${FREE_LIMIT - productos.length > 1 ? 's' : ''} más en el plan gratis.`
-                      }
-                    </div>
-                    <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', marginBottom: 16, fontSize: '0.8125rem' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', background: 'var(--bg)', padding: '8px 14px', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
-                        <span>Producto</span><span>Precio</span><span>Margen</span><span>Estado</span>
+                {/* Comparación inline */}
+                {productos.length > 0 && (
+                  <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', marginBottom: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>
+                      <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text)' }}>
+                        Comparando {productos.length + 1} productos
                       </div>
-                      {/* Productos ya guardados */}
-                      {productos.map(p => (
-                        <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)' }}>
-                          <span style={{ color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{p.nombre}</span>
-                          <span style={{ color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
-                          <span style={{ color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555', fontWeight: 700 }}>{p.margenPct.toFixed(1).replace('.', ',')}%</span>
-                          <span style={{ fontSize: '0.75rem' }}>{!p.esCosteable ? '❌' : p.margenPct < 20 ? '⚠️' : '✅'}</span>
-                        </div>
-                      ))}
-                      {/* Producto actual (aún no guardado) */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)', background: 'rgba(249,215,27,0.04)' }}>
-                        <span style={{ color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{nombre || 'Este producto'} <span style={{ fontSize: '0.625rem', color: 'var(--muted-2)', fontWeight: 400 }}>← actual</span></span>
-                        <span style={{ color: 'var(--muted)' }}>${fmt(precioNum)}</span>
-                        <span style={{ color: resultado.margenPct >= 20 ? '#2dd4a0' : resultado.margenPct >= 0 ? '#f0b429' : '#e85555', fontWeight: 700 }}>{fmtPct(resultado.margenPct)}</span>
-                        <span style={{ fontSize: '0.75rem' }}>{!resultado.esCosteable ? '❌' : resultado.margenPct < 20 ? '⚠️' : '✅'}</span>
-                      </div>
-                      {/* Filas bloqueadas si no llegó al límite */}
-                      {productos.length < FREE_LIMIT - 1 && Array.from({ length: FREE_LIMIT - 1 - productos.length }).map((_, i) => (
-                        <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 14px', borderTop: '1px solid var(--border)', opacity: 0.3, filter: 'blur(3px)', userSelect: 'none' as const }}>
-                          <span>Producto {productos.length + i + 2}</span><span>$••.•••</span><span>••%</span><span>🔒</span>
-                        </div>
-                      ))}
+                      <button onClick={() => setProductos([])} style={{ fontSize: '0.75rem', color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}>Limpiar</button>
                     </div>
-                    {productos.length >= FREE_LIMIT ? (
-                      <Link
-                        href="/pricing"
-                        className="btn btn-primary"
-                        style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box' as const }}
-                        onClick={() => posthog.capture('multiproduct_cta_click', { source: 'calculadora', trigger: 'limit' })}
-                      >
-                        🔒 Desbloqueá comparación ilimitada →
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/pricing"
-                        className="btn btn-primary"
-                        style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box' as const }}
-                        onClick={() => posthog.capture('multiproduct_cta_click', { source: 'calculadora', trigger: 'teaser' })}
-                      >
-                        Analizar todos mis productos →
-                      </Link>
+                    <div style={{ fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '8px 18px', background: 'var(--bg)' }}>
+                      <span>Producto</span><span>Precio</span><span>Margen</span><span>Estado</span>
+                    </div>
+                    {/* Producto actual */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 18px', borderTop: '1px solid var(--border)', background: 'rgba(249,215,27,0.04)', alignItems: 'center' }}>
+                      <span style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.8125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
+                        {nombre || 'Este producto'} <span style={{ fontSize: '0.5625rem', color: 'var(--accent)', fontWeight: 700 }}>actual</span>
+                      </span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>${fmt(precioNum)}</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 700, color: resultado.margenPct >= 20 ? '#2dd4a0' : resultado.margenPct >= 0 ? '#f0b429' : '#e85555' }}>{fmtPct(resultado.margenPct)}</span>
+                      <span>{!resultado.esCosteable ? '❌' : resultado.margenPct < 20 ? '⚠️' : '✅'}</span>
+                    </div>
+                    {/* Productos guardados */}
+                    {productos.map(p => (
+                      <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 18px', borderTop: '1px solid var(--border)', alignItems: 'center' }}>
+                        <span style={{ color: 'var(--text)', fontSize: '0.8125rem', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{p.nombre}</span>
+                        <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 700, color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555' }}>{p.margenPct.toFixed(1).replace('.', ',')}%</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span>{!p.esCosteable ? '❌' : p.margenPct < 20 ? '⚠️' : '✅'}</span>
+                          <button onClick={() => handleEliminarProducto(p.id)} style={{ fontSize: '0.75rem', color: 'var(--muted-2)', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, padding: '2px 4px' }} title="Eliminar">×</button>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Gate upgrade */}
+                    {productos.length >= FREE_LIMIT && (
+                      <div style={{ padding: '14px 18px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' as const, background: 'rgba(249,215,27,0.04)' }}>
+                        <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>🔒 Límite gratis · {FREE_LIMIT} productos</span>
+                        <Link href="/pricing" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}
+                          onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion_inline' })}>
+                          Ver plan completo →
+                        </Link>
+                      </div>
                     )}
-                    <div style={{ display: 'flex', gap: 12, marginTop: 10, fontSize: '0.75rem', color: 'var(--muted)', justifyContent: 'center', flexWrap: 'wrap' as const }}>
-                      <span>✓ Comparación multi-producto</span>
-                      <span>✓ Precio mínimo por categoría</span>
-                      <span>✓ Guía táctica completa</span>
-                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Acción — Lead magnet */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
@@ -547,75 +524,6 @@ export default function CalculadoraML() {
           </div>
         </div>
 
-        {/* Tabla comparación multi-producto */}
-        {productos.length > 0 && (
-          <div className="comparacion-wrap">
-            <div className="comparacion-header">
-              <div className="comparacion-title">Comparación de productos ({productos.length})</div>
-              <button className="btn-limpiar" onClick={() => setProductos([])}>Limpiar lista</button>
-            </div>
-            <div className="comp-table-wrap" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
-              <table className="comp-table">
-                <thead>
-                  <tr>
-                    <th>Producto</th>
-                    <th>Costo</th>
-                    <th>Precio venta</th>
-                    <th>Margen</th>
-                    <th>Ganancia / unidad</th>
-                    <th>Estado</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {productos.map(p => {
-                    const cls = !p.esCosteable ? 'loss' : p.margenPct < 15 ? 'low' : 'ok';
-                    const badge = cls === 'loss' ? 'Pérdida' : cls === 'low' ? 'Margen bajo' : 'Rentable';
-                    const fmt = (n: number) => n.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                    return (
-                      <tr key={p.id} className={cls}>
-                        <td>
-                          <div className="comp-nombre">{p.nombre}</div>
-                          <div className="comp-cat">{p.categoria}</div>
-                        </td>
-                        <td>${fmt(p.costo)}</td>
-                        <td>${fmt(p.precio)}</td>
-                        <td><span className={`comp-margen ${cls}`}>{p.margenPct.toFixed(1).replace('.', ',')}%</span></td>
-                        <td>
-                          <span className="comp-ganancia" style={{ color: p.esCosteable ? '#22c55e' : '#ef4444' }}>
-                            {p.esCosteable ? '' : '−'}${fmt(Math.abs(p.ganancia))}
-                          </span>
-                        </td>
-                        <td><span className={`comp-badge ${cls}`}>{badge}</span></td>
-                        <td><button className="btn-del" onClick={() => handleEliminarProducto(p.id)} title="Eliminar">×</button></td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            {productos.length >= FREE_LIMIT && (
-              <div style={{ padding: '20px 24px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' as const }}>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--text)', marginBottom: 4 }}>
-                    🔒 Límite del plan gratis ({FREE_LIMIT} productos)
-                  </div>
-                  <div style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>
-                    Desbloqueá comparación ilimitada y análisis completo de tu catálogo.
-                  </div>
-                </div>
-                <Link
-                  href="/pricing"
-                  className="btn btn-primary"
-                  style={{ textDecoration: 'none', whiteSpace: 'nowrap' as const, flexShrink: 0 }}
-                  onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion_table', limit: FREE_LIMIT })}
-                >
-                  Ver plan completo →
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
     </Layout>
