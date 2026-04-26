@@ -79,7 +79,11 @@ export default function Layout({ children }: { children: ReactNode }) {
       if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false);
     };
     document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('touchstart', handleClick as unknown as EventListener);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('touchstart', handleClick as unknown as EventListener);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -202,6 +206,18 @@ export default function Layout({ children }: { children: ReactNode }) {
         /* Sidebar divider */
         .sb-divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
 
+        /* Topbar actions responsive */
+        .topbar-actions { display: flex; align-items: center; gap: 8px; }
+        .topbar-btn-secondary { display: inline-block; }
+        @media (max-width: 420px) {
+          .topbar-btn-secondary { display: none; }
+        }
+        .topbar-user-pill { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px 5px 6px; cursor: pointer; font-family: inherit; }
+        .topbar-user-name { font-size: 0.8125rem; font-weight: 700; color: var(--text); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        @media (max-width: 380px) { .topbar-user-name { display: none; } }
+        .topbar-drop { position: absolute; right: 0; top: calc(100% + 8px); background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; min-width: 220px; z-index: 500; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        @media (max-width: 380px) { .topbar-drop { right: -12px; min-width: 200px; } }
+
         /* Tooltip for collapsed state */
         .sb-tooltip-wrap { position: relative; }
         .sb-tooltip {
@@ -229,20 +245,15 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
         {userInitial && userEmail ? (
           <div ref={dropRef} style={{ position: 'relative' }}>
-            <button
-              onClick={() => setDropOpen(o => !o)}
-              style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 20, padding: '5px 12px 5px 6px', cursor: 'pointer', fontFamily: 'inherit', transition: 'border-color 0.15s' }}
-            >
+            <button onClick={() => setDropOpen(o => !o)} className="topbar-user-pill">
               <span style={{ width: 26, height: 26, borderRadius: 8, background: 'var(--accent)', color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem', flexShrink: 0 }}>
                 {userInitial}
               </span>
-              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {userEmail.split('@')[0]}
-              </span>
+              <span className="topbar-user-name">{userEmail.split('@')[0]}</span>
             </button>
 
             {dropOpen && (
-              <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 14, minWidth: 220, zIndex: 500, overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+              <div className="topbar-drop">
                 <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
                   <span style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--accent)', color: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem', flexShrink: 0 }}>
                     {userInitial}
@@ -275,15 +286,15 @@ export default function Layout({ children }: { children: ReactNode }) {
             )}
           </div>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Link href="/login"
+          <div className="topbar-actions">
+            <Link href="/login" className="topbar-btn-secondary"
               style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, border: '1.5px solid var(--accent)', transition: 'opacity 0.15s' }}
               onMouseOver={e => (e.currentTarget.style.opacity = '0.75')}
               onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
               Iniciar sesión
             </Link>
             <Link href="/registro"
-              style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s' }}
+              style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--bg)', textDecoration: 'none', padding: '7px 13px', borderRadius: 8, background: 'var(--accent)', transition: 'opacity 0.15s', whiteSpace: 'nowrap' }}
               onMouseOver={e => (e.currentTarget.style.opacity = '0.85')}
               onMouseOut={e  => (e.currentTarget.style.opacity = '1')}>
               Crear cuenta

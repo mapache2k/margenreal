@@ -58,7 +58,8 @@ function DashboardContent({ session }: { session: ProSession }) {
   return (
     <>
       <style>{`
-        .dash-wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 64px; }
+        .dash-wrap { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+        @media (min-width: 600px) { .dash-wrap { padding: 40px 24px 64px; } }
 
         /* Header */
         .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 12px; }
@@ -75,7 +76,8 @@ function DashboardContent({ session }: { session: ProSession }) {
 
         /* Compras */
         .dash-compras { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
-        .dash-compra-card { width: 180px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; flex-shrink: 0; }
+        .dash-compra-card { width: 160px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; flex-shrink: 0; }
+        @media (max-width: 400px) { .dash-compra-card { width: calc(50% - 7px); } }
         .dash-compra-thumb { height: 100px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
         .dash-compra-body { padding: 12px 14px; }
         .dash-compra-type { font-size: 0.5625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-2); margin-bottom: 4px; }
@@ -84,12 +86,10 @@ function DashboardContent({ session }: { session: ProSession }) {
         .dash-compra-btn:hover { opacity: 0.85; text-decoration: none; }
 
         /* Mini calculator widget */
-        .dash-widget { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 22px; margin-bottom: 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
         .dash-widget-icon { font-size: 2rem; flex-shrink: 0; }
-        .dash-widget-info { flex: 1; min-width: 180px; }
+        .dash-widget-info { flex: 1; min-width: 160px; }
         .dash-widget-title { font-size: 1rem; font-weight: 800; color: var(--text); font-family: var(--font-display); margin-bottom: 4px; }
         .dash-widget-desc { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; }
-        .dash-widget-btn { background: var(--accent); color: var(--bg); font-size: 0.875rem; font-weight: 800; padding: 11px 20px; border-radius: 10px; text-decoration: none; white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0; }
         .dash-widget-btn:hover { opacity: 0.85; text-decoration: none; }
 
         /* Productos */
@@ -107,12 +107,22 @@ function DashboardContent({ session }: { session: ProSession }) {
         .dash-prod-del { background: none; border: none; cursor: pointer; color: var(--muted-2); font-size: 1rem; padding: 2px 6px; border-radius: 5px; transition: color 0.15s; }
         .dash-prod-del:hover { color: #e85555; }
 
+        /* Tabla responsive — oculta costo en mobile, precio en muy pequeño */
         @media (max-width: 600px) {
           .dash-products-head { grid-template-columns: 2fr 1fr 1fr auto; }
           .dash-products-row { grid-template-columns: 2fr 1fr 1fr auto; }
-          .dash-products-head span:nth-child(3),
-          .dash-products-row > span:nth-child(3) { display: none; }
+          .dash-col-costo { display: none; }
         }
+        @media (max-width: 380px) {
+          .dash-products-head { grid-template-columns: 2fr 1fr auto; }
+          .dash-products-row { grid-template-columns: 2fr 1fr auto; }
+          .dash-col-precio { display: none; }
+        }
+
+        /* Widget responsive */
+        .dash-widget { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .dash-widget-btn { display: inline-block; background: var(--accent); color: var(--bg); font-size: 0.875rem; font-weight: 800; padding: 10px 18px; border-radius: 10px; text-decoration: none; white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0; }
+        @media (max-width: 480px) { .dash-widget { flex-direction: column; align-items: flex-start; } }
       `}</style>
 
       <div className="dash-wrap">
@@ -182,8 +192,8 @@ function DashboardContent({ session }: { session: ProSession }) {
           <div className="dash-products-table">
             <div className="dash-products-head">
               <span>Producto</span>
-              <span>Precio</span>
-              <span>Costo</span>
+              <span className="dash-col-precio">Precio</span>
+              <span className="dash-col-costo">Costo</span>
               <span>Margen</span>
               <span></span>
             </div>
@@ -199,16 +209,12 @@ function DashboardContent({ session }: { session: ProSession }) {
                     <div className="dash-prod-name">{p.nombre}</div>
                     <div className="dash-prod-cat">{p.categoria}</div>
                   </div>
-                  <span className="dash-prod-val">${fmt(p.precio)}</span>
-                  <span className="dash-prod-val">${fmt(p.costo)}</span>
+                  <span className="dash-prod-val dash-col-precio">${fmt(p.precio)}</span>
+                  <span className="dash-prod-val dash-col-costo">${fmt(p.costo)}</span>
                   <span className={margenCls}>
                     {p.margen_pct.toFixed(1).replace('.', ',')}%
                   </span>
-                  <button
-                    className="dash-prod-del"
-                    title="Eliminar"
-                    onClick={() => handleDelete(p.id)}
-                  >×</button>
+                  <button className="dash-prod-del" title="Eliminar" onClick={() => handleDelete(p.id)}>×</button>
                 </div>
               );
             })}
