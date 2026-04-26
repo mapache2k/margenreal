@@ -306,6 +306,47 @@ export default function CalculadoraML() {
                 </button>
               )
             )}
+
+            {/* Tabla comparación — panel izquierdo, siempre visible */}
+            {productos.length > 0 && (
+              <div style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text)' }}>
+                    Comparación ({slotsUsados}/{FREE_LIMIT})
+                  </span>
+                  <button
+                    onClick={() => { setProductos([]); setSlotsUsados(0); localStorage.removeItem('mr_productos'); localStorage.removeItem('mr_slots'); }}
+                    style={{ fontSize: '0.75rem', color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}
+                  >
+                    Limpiar
+                  </button>
+                </div>
+                <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', fontSize: '0.8125rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '7px 14px', background: 'var(--bg)', fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)' }}>
+                    <span>Producto</span><span>Precio</span><span>Margen</span><span></span>
+                  </div>
+                  {productos.map(p => (
+                    <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', padding: '10px 14px', borderTop: '1px solid var(--border)', alignItems: 'center', gap: 4 }}>
+                      <span style={{ color: 'var(--text)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{p.nombre}</span>
+                      <span style={{ color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
+                      <span style={{ fontWeight: 700, color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555' }}>
+                        {p.margenPct.toFixed(1).replace('.', ',')}%
+                      </span>
+                      <button onClick={() => handleEliminarProducto(p.id)} style={{ color: 'var(--muted-2)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: '0 2px' }} title="Eliminar">×</button>
+                    </div>
+                  ))}
+                  {limitAlcanzado && (
+                    <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(249,215,27,0.04)' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>🔒 Límite del plan gratis</span>
+                      <Link href="/pricing" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}
+                        onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion_inputs' })}>
+                        Ver plan →
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Panel de resultados */}
@@ -458,52 +499,6 @@ export default function CalculadoraML() {
                     : <><strong style={{ color: '#e85555' }}>perdés ${fmt(Math.abs(resultado.gananciaAbsoluta * 10))}</strong> al mes aunque vendas bien.</>
                   }
                 </div>
-
-                {/* Comparación inline */}
-                {productos.length > 0 && (
-                  <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', marginBottom: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text)' }}>
-                        Comparando {productos.length + 1} productos
-                      </div>
-                      <button onClick={() => setProductos([])} style={{ fontSize: '0.75rem', color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}>Limpiar</button>
-                    </div>
-                    <div style={{ fontSize: '0.5625rem', fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'var(--muted-2)', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '8px 18px', background: 'var(--bg)' }}>
-                      <span>Producto</span><span>Precio</span><span>Margen</span><span>Estado</span>
-                    </div>
-                    {/* Producto actual */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 18px', borderTop: '1px solid var(--border)', background: 'rgba(249,215,27,0.04)', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.8125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
-                        {nombre || 'Este producto'} <span style={{ fontSize: '0.5625rem', color: 'var(--accent)', fontWeight: 700 }}>actual</span>
-                      </span>
-                      <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>${fmt(precioNum)}</span>
-                      <span style={{ fontSize: '0.875rem', fontWeight: 700, color: resultado.margenPct >= 20 ? '#2dd4a0' : resultado.margenPct >= 0 ? '#f0b429' : '#e85555' }}>{fmtPct(resultado.margenPct)}</span>
-                      <span>{!resultado.esCosteable ? '❌' : resultado.margenPct < 20 ? '⚠️' : '✅'}</span>
-                    </div>
-                    {/* Productos guardados */}
-                    {productos.map(p => (
-                      <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '10px 18px', borderTop: '1px solid var(--border)', alignItems: 'center' }}>
-                        <span style={{ color: 'var(--text)', fontSize: '0.8125rem', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{p.nombre}</span>
-                        <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>${p.precio.toLocaleString('es-CL')}</span>
-                        <span style={{ fontSize: '0.875rem', fontWeight: 700, color: p.margenPct >= 20 ? '#2dd4a0' : p.margenPct >= 0 ? '#f0b429' : '#e85555' }}>{p.margenPct.toFixed(1).replace('.', ',')}%</span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <span>{!p.esCosteable ? '❌' : p.margenPct < 20 ? '⚠️' : '✅'}</span>
-                          <button onClick={() => handleEliminarProducto(p.id)} style={{ fontSize: '0.75rem', color: 'var(--muted-2)', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, padding: '2px 4px' }} title="Eliminar">×</button>
-                        </div>
-                      </div>
-                    ))}
-                    {/* Gate upgrade */}
-                    {limitAlcanzado && (
-                      <div style={{ padding: '14px 18px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' as const, background: 'rgba(249,215,27,0.04)' }}>
-                        <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>🔒 Límite gratis · {FREE_LIMIT} productos</span>
-                        <Link href="/pricing" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}
-                          onClick={() => posthog.capture('free_limit_hit', { source: 'comparacion_inline' })}>
-                          Ver plan completo →
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Acción — Lead magnet */}
                 <div className="lead-card" style={{ marginTop: 16 }}>
