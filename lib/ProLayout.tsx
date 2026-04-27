@@ -39,9 +39,10 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-subnav-inner {
           display: flex; gap: 4px;
           max-width: 960px;
-          padding: 0 60px;
+          padding: 0 40px;
+          margin-left: max(0px, calc((100% - var(--section-max)) / 2));
         }
-        @media(max-width:640px){ .pro-subnav-inner { padding: 0 20px; } }
+        @media(max-width:640px){ .pro-subnav-inner { padding: 0 20px; margin-left: 0; } }
 
         .pro-tab {
           display: inline-flex; align-items: center; gap: 7px;
@@ -67,9 +68,10 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-metrics-inner {
           display: flex; align-items: center; gap: 6px;
           max-width: 960px;
-          padding: 10px 60px;
+          padding: 10px 40px;
+          margin-left: max(0px, calc((100% - var(--section-max)) / 2));
         }
-        @media(max-width:640px){ .pro-metrics-inner { padding: 10px 20px; } }
+        @media(max-width:640px){ .pro-metrics-inner { padding: 10px 20px; margin-left: 0; } }
 
         .pm-card {
           position: relative; overflow: hidden;

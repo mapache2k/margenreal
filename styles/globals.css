@@ -270,7 +270,7 @@ table td { padding:12px; border-bottom:1px solid var(--border); }
 }
 .home-topbar-title { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
 
-.home-content { padding: 48px 40px 80px 60px; max-width: 920px; }
+.home-content { padding: 48px 40px 80px; max-width: 920px; margin-left: max(0px, calc((100% - var(--section-max)) / 2)); }
 .home-eyebrow { font-size: 0.625rem; font-weight:700; letter-spacing: 0.2em; text-transform: uppercase; color: #f0ebe0; margin-bottom:12px; }
 .home-title { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight:800; letter-spacing:-0.02em; line-height:1.15; color: var(--text); margin-bottom:10px; }
 .home-sub { font-size: 0.9375rem; color: var(--muted-2); line-height:1.7; margin-bottom:40px; }
