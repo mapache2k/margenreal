@@ -38,8 +38,8 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         }
         .pro-subnav-inner {
           display: flex; gap: 4px;
-          max-width: 920px;
-          padding: 0 40px;
+          max-width: 960px;
+          padding: 0 60px;
         }
         @media(max-width:640px){ .pro-subnav-inner { padding: 0 20px; } }
 
@@ -66,8 +66,8 @@ export default function ProLayout({ children }: { children: ReactNode }) {
         .pro-metrics-bar::-webkit-scrollbar { display: none; }
         .pro-metrics-inner {
           display: flex; align-items: center; gap: 6px;
-          max-width: 920px;
-          padding: 10px 40px;
+          max-width: 960px;
+          padding: 10px 60px;
         }
         @media(max-width:640px){ .pro-metrics-inner { padding: 10px 20px; } }
 
