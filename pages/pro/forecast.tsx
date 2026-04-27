@@ -109,7 +109,7 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
     <ProLayout>
       <style>{`
         .fc-grid { display:grid; grid-template-columns:260px 1fr; gap:20px; align-items:start; }
-        @media(max-width:700px){ .fc-grid { grid-template-columns:1fr; } }
+        @media(max-width:700px){ .fc-grid { grid-template-columns:1fr; } .fc-sticky { position:static !important; } }
         .horizon-tabs { display:flex; gap:4px; margin-bottom:16px; }
         .horizon-tab { flex:1; padding:8px 4px; border-radius:7px; border:1px solid var(--border); background:transparent; color:var(--muted-2); font-family:var(--font-display); font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.18s; text-align:center; }
         .horizon-tab.active { background:var(--accent); border-color:var(--accent); color:var(--bg); }
@@ -143,7 +143,7 @@ Máximo 220 palabras. Directo, con números, habla de "tu negocio".`;
         <div className="fc-grid">
 
           {/* Assumptions panel */}
-          <div className="form-card" style={{ position: 'sticky', top: 72 }}>
+          <div className="form-card fc-sticky" style={{ position: 'sticky', top: 72 }}>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--text)', marginBottom: 16, letterSpacing: '-0.02em' }}>Supuestos</div>
 
             <div className="sf" style={{ marginBottom: 16 }}>
