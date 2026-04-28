@@ -43,9 +43,7 @@ const NAV = [
   { href: '/about',   icon: 'user', label: 'Nosotros' },
 ];
 
-const NAV_ADMIN: { href: string; activePath?: string; icon: string; label: string }[] = [
-  { href: '/admin/mercadolibre', icon: 'link', label: 'API Mercado Libre' },
-];
+const NAV_ADMIN: { href: string; activePath?: string; icon: string; label: string }[] = [];
 
 export default function Layout({ children }: { children: ReactNode }) {
   const router = useRouter();
