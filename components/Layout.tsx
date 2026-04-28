@@ -24,6 +24,7 @@ const ICONS = {
   tag:   'M12 2v20 M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6',
   user:  'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 7a4 4 0 100 8 4 4 0 000-8',
   chev:  'M6 9l6 6 6-6',
+  link:  'M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71 M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71',
 };
 
 const CALC_FREE = [
@@ -42,7 +43,9 @@ const NAV = [
   { href: '/about',   icon: 'user', label: 'Nosotros' },
 ];
 
-const NAV_ADMIN: { href: string; icon: string; label: string }[] = [];
+const NAV_ADMIN: { href: string; activePath?: string; icon: string; label: string }[] = [
+  { href: '/admin/mercadolibre', icon: 'link', label: 'API Mercado Libre' },
+];
 
 export default function Layout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -346,9 +349,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         {userPlan === 'admin' ? (
           /* Nav admin */
           <>
-            {NAV_ADMIN.map(({ href, icon, label }) => (
+            {NAV_ADMIN.map(({ href, activePath, icon, label }) => (
               <div key={href} className="sb-tooltip-wrap">
-                <Link href={href} className={`sb-item${isActive(href) ? ' active' : ''}`}>
+                <Link href={href} className={`sb-item${isActive(activePath ?? href) ? ' active' : ''}`}>
                   <span className="sb-icon"><Ico d={ICONS[icon as keyof typeof ICONS]} /></span>
                   <span className="sb-label">{label}</span>
                 </Link>
