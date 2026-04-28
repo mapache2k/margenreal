@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
       "script-src 'self' 'unsafe-inline' https://us.i.posthog.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
-      "connect-src 'self' https://us.i.posthog.com",
+      "connect-src 'self' https://us.i.posthog.com https://api.mercadolibre.com",
       "frame-ancestors 'none'",
     ].join('; ')
   );
