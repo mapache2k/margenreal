@@ -7,29 +7,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!q || typeof q !== 'string' || !q.trim())
     return res.status(200).json({ error: 'Falta el parámetro q' });
 
-  const clientId     = process.env.ML_CLIENT_ID;
-  const clientSecret = process.env.ML_CLIENT_SECRET;
-  if (!clientId || !clientSecret)
-    return res.status(200).json({ error: 'ML_CLIENT_ID o ML_CLIENT_SECRET no configurados en Vercel' });
-
   try {
-    // 1. Token via Client Credentials
-    const tokenRes = await fetch('https://api.mercadolibre.com/oauth/token', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-      body:    `grant_type=client_credentials&client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`,
-    });
-
-    if (!tokenRes.ok) {
-      const body = await tokenRes.text().catch(() => '');
-      return res.status(200).json({ error: `Error de autenticación ML ${tokenRes.status}: ${body.slice(0, 300)}` });
-    }
-
-    const { access_token } = await tokenRes.json();
-
-    // 2. Búsqueda — access_token como query param (Client Credentials no autoriza Bearer en search)
+    // Endpoint público de MercadoLibre Chile — no requiere autenticación
     const searchRes = await fetch(
-      `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q.trim())}&limit=20&access_token=${encodeURIComponent(access_token)}`,
+      `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q.trim())}&limit=20`,
       { headers: { Accept: 'application/json' } },
     );
 
@@ -52,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       free_shipping: item.shipping?.free_shipping ?? false,
     }));
 
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
+    res.setHeader('Cache-Control', 'no-store');
     return res.status(200).json({ items, total: data.paging?.total ?? items.length });
 
   } catch (err: any) {
