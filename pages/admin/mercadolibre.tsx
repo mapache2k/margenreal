@@ -33,10 +33,15 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      // Llamada directa al browser — ML bloquea IPs de Vercel/AWS en server-side
+      // 1. Obtener token del servidor (Client Secret nunca sale del server)
+      const tokenR    = await fetch('/api/admin/ml-token');
+      const tokenData = await tokenR.json();
+      if (tokenData.error) { setError(tokenData.error); return; }
+
+      // 2. Buscar desde el browser con Bearer token (evita bloqueo de IPs de Vercel/AWS)
       const r = await fetch(
         `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`,
-        { headers: { Accept: 'application/json' } },
+        { headers: { Accept: 'application/json', Authorization: `Bearer ${tokenData.access_token}` } },
       );
       if (!r.ok) {
         const body = await r.text().catch(() => '');
