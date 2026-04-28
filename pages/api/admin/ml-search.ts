@@ -17,37 +17,37 @@ export default async function handler(req: NextRequest) {
 
   const clientId     = process.env.ML_CLIENT_ID;
   const clientSecret = process.env.ML_CLIENT_SECRET;
+  if (!clientId || !clientSecret)
+    return json({ error: 'Credenciales ML no configuradas en Vercel' });
+
+  // 1. Intentar obtener access_token desde la cookie de sesión
+  let accessToken = req.cookies.get('ml_access')?.value;
+
+  if (!accessToken) {
+    const refreshToken = req.cookies.get('ml_refresh')?.value;
+    if (!refreshToken) return json({ error: 'no_auth' }); // señal para mostrar botón Conectar
+
+    // Renovar access_token con refresh_token
+    const refreshRes = await fetch('https://api.mercadolibre.com/oauth/token', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+      body: [
+        'grant_type=refresh_token',
+        `client_id=${encodeURIComponent(clientId)}`,
+        `client_secret=${encodeURIComponent(clientSecret)}`,
+        `refresh_token=${encodeURIComponent(refreshToken)}`,
+      ].join('&'),
+    });
+
+    if (!refreshRes.ok) return json({ error: 'no_auth' });
+    const { access_token } = await refreshRes.json() as { access_token: string };
+    accessToken = access_token;
+  }
 
   try {
-    // 1. Ping para diagnóstico
-    const pingRes = await fetch('https://api.mercadolibre.com/sites/MLC', {
-      headers: { Accept: 'application/json' },
-    });
-    if (!pingRes.ok) {
-      return json({ error: `ML inaccesible desde Edge (${pingRes.status}) — IP bloqueada` });
-    }
-
-    // 2. Token via Client Credentials
-    let tokenHeader: string | undefined;
-    if (clientId && clientSecret) {
-      const tokenRes = await fetch('https://api.mercadolibre.com/oauth/token', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-        body:    `grant_type=client_credentials&client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`,
-      });
-      if (tokenRes.ok) {
-        const { access_token } = await tokenRes.json() as { access_token: string };
-        tokenHeader = `Bearer ${access_token}`;
-      }
-    }
-
-    // 3. Búsqueda — con o sin token según disponibilidad
-    const searchHeaders: Record<string, string> = { Accept: 'application/json' };
-    if (tokenHeader) searchHeaders['Authorization'] = tokenHeader;
-
     const searchRes = await fetch(
       `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q.trim())}&limit=20`,
-      { headers: searchHeaders },
+      { headers: { Accept: 'application/json', Authorization: `Bearer ${accessToken}` } },
     );
 
     if (!searchRes.ok) {
@@ -70,7 +70,6 @@ export default async function handler(req: NextRequest) {
     }));
 
     return json({ items, total: data.paging?.total ?? items.length });
-
   } catch (err: any) {
     return json({ error: `Error de conexión: ${err?.message ?? String(err)}` });
   }

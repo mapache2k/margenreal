@@ -1,32 +1,52 @@
 'use client';
 import Head from 'next/head';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import AdminGate from '../../components/AdminGate';
 import Layout from '../../components/Layout';
 
+const ML_CLIENT_ID  = '4121257083855967';
+const ML_REDIRECT   = 'https://margenreal.io/admin/mercadolibre';
+const ML_AUTH_URL   =
+  `https://auth.mercadolibre.cl/authorization?response_type=code&client_id=${ML_CLIENT_ID}&redirect_uri=${encodeURIComponent(ML_REDIRECT)}`;
+
 type MLItem = {
-  id: string;
-  title: string;
-  price: number;
-  currency: string;
-  seller: string;
-  seller_id: number | null;
-  permalink: string;
-  thumbnail: string;
-  condition: string;
-  free_shipping: boolean;
+  id: string; title: string; price: number; currency: string;
+  seller: string; seller_id: number | null; permalink: string;
+  thumbnail: string; condition: string; free_shipping: boolean;
 };
 
-const fmtCLP = (n: number) =>
-  '$' + Math.round(n).toLocaleString('es-CL');
+const fmtCLP = (n: number) => '$' + Math.round(n).toLocaleString('es-CL');
 
 export default function AdminMercadoLibre() {
-  const [query, setQuery]     = useState('');
-  const [items, setItems]     = useState<MLItem[]>([]);
-  const [total, setTotal]     = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
+  const router = useRouter();
+  const [query, setQuery]       = useState('');
+  const [items, setItems]       = useState<MLItem[]>([]);
+  const [total, setTotal]       = useState<number | null>(null);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState('');
+  const [connected, setConnected] = useState<boolean | null>(null); // null = desconocido
+  const [connecting, setConnecting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Manejar redirect OAuth: si hay ?code= en la URL, intercambiar por tokens
+  useEffect(() => {
+    const code = router.query.code as string | undefined;
+    if (!code) return;
+    setConnecting(true);
+    fetch(`/api/admin/ml-exchange?code=${encodeURIComponent(code)}`)
+      .then(r => r.json())
+      .then((data: any) => {
+        if (data.success) {
+          setConnected(true);
+          router.replace('/admin/mercadolibre', undefined, { shallow: true });
+        } else {
+          setError(data.error ?? 'Error al conectar con ML');
+        }
+      })
+      .catch(() => setError('Error al conectar con ML'))
+      .finally(() => setConnecting(false));
+  }, [router.query.code]);
 
   const handleSearch = async () => {
     const q = query.trim();
@@ -35,11 +55,16 @@ export default function AdminMercadoLibre() {
     try {
       const r    = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
       const data = await r.json();
+      if (data.error === 'no_auth') {
+        setConnected(false);
+        return;
+      }
       if (data.error) { setError(data.error); return; }
+      setConnected(true);
       setItems(data.items ?? []);
       setTotal(data.total ?? 0);
     } catch (err: any) {
-      setError(`Error de conexión: ${err?.message ?? ''}`);
+      setError(`Error inesperado: ${err?.message ?? ''}`);
     } finally {
       setLoading(false);
     }
@@ -62,6 +87,12 @@ export default function AdminMercadoLibre() {
           .ml-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin: 0 0 6px; }
           .ml-sub { font-size: 0.875rem; color: var(--muted); margin: 0 0 32px; line-height: 1.6; }
 
+          .ml-connect-box { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 32px; }
+          .ml-connect-title { font-weight: 700; font-size: 1rem; color: var(--text); margin: 0 0 8px; }
+          .ml-connect-desc { font-size: 0.875rem; color: var(--muted); margin: 0 0 20px; line-height: 1.5; }
+          .ml-connect-btn { display: inline-block; background: #FFE600; color: #333; font-weight: 800; font-size: 0.9375rem; padding: 12px 28px; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; text-decoration: none; transition: opacity 0.15s; }
+          .ml-connect-btn:hover { opacity: 0.85; }
+
           .ml-search-input { flex: 1; background: var(--surface); border: 1.5px solid var(--border); color: var(--text); font-family: inherit; font-size: 0.9375rem; padding: 12px 16px; border-radius: 10px; outline: none; transition: border-color 0.2s; }
           .ml-search-input:focus { border-color: var(--accent); }
           .ml-search-btn { background: var(--accent); color: var(--bg); font-weight: 800; font-size: 0.9375rem; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s; white-space: nowrap; flex-shrink: 0; }
@@ -79,7 +110,6 @@ export default function AdminMercadoLibre() {
           .ml-seller { color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
           .ml-link { color: var(--accent); text-decoration: none; font-size: 0.8125rem; font-weight: 600; white-space: nowrap; }
           .ml-link:hover { text-decoration: underline; }
-
           .ml-badge { font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
           .ml-badge-new  { background: rgba(45,212,160,0.12); color: #2dd4a0; }
           .ml-badge-used { background: rgba(245,158,11,0.12); color: #f59e0b; }
@@ -91,21 +121,42 @@ export default function AdminMercadoLibre() {
           <h1 className="ml-title">API Mercado Libre</h1>
           <p className="ml-sub">Consultá precios y vendedores en MercadoLibre Chile en tiempo real.</p>
 
-          <div style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
-            <input
-              ref={inputRef}
-              type="text"
-              className="ml-search-input"
-              placeholder="Buscar producto en MercadoLibre Chile..."
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={handleKey}
-              autoFocus
-            />
-            <button className="ml-search-btn" onClick={handleSearch} disabled={loading || !query.trim()}>
-              {loading ? '...' : 'Buscar'}
-            </button>
-          </div>
+          {connecting && (
+            <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '20px 0 32px' }}>
+              Conectando con MercadoLibre...
+            </div>
+          )}
+
+          {!connecting && connected === false && (
+            <div className="ml-connect-box">
+              <p className="ml-connect-title">Conectá tu cuenta de MercadoLibre</p>
+              <p className="ml-connect-desc">
+                ML requiere autenticación para buscar productos.<br />
+                Iniciá sesión una sola vez con tu cuenta de MercadoLibre Chile.
+              </p>
+              <a href={ML_AUTH_URL} className="ml-connect-btn">
+                Conectar con MercadoLibre
+              </a>
+            </div>
+          )}
+
+          {!connecting && connected !== false && (
+            <div style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
+              <input
+                ref={inputRef}
+                type="text"
+                className="ml-search-input"
+                placeholder="Buscar producto en MercadoLibre Chile..."
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                onKeyDown={handleKey}
+                autoFocus
+              />
+              <button className="ml-search-btn" onClick={handleSearch} disabled={loading || !query.trim()}>
+                {loading ? '...' : 'Buscar'}
+              </button>
+            </div>
+          )}
 
           {error && <div className="ml-error">{error}</div>}
 
@@ -167,7 +218,7 @@ export default function AdminMercadoLibre() {
             </div>
           )}
 
-          {!loading && items.length === 0 && total === null && !error && (
+          {!loading && connected !== false && items.length === 0 && total === null && !error && (
             <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--muted-2)', fontSize: '0.875rem' }}>
               Ingresá un producto para buscar
             </div>
