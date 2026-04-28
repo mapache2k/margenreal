@@ -33,32 +33,13 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      const appId = process.env.NEXT_PUBLIC_ML_APP_ID;
-      const base  = `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`;
-      const url   = appId ? `${base}&APP_ID=${appId}` : base;
-      const r = await fetch(url, { headers: { Accept: 'application/json' } });
-      if (r.status === 403) {
-        setError('MercadoLibre rechazó la solicitud (403). Configurá la variable NEXT_PUBLIC_ML_APP_ID en Vercel con el App ID de tu aplicación en developers.mercadolibre.com.ar');
-        return;
-      }
-      if (!r.ok) { setError(`Error MercadoLibre: ${r.status}`); return; }
+      const r = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
       const data = await r.json();
-      const mapped = (data.results ?? []).map((item: any) => ({
-        id:            item.id,
-        title:         item.title,
-        price:         item.price,
-        currency:      item.currency_id,
-        seller:        item.seller?.nickname ?? '—',
-        seller_id:     item.seller?.id ?? null,
-        permalink:     item.permalink,
-        thumbnail:     item.thumbnail,
-        condition:     item.condition,
-        free_shipping: item.shipping?.free_shipping ?? false,
-      }));
-      setItems(mapped);
-      setTotal(data.paging?.total ?? mapped.length);
-    } catch (err: any) {
-      setError(`No se pudo conectar con MercadoLibre: ${err?.message ?? ''}`);
+      if (!r.ok) { setError(data.error || 'Error al buscar'); return; }
+      setItems(data.items);
+      setTotal(data.total);
+    } catch {
+      setError('No se pudo conectar con el servidor');
     } finally {
       setLoading(false);
     }
