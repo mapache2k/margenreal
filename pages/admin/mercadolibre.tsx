@@ -38,10 +38,11 @@ export default function AdminMercadoLibre() {
       const tokenData = await tokenR.json();
       if (tokenData.error) { setError(tokenData.error); return; }
 
-      // 2. Buscar desde el browser con Bearer token (evita bloqueo de IPs de Vercel/AWS)
+      // 2. Buscar desde el browser con access_token como query param
+      // (Bearer header no funciona: CORS de ML solo permite Content-Type, no Authorization)
       const r = await fetch(
-        `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`,
-        { headers: { Accept: 'application/json', Authorization: `Bearer ${tokenData.access_token}` } },
+        `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20&access_token=${encodeURIComponent(tokenData.access_token)}`,
+        { headers: { Accept: 'application/json' } },
       );
       if (!r.ok) {
         const body = await r.text().catch(() => '');
