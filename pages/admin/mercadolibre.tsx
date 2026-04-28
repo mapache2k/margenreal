@@ -53,18 +53,37 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      const r    = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
-      const data = await r.json();
-      if (data.error === 'no_auth') {
-        setConnected(false);
+      // Llamada directa al browser con cookies de sesión ML del usuario
+      const r = await fetch(
+        `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`,
+        { credentials: 'include', headers: { Accept: 'application/json' } },
+      );
+      if (!r.ok) {
+        const body = await r.text().catch(() => '');
+        setError(
+          r.status === 403
+            ? 'Acceso denegado por MercadoLibre. Asegurate de estar logueado en mercadolibre.cl en esta misma sesión del browser.'
+            : `Error MercadoLibre ${r.status}: ${body.slice(0, 200)}`
+        );
         return;
       }
-      if (data.error) { setError(data.error); return; }
+      const data = await r.json();
       setConnected(true);
-      setItems(data.items ?? []);
-      setTotal(data.total ?? 0);
+      setItems((data.results ?? []).map((item: any) => ({
+        id:            item.id,
+        title:         item.title,
+        price:         item.price,
+        currency:      item.currency_id,
+        seller:        item.seller?.nickname ?? '—',
+        seller_id:     item.seller?.id ?? null,
+        permalink:     item.permalink,
+        thumbnail:     item.thumbnail,
+        condition:     item.condition,
+        free_shipping: item.shipping?.free_shipping ?? false,
+      })));
+      setTotal(data.paging?.total ?? 0);
     } catch (err: any) {
-      setError(`Error inesperado: ${err?.message ?? ''}`);
+      setError(`Error de conexión: ${err?.message ?? ''}`);
     } finally {
       setLoading(false);
     }
