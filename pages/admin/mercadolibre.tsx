@@ -33,13 +33,13 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      const r = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
+      const r    = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
       const data = await r.json();
-      if (!r.ok) { setError(data.error || 'Error al buscar'); return; }
-      setItems(data.items);
-      setTotal(data.total);
-    } catch {
-      setError('No se pudo conectar con el servidor');
+      if (data.error) { setError(data.error); return; }
+      setItems(data.items ?? []);
+      setTotal(data.total ?? 0);
+    } catch (err: any) {
+      setError(`Error inesperado: ${err?.message ?? ''}`);
     } finally {
       setLoading(false);
     }
