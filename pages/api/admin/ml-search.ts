@@ -27,10 +27,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { access_token } = await tokenRes.json();
 
-    // 2. Búsqueda
+    // 2. Búsqueda — access_token como query param (Client Credentials no autoriza Bearer en search)
     const searchRes = await fetch(
-      `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q.trim())}&limit=20`,
-      { headers: { Accept: 'application/json', Authorization: `Bearer ${access_token}` } },
+      `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q.trim())}&limit=20&access_token=${encodeURIComponent(access_token)}`,
+      { headers: { Accept: 'application/json' } },
     );
 
     if (!searchRes.ok) {
