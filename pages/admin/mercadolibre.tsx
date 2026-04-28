@@ -33,8 +33,14 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      const url = `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`;
+      const appId = process.env.NEXT_PUBLIC_ML_APP_ID;
+      const base  = `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`;
+      const url   = appId ? `${base}&APP_ID=${appId}` : base;
       const r = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (r.status === 403) {
+        setError('MercadoLibre rechazó la solicitud (403). Configurá la variable NEXT_PUBLIC_ML_APP_ID en Vercel con el App ID de tu aplicación en developers.mercadolibre.com.ar');
+        return;
+      }
       if (!r.ok) { setError(`Error MercadoLibre: ${r.status}`); return; }
       const data = await r.json();
       const mapped = (data.results ?? []).map((item: any) => ({
