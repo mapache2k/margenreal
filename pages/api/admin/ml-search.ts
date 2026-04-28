@@ -8,10 +8,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ error: 'Falta el parámetro q' });
 
   try {
-    // Endpoint público de MercadoLibre Chile — no requiere autenticación
+    // Diagnóstico: verificar si el servidor puede contactar ML en absoluto
+    const pingRes = await fetch('https://api.mercadolibre.com/sites/MLC', {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      },
+    });
+    if (!pingRes.ok) {
+      return res.status(200).json({ error: `ML inaccesible desde servidor (${pingRes.status}) — IP bloqueada por ML` });
+    }
+
+    const clientId     = process.env.ML_CLIENT_ID;
+    const clientSecret = process.env.ML_CLIENT_SECRET;
+
+    let tokenHeader: string | undefined;
+    if (clientId && clientSecret) {
+      const tokenRes = await fetch('https://api.mercadolibre.com/oauth/token', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+        body:    `grant_type=client_credentials&client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`,
+      });
+      if (tokenRes.ok) {
+        const { access_token } = await tokenRes.json();
+        tokenHeader = `Bearer ${access_token}`;
+      }
+    }
+
+    const searchHeaders: Record<string, string> = {
+      Accept: 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    };
+    if (tokenHeader) searchHeaders['Authorization'] = tokenHeader;
+
     const searchRes = await fetch(
       `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q.trim())}&limit=20`,
-      { headers: { Accept: 'application/json' } },
+      { headers: searchHeaders },
     );
 
     if (!searchRes.ok) {

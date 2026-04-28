@@ -33,36 +33,11 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      // 1. Obtener token del servidor (Client Secret nunca sale del server)
-      const tokenR    = await fetch('/api/admin/ml-token');
-      const tokenData = await tokenR.json();
-      if (tokenData.error) { setError(tokenData.error); return; }
-
-      // 2. Buscar desde el browser con access_token como query param
-      // (Bearer header no funciona: CORS de ML solo permite Content-Type, no Authorization)
-      const r = await fetch(
-        `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20&access_token=${encodeURIComponent(tokenData.access_token)}`,
-        { headers: { Accept: 'application/json' } },
-      );
-      if (!r.ok) {
-        const body = await r.text().catch(() => '');
-        setError(`Error MercadoLibre ${r.status}: ${body.slice(0, 200)}`);
-        return;
-      }
+      const r    = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
       const data = await r.json();
-      setItems((data.results ?? []).map((item: any) => ({
-        id:            item.id,
-        title:         item.title,
-        price:         item.price,
-        currency:      item.currency_id,
-        seller:        item.seller?.nickname ?? '—',
-        seller_id:     item.seller?.id ?? null,
-        permalink:     item.permalink,
-        thumbnail:     item.thumbnail,
-        condition:     item.condition,
-        free_shipping: item.shipping?.free_shipping ?? false,
-      })));
-      setTotal(data.paging?.total ?? 0);
+      if (data.error) { setError(data.error); return; }
+      setItems(data.items ?? []);
+      setTotal(data.total ?? 0);
     } catch (err: any) {
       setError(`Error de conexión: ${err?.message ?? ''}`);
     } finally {
