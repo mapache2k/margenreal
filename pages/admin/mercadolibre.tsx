@@ -33,13 +33,32 @@ export default function AdminMercadoLibre() {
     if (!q) return;
     setLoading(true); setError(''); setItems([]); setTotal(null);
     try {
-      const r    = await fetch(`/api/admin/ml-search?q=${encodeURIComponent(q)}`);
+      // Llamada directa al browser — ML bloquea IPs de Vercel/AWS en server-side
+      const r = await fetch(
+        `https://api.mercadolibre.com/sites/MLC/search?q=${encodeURIComponent(q)}&limit=20`,
+        { headers: { Accept: 'application/json' } },
+      );
+      if (!r.ok) {
+        const body = await r.text().catch(() => '');
+        setError(`Error MercadoLibre ${r.status}: ${body.slice(0, 200)}`);
+        return;
+      }
       const data = await r.json();
-      if (data.error) { setError(data.error); return; }
-      setItems(data.items ?? []);
-      setTotal(data.total ?? 0);
+      setItems((data.results ?? []).map((item: any) => ({
+        id:            item.id,
+        title:         item.title,
+        price:         item.price,
+        currency:      item.currency_id,
+        seller:        item.seller?.nickname ?? '—',
+        seller_id:     item.seller?.id ?? null,
+        permalink:     item.permalink,
+        thumbnail:     item.thumbnail,
+        condition:     item.condition,
+        free_shipping: item.shipping?.free_shipping ?? false,
+      })));
+      setTotal(data.paging?.total ?? 0);
     } catch (err: any) {
-      setError(`Error inesperado: ${err?.message ?? ''}`);
+      setError(`Error de conexión: ${err?.message ?? ''}`);
     } finally {
       setLoading(false);
     }
