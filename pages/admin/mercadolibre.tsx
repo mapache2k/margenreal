@@ -8,7 +8,7 @@ import Layout from '../../components/Layout';
 const ML_CLIENT_ID = '4121257083855967';
 const ML_REDIRECT  = 'https://margenreal.io/admin/mercadolibre';
 const ML_AUTH_URL  =
-  `https://auth.mercadolibre.cl/authorization?response_type=code&client_id=${ML_CLIENT_ID}&redirect_uri=${encodeURIComponent(ML_REDIRECT)}`;
+  `https://auth.mercadolibre.cl/authorization?response_type=code&client_id=${ML_CLIENT_ID}&redirect_uri=${encodeURIComponent(ML_REDIRECT)}&scope=offline_access%20read%20write`;
 
 type MLItem = {
   id: string; title: string; price: number; currency: string;
